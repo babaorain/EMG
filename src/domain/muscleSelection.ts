@@ -14,10 +14,6 @@ export interface PathwayStage {
 }
 
 const rootOrder = [
-  'V',
-  'VII',
-  'XI',
-  'XII',
   'C1',
   'C2',
   'C3',
@@ -48,6 +44,10 @@ const rootOrder = [
   'S3',
   'S4',
   'S5',
+  'V',
+  'VII',
+  'XI',
+  'XII',
 ]
 
 const rootRanks = new Map(rootOrder.map((root, index) => [root, index]))
