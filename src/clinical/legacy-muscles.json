@@ -1,0 +1,1243 @@
+﻿[
+    {
+        "m":  "Frontalis",
+        "n":  "Facial N.",
+        "r":  "VII",
+        "r_list":  [
+                       "VII"
+                   ],
+        "a":  [
+                  "CN7"
+              ]
+    },
+    {
+        "m":  "Orbicularis Oculi",
+        "n":  "Facial N.",
+        "r":  "VII",
+        "r_list":  [
+                       "VII"
+                   ],
+        "a":  [
+                  "O.Oculi",
+                  "CN7"
+              ]
+    },
+    {
+        "m":  "Orbicularis Oris",
+        "n":  "Facial N.",
+        "r":  "VII",
+        "r_list":  [
+                       "VII"
+                   ],
+        "a":  [
+                  "O.Oris",
+                  "CN7"
+              ]
+    },
+    {
+        "m":  "Nasalis",
+        "n":  "Facial N.",
+        "r":  "VII",
+        "r_list":  [
+                       "VII"
+                   ],
+        "a":  [
+                  "CN7"
+              ]
+    },
+    {
+        "m":  "Mentalis",
+        "n":  "Facial N.",
+        "r":  "VII",
+        "r_list":  [
+                       "VII"
+                   ],
+        "a":  [
+                  "CN7"
+              ]
+    },
+    {
+        "m":  "Masseter",
+        "n":  "Trigeminal N.",
+        "r":  "V",
+        "r_list":  [
+                       "V"
+                   ],
+        "a":  [
+                  "CN5"
+              ]
+    },
+    {
+        "m":  "Temporalis",
+        "n":  "Trigeminal N.",
+        "r":  "V",
+        "r_list":  [
+                       "V"
+                   ],
+        "a":  [
+                  "CN5"
+              ]
+    },
+    {
+        "m":  "Tongue (Genioglossus)",
+        "n":  "Hypoglossal N.",
+        "r":  "XII",
+        "r_list":  [
+                       "XII"
+                   ],
+        "a":  [
+                  "Tongue",
+                  "CN12"
+              ]
+    },
+    {
+        "m":  "Sternocleidomastoid",
+        "n":  "Accessory N.",
+        "r":  "XI (C2-3)",
+        "r_list":  [
+                       "XI",
+                       "C2",
+                       "C3"
+                   ],
+        "a":  [
+                  "SCM",
+                  "CN11"
+              ]
+    },
+    {
+        "m":  "Trapezius (Upper)",
+        "n":  "Accessory N.",
+        "r":  "XI (C3-4)",
+        "r_list":  [
+                       "XI",
+                       "C3",
+                       "C4"
+                   ],
+        "a":  [
+                  "Trap",
+                  "CN11"
+              ]
+    },
+    {
+        "m":  "Rhomboid Major/Minor",
+        "n":  "Dorsal Scapular N.",
+        "r":  "C5",
+        "r_list":  [
+                       "C5"
+                   ],
+        "a":  [
+                  "Rhomboids"
+              ]
+    },
+    {
+        "m":  "Levator Scapulae",
+        "n":  "Dorsal Scapular N.",
+        "r":  "C3-C5",
+        "r_list":  [
+                       "C3",
+                       "C4",
+                       "C5"
+                   ],
+        "a":  [
+                  "Levator"
+              ]
+    },
+    {
+        "m":  "Serratus Anterior",
+        "n":  "Long Thoracic N.",
+        "r":  "C5-C7",
+        "r_list":  [
+                       "C5",
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "SA"
+              ]
+    },
+    {
+        "m":  "Subclavius",
+        "n":  "N. to Subclavius",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Supraspinatus",
+        "n":  "Suprascapular N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+                  "Supra",
+                  "SS"
+              ]
+    },
+    {
+        "m":  "Infraspinatus",
+        "n":  "Suprascapular N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+                  "Infra",
+                  "IS"
+              ]
+    },
+    {
+        "m":  "Pectoralis Major (Clav)",
+        "n":  "Lat. Pectoral N.",
+        "r":  "C5-C7",
+        "r_list":  [
+                       "C5",
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "Pec Maj"
+              ]
+    },
+    {
+        "m":  "Pectoralis Major (Stern)",
+        "n":  "Med. Pectoral N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "Pec Maj"
+              ]
+    },
+    {
+        "m":  "Pectoralis Minor",
+        "n":  "Med. Pectoral N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "Pec Min"
+              ]
+    },
+    {
+        "m":  "Subscapularis",
+        "n":  "Subscapular N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+                  "Subscap"
+              ]
+    },
+    {
+        "m":  "Teres Major",
+        "n":  "Lower Subscapular N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Latissimus Dorsi",
+        "n":  "Thoracodorsal N.",
+        "r":  "C6-C8",
+        "r_list":  [
+                       "C6",
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "Lat",
+                  "Lats"
+              ]
+    },
+    {
+        "m":  "Deltoid (Ant/Mid/Post)",
+        "n":  "Axillary N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+                  "Deltoid"
+              ]
+    },
+    {
+        "m":  "Teres Minor",
+        "n":  "Axillary N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Biceps Brachii",
+        "n":  "Musculocutaneous",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+                  "Biceps"
+              ]
+    },
+    {
+        "m":  "Brachialis",
+        "n":  "Musculocutaneous",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Coracobrachialis",
+        "n":  "Musculocutaneous",
+        "r":  "C5-C7",
+        "r_list":  [
+                       "C5",
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "Coraco"
+              ]
+    },
+    {
+        "m":  "Triceps Brachii",
+        "n":  "Radial N.",
+        "r":  "C6-C8",
+        "r_list":  [
+                       "C6",
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "Triceps"
+              ]
+    },
+    {
+        "m":  "Anconeus",
+        "n":  "Radial N.",
+        "r":  "C6-C8",
+        "r_list":  [
+                       "C6",
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Brachioradialis",
+        "n":  "Radial N.",
+        "r":  "C5-C6",
+        "r_list":  [
+                       "C5",
+                       "C6"
+                   ],
+        "a":  [
+                  "BR"
+              ]
+    },
+    {
+        "m":  "Extensor Carpi Rad. Longus",
+        "n":  "Radial N.",
+        "r":  "C6-C7",
+        "r_list":  [
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "ECRL"
+              ]
+    },
+    {
+        "m":  "Extensor Carpi Rad. Brevis",
+        "n":  "PIN (Radial)",
+        "r":  "C6-C7",
+        "r_list":  [
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "ECRB"
+              ]
+    },
+    {
+        "m":  "Supinator",
+        "n":  "PIN (Radial)",
+        "r":  "C6-C7",
+        "r_list":  [
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Extensor Digitorum Communis",
+        "n":  "PIN (Radial)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "EDC",
+                  "Extensor Digitorum"
+              ]
+    },
+    {
+        "m":  "Extensor Carpi Ulnaris",
+        "n":  "PIN (Radial)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "ECU"
+              ]
+    },
+    {
+        "m":  "Extensor Indicis Proprius",
+        "n":  "PIN (Radial)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "EIP"
+              ]
+    },
+    {
+        "m":  "Abd. Pollicis Longus",
+        "n":  "PIN (Radial)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "APL"
+              ]
+    },
+    {
+        "m":  "Ext. Pollicis Longus",
+        "n":  "PIN (Radial)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "EPL"
+              ]
+    },
+    {
+        "m":  "Ext. Pollicis Brevis",
+        "n":  "PIN (Radial)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "EPB"
+              ]
+    },
+    {
+        "m":  "Pronator Teres",
+        "n":  "Median N.",
+        "r":  "C6-C7",
+        "r_list":  [
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "PT"
+              ]
+    },
+    {
+        "m":  "Flexor Carpi Radialis",
+        "n":  "Median N.",
+        "r":  "C6-C7",
+        "r_list":  [
+                       "C6",
+                       "C7"
+                   ],
+        "a":  [
+                  "FCR"
+              ]
+    },
+    {
+        "m":  "Palmaris Longus",
+        "n":  "Median N.",
+        "r":  "C7-T1",
+        "r_list":  [
+                       "C7",
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "PL"
+              ]
+    },
+    {
+        "m":  "Flexor Digitorum Superficialis",
+        "n":  "Median N.",
+        "r":  "C7-T1",
+        "r_list":  [
+                       "C7",
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "FDS"
+              ]
+    },
+    {
+        "m":  "Flexor Pollicis Longus",
+        "n":  "AIN (Median)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "FPL"
+              ]
+    },
+    {
+        "m":  "Flexor Digitorum Profundus (1,2)",
+        "n":  "AIN (Median)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "FDP1",
+                  "FDP2",
+                  "FDP I",
+                  "FDP II"
+              ]
+    },
+    {
+        "m":  "Pronator Quadratus",
+        "n":  "AIN (Median)",
+        "r":  "C7-C8",
+        "r_list":  [
+                       "C7",
+                       "C8"
+                   ],
+        "a":  [
+                  "PQ"
+              ]
+    },
+    {
+        "m":  "Abd. Pollicis Brevis",
+        "n":  "Median N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "APB"
+              ]
+    },
+    {
+        "m":  "Opponens Pollicis",
+        "n":  "Median N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "OP"
+              ]
+    },
+    {
+        "m":  "Flexor Pollicis Brevis",
+        "n":  "Median N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "FPB"
+              ]
+    },
+    {
+        "m":  "Lumbricals (1,2)",
+        "n":  "Median N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "Lumb",
+                  "L1",
+                  "L2"
+              ]
+    },
+    {
+        "m":  "Flexor Carpi Ulnaris",
+        "n":  "Ulnar N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "FCU"
+              ]
+    },
+    {
+        "m":  "Flexor Digitorum Profundus (3,4)",
+        "n":  "Ulnar N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "FDP3",
+                  "FDP4",
+                  "FDP III",
+                  "FDP IV"
+              ]
+    },
+    {
+        "m":  "Abd. Digiti Minimi",
+        "n":  "Ulnar N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "ADM"
+              ]
+    },
+    {
+        "m":  "First Dorsal Interosseous",
+        "n":  "Ulnar N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "FDI"
+              ]
+    },
+    {
+        "m":  "Palmar Interossei",
+        "n":  "Ulnar N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "PI"
+              ]
+    },
+    {
+        "m":  "Adductor Pollicis",
+        "n":  "Ulnar N.",
+        "r":  "C8-T1",
+        "r_list":  [
+                       "C8",
+                       "T1"
+                   ],
+        "a":  [
+                  "AddP"
+              ]
+    },
+    {
+        "m":  "Paraspinal (L2)",
+        "n":  "Post. Rami (Lumbar)",
+        "r":  "L2",
+        "r_list":  [
+                       "L2"
+                   ],
+        "a":  [
+                  "LSP L2",
+                  "L2"
+              ]
+    },
+    {
+        "m":  "Paraspinal (L3)",
+        "n":  "Post. Rami (Lumbar)",
+        "r":  "L3",
+        "r_list":  [
+                       "L3"
+                   ],
+        "a":  [
+                  "LSP L3",
+                  "L3"
+              ]
+    },
+    {
+        "m":  "Paraspinal (L4)",
+        "n":  "Post. Rami (Lumbar)",
+        "r":  "L4",
+        "r_list":  [
+                       "L4"
+                   ],
+        "a":  [
+                  "LSP L4",
+                  "L4"
+              ]
+    },
+    {
+        "m":  "Paraspinal (L5)",
+        "n":  "Post. Rami (Lumbar)",
+        "r":  "L5",
+        "r_list":  [
+                       "L5"
+                   ],
+        "a":  [
+                  "LSP L5",
+                  "L5"
+              ]
+    },
+    {
+        "m":  "Paraspinal (S1)",
+        "n":  "Post. Rami (Sacral)",
+        "r":  "S1",
+        "r_list":  [
+                       "S1"
+                   ],
+        "a":  [
+                  "LSP S1",
+                  "S1"
+              ]
+    },
+    {
+        "m":  "Iliopsoas",
+        "n":  "Femoral N.",
+        "r":  "L1-L3",
+        "r_list":  [
+                       "L1",
+                       "L2",
+                       "L3"
+                   ],
+        "a":  [
+                  "Iliacus",
+                  "Psoas"
+              ]
+    },
+    {
+        "m":  "Quadriceps (Vastus/Rectus)",
+        "n":  "Femoral N.",
+        "r":  "L2-L4",
+        "r_list":  [
+                       "L2",
+                       "L3",
+                       "L4"
+                   ],
+        "a":  [
+                  "Quad",
+                  "VMO",
+                  "VL",
+                  "RF"
+              ]
+    },
+    {
+        "m":  "Sartorius",
+        "n":  "Femoral N.",
+        "r":  "L2-L3",
+        "r_list":  [
+                       "L2",
+                       "L3"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Pectineus",
+        "n":  "Femoral N.",
+        "r":  "L2-L3",
+        "r_list":  [
+                       "L2",
+                       "L3"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Adductor Longus/Brevis",
+        "n":  "Obturator N.",
+        "r":  "L2-L4",
+        "r_list":  [
+                       "L2",
+                       "L3",
+                       "L4"
+                   ],
+        "a":  [
+                  "Add Longus",
+                  "Add Brevis"
+              ]
+    },
+    {
+        "m":  "Adductor Magnus",
+        "n":  "Obturator N.",
+        "r":  "L2-L4",
+        "r_list":  [
+                       "L2",
+                       "L3",
+                       "L4"
+                   ],
+        "a":  [
+                  "Add Magnus"
+              ]
+    },
+    {
+        "m":  "Gracilis",
+        "n":  "Obturator N.",
+        "r":  "L2-L4",
+        "r_list":  [
+                       "L2",
+                       "L3",
+                       "L4"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Obturator Externus",
+        "n":  "Obturator N.",
+        "r":  "L3-L4",
+        "r_list":  [
+                       "L3",
+                       "L4"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Gluteus Medius",
+        "n":  "Sup. Gluteal N.",
+        "r":  "L4-S1",
+        "r_list":  [
+                       "L4",
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "GMed",
+                  "Glut Med"
+              ]
+    },
+    {
+        "m":  "Gluteus Minimus",
+        "n":  "Sup. Gluteal N.",
+        "r":  "L4-S1",
+        "r_list":  [
+                       "L4",
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "GMin",
+                  "Glut Min"
+              ]
+    },
+    {
+        "m":  "Tensor Fasciae Latae",
+        "n":  "Sup. Gluteal N.",
+        "r":  "L4-S1",
+        "r_list":  [
+                       "L4",
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "TFL"
+              ]
+    },
+    {
+        "m":  "Gluteus Major",
+        "n":  "Inf. Gluteal N.",
+        "r":  "L5-S2",
+        "r_list":  [
+                       "L5",
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "GMax",
+                  "Glut Max"
+              ]
+    },
+    {
+        "m":  "Piriformis",
+        "n":  "Sacral Plexus",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Obturator Int / Gemelli",
+        "n":  "Sacral Plexus",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "Obt Int"
+              ]
+    },
+    {
+        "m":  "Quadratus Femoris",
+        "n":  "Sacral Plexus",
+        "r":  "L4-S1",
+        "r_list":  [
+                       "L4",
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "Quad Fem"
+              ]
+    },
+    {
+        "m":  "Semitendinosus",
+        "n":  "Sciatic (Tibial)",
+        "r":  "L5-S2",
+        "r_list":  [
+                       "L5",
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "Semi T",
+                  "ST"
+              ]
+    },
+    {
+        "m":  "Semimembranosus",
+        "n":  "Sciatic (Tibial)",
+        "r":  "L5-S2",
+        "r_list":  [
+                       "L5",
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "Semi M",
+                  "SM"
+              ]
+    },
+    {
+        "m":  "Biceps Femoris (Long Head)",
+        "n":  "Sciatic (Tibial)",
+        "r":  "L5-S2",
+        "r_list":  [
+                       "L5",
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "BFLH"
+              ]
+    },
+    {
+        "m":  "Biceps Femoris (Short Head)",
+        "n":  "Sciatic (Peroneal)",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "BFSH"
+              ]
+    },
+    {
+        "m":  "Tibialis Anterior",
+        "n":  "Deep Peroneal N.",
+        "r":  "L4-L5",
+        "r_list":  [
+                       "L4",
+                       "L5"
+                   ],
+        "a":  [
+                  "TA"
+              ]
+    },
+    {
+        "m":  "Extensor Hallucis Longus",
+        "n":  "Deep Peroneal N.",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "EHL"
+              ]
+    },
+    {
+        "m":  "Extensor Digitorum Longus",
+        "n":  "Deep Peroneal N.",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "EDL"
+              ]
+    },
+    {
+        "m":  "Extensor Digitorum Brevis",
+        "n":  "Deep Peroneal N.",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "EDB"
+              ]
+    },
+    {
+        "m":  "Extensor Hallucis Brevis",
+        "n":  "Deep Peroneal N.",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "EHB"
+              ]
+    },
+    {
+        "m":  "Peroneus Longus",
+        "n":  "Sup. Peroneal N.",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "PL",
+                  "Fibularis"
+              ]
+    },
+    {
+        "m":  "Peroneus Brevis",
+        "n":  "Sup. Peroneal N.",
+        "r":  "L5-S1",
+        "r_list":  [
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+                  "PB",
+                  "Fibularis"
+              ]
+    },
+    {
+        "m":  "Gastrocnemius (Med/Lat)",
+        "n":  "Tibial N.",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "Gastroc",
+                  "GCM",
+                  "GCL"
+              ]
+    },
+    {
+        "m":  "Soleus",
+        "n":  "Tibial N.",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "SOL"
+              ]
+    },
+    {
+        "m":  "Popliteus",
+        "n":  "Tibial N.",
+        "r":  "L4-S1",
+        "r_list":  [
+                       "L4",
+                       "L5",
+                       "S1"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Tibialis Posterior",
+        "n":  "Tibial N.",
+        "r":  "L4-L5",
+        "r_list":  [
+                       "L4",
+                       "L5"
+                   ],
+        "a":  [
+                  "TP",
+                  "Tib Post"
+              ]
+    },
+    {
+        "m":  "Flexor Digitorum Longus",
+        "n":  "Tibial N.",
+        "r":  "L5-S2",
+        "r_list":  [
+                       "L5",
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "FDL"
+              ]
+    },
+    {
+        "m":  "Flexor Hallucis Longus",
+        "n":  "Tibial N.",
+        "r":  "L5-S2",
+        "r_list":  [
+                       "L5",
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "FHL"
+              ]
+    },
+    {
+        "m":  "Abductor Hallucis",
+        "n":  "Med. Plantar N.",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "AH"
+              ]
+    },
+    {
+        "m":  "Flexor Digitorum Brevis",
+        "n":  "Med. Plantar N.",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "FDB"
+              ]
+    },
+    {
+        "m":  "Abductor Digiti Quinti",
+        "n":  "Lat. Plantar N.",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+                  "ADQ"
+              ]
+    },
+    {
+        "m":  "Interossei (Foot)",
+        "n":  "Lat. Plantar N.",
+        "r":  "S1-S2",
+        "r_list":  [
+                       "S1",
+                       "S2"
+                   ],
+        "a":  [
+
+              ]
+    },
+    {
+        "m":  "Ext. Anal Sphincter",
+        "n":  "Pudendal N.",
+        "r":  "S2-S4",
+        "r_list":  [
+                       "S2",
+                       "S3",
+                       "S4"
+                   ],
+        "a":  [
+                  "EAS",
+                  "Sphincter"
+              ]
+    },
+    {
+        "m":  "Bulbocavernosus",
+        "n":  "Pudendal N.",
+        "r":  "S2-S4",
+        "r_list":  [
+                       "S2",
+                       "S3",
+                       "S4"
+                   ],
+        "a":  [
+                  "BC"
+              ]
+    }
+]
