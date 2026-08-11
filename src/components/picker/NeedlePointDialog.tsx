@@ -14,6 +14,43 @@ function figureLabel(figures: number[]): string {
   return figures.map((figure) => `13.${figure}`).join('、')
 }
 
+const distanceCue = String.raw`(?:約)?(?:一|二|兩|三|四|五|六|七|八|九|十|\d+)(?:至(?:一|二|兩|三|四|五|六|七|八|九|十|\d+))?(?:指幅|公分|cm)`
+const landmarkCue = [
+  '肱二頭肌腱',
+  '腹股溝韌帶',
+  '股動脈搏動',
+  '肩胛骨下角',
+  '肩胛骨內緣',
+  '前上髂棘',
+  '坐骨粗隆',
+  '脛骨脊',
+  '腓骨頭',
+  '大轉子',
+  '髂嵴',
+  '鷹嘴',
+  '內上髁',
+  '外上髁',
+  '莖突',
+  '肩胛棘',
+  '肩峰',
+  '下顎角',
+  '中點',
+].join('|')
+const clinicalCuePattern = new RegExp(`(${distanceCue}|${landmarkCue})`, 'g')
+const exactClinicalCuePattern = new RegExp(`^(?:${distanceCue}|${landmarkCue})$`)
+
+function HighlightedClinicalText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(clinicalCuePattern).map((part, index) => (
+        exactClinicalCuePattern.test(part)
+          ? <mark className="clinical-emphasis" key={`${part}-${index}`}>{part}</mark>
+          : part
+      ))}
+    </>
+  )
+}
+
 export function NeedlePointDialog({ muscle, side, onClose }: NeedlePointDialogProps) {
   const closeRef = useRef<HTMLButtonElement>(null)
   const guides = needleGuidesForMuscle(muscle.name)
@@ -105,9 +142,9 @@ export function NeedlePointDialog({ muscle, side, onClose }: NeedlePointDialogPr
                   </div>
                   <div>
                     <dt>病人姿勢／扎針方式</dt>
-                    <dd>{activeGuide.insertion}</dd>
+                    <dd><HighlightedClinicalText text={activeGuide.insertion} /></dd>
                   </div>
-                  <div>
+                  <div className="activation-field">
                     <dt>肌肉啟動（activation）</dt>
                     <dd>{activeGuide.activation}</dd>
                   </div>
@@ -116,7 +153,9 @@ export function NeedlePointDialog({ muscle, side, onClose }: NeedlePointDialogPr
                 <div className="needle-point-section">
                   <h3>臨床重點</h3>
                   <ul>
-                    {activeGuide.clinicalPoints.map((point) => <li key={point}>{point}</li>)}
+                    {activeGuide.clinicalPoints.map((point) => (
+                      <li key={point}><HighlightedClinicalText text={point} /></li>
+                    ))}
                   </ul>
                 </div>
 
@@ -124,7 +163,9 @@ export function NeedlePointDialog({ muscle, side, onClose }: NeedlePointDialogPr
                   <h3><ShieldAlert size={17} aria-hidden="true" /> 橫切面構造與避險</h3>
                   {activeGuide.anatomyPoints.length ? (
                     <ul>
-                      {activeGuide.anatomyPoints.map((point) => <li key={point}>{point}</li>)}
+                      {activeGuide.anatomyPoints.map((point) => (
+                        <li key={point}><HighlightedClinicalText text={point} /></li>
+                      ))}
                     </ul>
                   ) : <p>本章未另列此肌肉的橫切面避險文字；請依圖示構造判讀。</p>}
                 </div>
