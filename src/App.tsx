@@ -15,6 +15,8 @@ import {
   clinicalAreaLabel,
   clinicalAreaRank,
 } from './clinical/clinicalAreas'
+import { needleGuidesForMuscle } from './clinical/needleGuides'
+import { BrachialPlexusPage } from './components/BrachialPlexusPage'
 import { MuscleLibrary, type AreaFilter } from './components/picker/MuscleLibrary'
 import { NeedlePointDialog } from './components/picker/NeedlePointDialog'
 import { SelectedMusclesPanel, type ResolvedSelectedMuscle } from './components/picker/SelectedMusclesPanel'
@@ -30,10 +32,12 @@ const visibleRoots = [
   'V', 'VII', 'XI', 'XII',
 ]
 
-type AppPage = 'muscles' | 'dermatomes'
+type AppPage = 'muscles' | 'dermatomes' | 'brachial-plexus'
 
 function pageFromHash(): AppPage {
-  return window.location.hash === '#dermatomes' ? 'dermatomes' : 'muscles'
+  if (window.location.hash === '#dermatomes') return 'dermatomes'
+  if (window.location.hash === '#brachial-plexus') return 'brachial-plexus'
+  return 'muscles'
 }
 
 function App() {
@@ -66,7 +70,11 @@ function App() {
           ...muscle.abbreviations,
         ].some((value) => value.toLowerCase().includes(deferredQuery))
       })
-      .sort((a, b) => clinicalAreaRank(a) - clinicalAreaRank(b) || compareMuscles(a, b))
+      .sort((a, b) => (
+        clinicalAreaRank(a) - clinicalAreaRank(b)
+        || Number(needleGuidesForMuscle(b.name).length > 0) - Number(needleGuidesForMuscle(a.name).length > 0)
+        || compareMuscles(a, b)
+      ))
   }, [area, deferredQuery, root])
 
   const resolvedSelected = useMemo<ResolvedSelectedMuscle[]>(() => {
@@ -100,7 +108,9 @@ function App() {
             <p>
               {activePage === 'muscles'
                 ? '肌肉選擇、扎針定位與空白 worksheet'
-                : '皮節分布與標準化感覺檢查點'}
+                : activePage === 'dermatomes'
+                  ? '皮節分布與標準化感覺檢查點'
+                  : 'Brachial plexus 的 trunk 與 cord 定位'}
             </p>
           </div>
           <nav className="primary-nav" aria-label="主要頁面">
@@ -110,7 +120,7 @@ function App() {
               aria-current={activePage === 'muscles' ? 'page' : undefined}
               onClick={() => setActivePage('muscles')}
             >
-              肌肉／扎針
+              <span className="nav-wide">肌肉／扎針</span><span className="nav-compact">肌肉</span>
             </a>
             <a
               href="#dermatomes"
@@ -118,7 +128,15 @@ function App() {
               aria-current={activePage === 'dermatomes' ? 'page' : undefined}
               onClick={() => setActivePage('dermatomes')}
             >
-              Dermatome 皮節
+              <span className="nav-wide">Dermatome 皮節</span><span className="nav-compact">皮節</span>
+            </a>
+            <a
+              href="#brachial-plexus"
+              className={activePage === 'brachial-plexus' ? 'active' : ''}
+              aria-current={activePage === 'brachial-plexus' ? 'page' : undefined}
+              onClick={() => setActivePage('brachial-plexus')}
+            >
+              <span className="nav-wide">Brachial plexus</span><span className="nav-compact">Plexus</span>
             </a>
           </nav>
         </div>
@@ -126,7 +144,9 @@ function App() {
           <Info size={17} aria-hidden="true" />
           {activePage === 'muscles'
             ? `${bookSourcedMuscleCount} 條依原書校正 · 其餘待覆核`
-            : 'C2-S4/5 · 28 個標準檢查點'}
+            : activePage === 'dermatomes'
+              ? 'C2-S4/5 · 28 個標準檢查點'
+              : 'C5-T1 · 3 trunks · 3 cords'}
         </div>
       </header>
 
@@ -152,8 +172,10 @@ function App() {
             onOpenWorksheet={() => setWorksheetOpen(true)}
           />
         </main>
-      ) : (
+      ) : activePage === 'dermatomes' ? (
         <DermatomePage />
+      ) : (
+        <BrachialPlexusPage />
       )}
 
       {needleTarget ? (
