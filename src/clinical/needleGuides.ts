@@ -1,7 +1,14 @@
+import { supplementalNeedleGuideInputs } from './supplementalNeedleGuides'
+
 export interface NeedleGuideImage {
   src: string
   alt: string
   caption: string
+}
+
+export interface NeedleGuideSource {
+  label: string
+  url: string
 }
 
 export interface NeedleGuide {
@@ -16,9 +23,26 @@ export interface NeedleGuide {
   activation: string
   clinicalPoints: string[]
   anatomyPoints: string[]
+  sourceKind: 'textbook' | 'supplemental'
+  sources: NeedleGuideSource[]
 }
 
-interface GuideInput extends Omit<NeedleGuide, 'id' | 'images'> {}
+interface GuideInput extends Omit<NeedleGuide, 'id' | 'images' | 'sourceKind' | 'sources'> {}
+
+export const needleGuideEvidenceSources: NeedleGuideSource[] = [
+  {
+    label: 'Nayak et al. — A systematic approach to needle EMG examination',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6921208/',
+  },
+  {
+    label: 'AANEM — Risks in Electrodiagnostic Medicine',
+    url: 'https://www.aanem.org/docs/default-source/documents/aanem/practice/risksinedx.pdf?sfvrsn=a112b935_0',
+  },
+  {
+    label: 'AAPM&R KnowledgeNow — Electrodiagnosis of Radiculopathies',
+    url: 'https://now.aapmr.org/electrodiagnosis-of-radiculopathies-cervical-thoracic-and-lumbar/',
+  },
+]
 
 function imageSources(figures: number[]): Array<{ figure: number; src: string; panel?: string }> {
   return figures.flatMap((figure) => {
@@ -39,6 +63,8 @@ function defineGuide(input: GuideInput): NeedleGuide {
   return {
     ...input,
     id: `chapter-13-figure-${input.figures.join('-')}`,
+    sourceKind: 'textbook',
+    sources: needleGuideEvidenceSources,
     images: imageSources(input.figures).map(({ figure, src, panel }) => ({
       src,
       alt: `${input.chineseName}（${input.englishName}）扎針位置與橫切面`,
@@ -48,6 +74,13 @@ function defineGuide(input: GuideInput): NeedleGuide {
 }
 
 export const needleGuides: NeedleGuide[] = [
+  ...supplementalNeedleGuideInputs.map((guide): NeedleGuide => ({
+    ...guide,
+    figures: [],
+    images: [],
+    sourceKind: 'supplemental',
+    sources: needleGuideEvidenceSources,
+  })),
   defineGuide({
     chineseName: '拇短展肌', englishName: 'Abductor Pollicis Brevis (APB)',
     catalogNames: ['Abd. Pollicis Brevis'], figures: [1],
@@ -544,13 +577,31 @@ export const needleGuides: NeedleGuide[] = [
     anatomyPoints: ['若在臀部中央或外下象限進針且太深，可能碰及坐骨神經。'],
   }),
   defineGuide({
-    chineseName: '脊椎旁肌', englishName: 'Paraspinal Muscles (PSPs)',
-    catalogNames: ['Paraspinal (C5)', 'Paraspinal (C6)', 'Paraspinal (C7)', 'Paraspinal (C8)', 'Paraspinal (Thoracic)', 'Paraspinal (L2)', 'Paraspinal (L3)', 'Paraspinal (L4)', 'Paraspinal (L5)', 'Paraspinal (S1)'], figures: [56, 57, 58],
+    chineseName: '頸椎脊旁肌', englishName: 'Cervical Paraspinal Muscles (PSPs)',
+    catalogNames: ['Paraspinal (C5)', 'Paraspinal (C6)', 'Paraspinal (C7)', 'Paraspinal (C8)'], figures: [56],
     innervation: '脊神經後支（dorsal rami）、脊神經與神經根。',
-    insertion: '側臥、待測側朝上；距脊椎中線兩指幅處進針，針尖稍向內側。為確認進入深層肌群，可前進至輕觸椎板（lamina）後稍微退出。',
-    activation: '頸椎：伸頸。胸椎：伸展背部或深吸氣。腰薦椎：膝伸直並伸髖。',
+    insertion: '側臥、待測側朝上；在下頸椎距脊椎中線兩指幅處進針，針尖稍向內側。為確認進入深層肌群，可前進至輕觸椎板（lamina）後稍微退出。',
+    activation: '請病人伸頸。',
     clinicalPoints: ['是最靠近神經根的近端肌群。', '適合評估神經根病變與肌病。', '神經病變時，脊椎旁肌異常只能把病灶定位在神經根或其近端；因相鄰肌節重疊大，特定根節仍應依肢體肌肉判定。', '有些病人難以完全放鬆；評估插入與自發活動時，可採胎兒姿勢，使頸、髖、膝屈曲。', '部分病人反而不易啟動。'],
-    anatomyPoints: ['下頸椎、尤其胸椎處若進針太外側，罕見但可能造成氣胸。', '下頸椎針位太淺可能進入上斜方肌。', '上胸椎太淺可能進入斜方肌或菱形肌。', '下胸椎太淺可能進入斜方肌或背闊肌。'],
+    anatomyPoints: ['下頸椎若進針太外側，罕見但可能造成氣胸。', '針位太淺可能進入上斜方肌。'],
+  }),
+  defineGuide({
+    chineseName: '胸椎脊旁肌', englishName: 'Thoracic Paraspinal Muscles (PSPs)',
+    catalogNames: ['Paraspinal (Thoracic)'], figures: [57],
+    innervation: '脊神經後支（dorsal rami）、脊神經與神經根，T1-T12。',
+    insertion: '側臥、待測側朝上；在欲檢查的胸椎高度，距脊椎中線兩指幅處進針，針尖稍向內側。為確認進入深層肌群，可前進至輕觸椎板（lamina）後稍微退出。',
+    activation: '請病人伸展背部或深吸氣。',
+    clinicalPoints: ['是最靠近胸神經根的近端肌群。', '適合評估胸神經根病變與肌病。', '相鄰胸髓節重疊大，異常高度仍需結合症狀、影像與其他檢查判定。', '評估插入與自發活動時，可採胎兒姿勢，使頸、髖、膝屈曲以利放鬆。'],
+    anatomyPoints: ['進針太外側可能造成氣胸。', '上胸椎針位太淺可能進入斜方肌或菱形肌。', '下胸椎針位太淺可能進入斜方肌或背闊肌。'],
+  }),
+  defineGuide({
+    chineseName: '腰薦椎脊旁肌', englishName: 'Lumbosacral Paraspinal Muscles (PSPs)',
+    catalogNames: ['Paraspinal (L2)', 'Paraspinal (L3)', 'Paraspinal (L4)', 'Paraspinal (L5)', 'Paraspinal (S1)'], figures: [58],
+    innervation: '脊神經後支（dorsal rami）、脊神經與神經根。',
+    insertion: '側臥、待測側朝上；在欲檢查的腰薦椎高度，距脊椎中線兩指幅處進針，針尖稍向內側。為確認進入深層肌群，可前進至輕觸椎板（lamina）後稍微退出。',
+    activation: '保持膝伸直，請病人伸髖。',
+    clinicalPoints: ['是最靠近神經根的近端肌群。', '適合評估神經根病變與肌病。', '神經病變時，脊椎旁肌異常只能把病灶定位在神經根或其近端；因相鄰肌節重疊大，特定根節仍應依肢體肌肉判定。', '評估插入與自發活動時，可採胎兒姿勢，使頸、髖、膝屈曲以利放鬆。'],
+    anatomyPoints: ['以椎板（lamina）作為深度定位；輕觸後稍微退出。', '避免向外側偏離脊椎旁深層肌群。'],
   }),
   defineGuide({
     chineseName: '頦舌肌', englishName: 'Genioglossus (Tongue)',
@@ -611,4 +662,12 @@ for (const guide of needleGuides) {
 
 export function needleGuidesForMuscle(name: string): NeedleGuide[] {
   return guidesByCatalogName.get(name) ?? []
+}
+
+export function hasNeedleGuideImage(name: string): boolean {
+  return needleGuidesForMuscle(name).some((guide) => guide.images.length > 0)
+}
+
+export function hasTextbookNeedleGuide(name: string): boolean {
+  return needleGuidesForMuscle(name).some((guide) => guide.sourceKind === 'textbook')
 }

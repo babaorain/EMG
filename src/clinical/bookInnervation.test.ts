@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { bookInnervationByCatalogName } from './bookInnervation'
 import { bookSourcedMuscleCount, findMuscleByName, muscleCatalog } from './catalog'
-import { needleGuidesForMuscle } from './needleGuides'
+import { hasTextbookNeedleGuide } from './needleGuides'
 
 describe('book-sourced muscle innervation', () => {
   it('covers every catalog muscle that has a chapter 13 needle guide', () => {
     const guidedNames = muscleCatalog
-      .filter((muscle) => needleGuidesForMuscle(muscle.name).length > 0)
+      .filter((muscle) => hasTextbookNeedleGuide(muscle.name))
       .map((muscle) => muscle.name)
 
     expect(bookSourcedMuscleCount).toBe(71)
