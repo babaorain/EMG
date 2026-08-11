@@ -18,7 +18,14 @@
   background: #fff;
 }
 
-.app-header > div:first-child {
+.app-header-main {
+  display: flex;
+  align-items: center;
+  gap: clamp(22px, 2.6vw, 42px);
+  min-width: 0;
+}
+
+.app-brand {
   display: flex;
   align-items: baseline;
   gap: 22px;
@@ -39,6 +46,38 @@
   font-size: 1rem;
 }
 
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+}
+
+.primary-nav a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 13px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.primary-nav a:hover {
+  color: var(--blue);
+}
+
+.primary-nav a.active {
+  background: var(--navy);
+  color: #fff;
+}
+
 .review-status {
   display: flex;
   align-items: center;
@@ -46,6 +85,329 @@
   flex-shrink: 0;
   color: var(--text-muted);
   font-size: 0.9rem;
+}
+
+.dermatome-page {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 46px) clamp(20px, 3.5vw, 54px) 54px;
+}
+
+.dermatome-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: clamp(28px, 5vw, 76px);
+  align-items: end;
+  padding: clamp(26px, 4vw, 54px);
+  border: 1px solid #cad8e2;
+  background:
+    linear-gradient(110deg, rgb(234 244 252 / 92%), rgb(255 255 255 / 88%)),
+    repeating-linear-gradient(90deg, transparent 0 87px, rgb(8 117 209 / 7%) 87px 88px);
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dermatome-hero h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.dermatome-hero-copy > p {
+  max-width: 780px;
+  margin: 18px 0 0;
+  color: #405564;
+  font-size: clamp(1rem, 1.2vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.dermatome-caution {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 19px;
+  border-left: 3px solid var(--warning);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.dermatome-caution svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.dermatome-caution strong,
+.dermatome-caution span {
+  display: block;
+}
+
+.dermatome-caution strong {
+  margin-bottom: 4px;
+  color: #754300;
+}
+
+.dermatome-caution span {
+  color: #72582e;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.dermatome-section {
+  margin-top: clamp(38px, 5vw, 68px);
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 18px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.section-heading h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 600;
+}
+
+.section-heading > p {
+  max-width: 570px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.dermatome-map-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.dermatome-map-card {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+
+.dermatome-image-wrap {
+  --map-padding: clamp(14px, 2vw, 28px);
+  position: relative;
+  height: clamp(500px, 49vw, 670px);
+  overflow: hidden;
+  padding: 0;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    repeating-linear-gradient(0deg, transparent 0 31px, rgb(8 42 74 / 4%) 31px 32px);
+}
+
+.dermatome-image-wrap img {
+  position: absolute;
+  inset: var(--map-padding);
+  width: calc(100% - (2 * var(--map-padding)));
+  height: calc(100% - (2 * var(--map-padding)));
+  display: block;
+  object-fit: contain;
+}
+
+.dermatome-map-card figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 64px;
+  padding: 13px 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.dermatome-map-card figcaption strong {
+  color: var(--navy);
+  font-size: 1rem;
+}
+
+.dermatome-map-card figcaption span {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.dermatome-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+  scrollbar-width: thin;
+}
+
+.dermatome-filter button {
+  min-width: 108px;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 11px;
+  padding: 7px 11px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.dermatome-filter button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.dermatome-filter button.active {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: #fff;
+}
+
+.dermatome-filter button span {
+  font-weight: 600;
+}
+
+.dermatome-filter button small {
+  color: currentColor;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  opacity: 0.74;
+}
+
+.dermatome-table {
+  border: 1px solid var(--rule-strong);
+  background: #fff;
+}
+
+.dermatome-table-head,
+.dermatome-row {
+  display: grid;
+  grid-template-columns: 92px 112px minmax(0, 1fr);
+}
+
+.dermatome-table-head {
+  min-height: 38px;
+  align-items: center;
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.dermatome-table-head span,
+.dermatome-row > * {
+  padding-right: 14px;
+  padding-left: 14px;
+}
+
+.dermatome-table-body {
+  display: contents;
+}
+
+.dermatome-row {
+  min-height: 68px;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+}
+
+.dermatome-row:last-child {
+  border-bottom: 0;
+}
+
+.dermatome-row.quick-reference {
+  background: linear-gradient(90deg, var(--blue-soft), #fff 42%);
+}
+
+.dermatome-root {
+  color: var(--navy);
+  font-family: var(--mono);
+  font-size: 1rem;
+}
+
+.dermatome-region {
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
+.dermatome-landmark {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+.dermatome-landmark svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--blue);
+}
+
+.dermatome-landmark strong,
+.dermatome-landmark small {
+  display: block;
+}
+
+.dermatome-landmark strong {
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.dermatome-landmark small {
+  margin-top: 2px;
+  color: var(--text-faint);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.dermatome-source-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-top: 26px;
+  padding: 18px 20px;
+  border: 1px solid var(--rule);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+}
+
+.dermatome-source-note svg {
+  flex: 0 0 auto;
+  color: var(--navy);
+}
+
+.dermatome-source-note h3 {
+  margin: 0 0 4px;
+  color: var(--navy);
+  font-size: 0.95rem;
+}
+
+.dermatome-source-note p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
 }
 
 .picker-layout {
@@ -656,8 +1018,9 @@
 }
 
 .dialog-close {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
   display: grid;
   place-items: center;
   border: 0;
@@ -680,7 +1043,7 @@
 }
 
 .dialog-footer button {
-  min-height: 38px;
+  min-height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -701,7 +1064,9 @@
 }
 
 .needle-dialog {
-  max-width: 680px;
+  width: min(1260px, calc(100vw - 48px));
+  max-width: 1260px;
+  max-height: min(920px, calc(100vh - 48px));
 }
 
 .needle-title-line {
@@ -713,63 +1078,266 @@
 .needle-title-line span {
   padding-left: 14px;
   border-left: 1px solid var(--rule-strong);
-  color: var(--navy);
-  font-size: 1.05rem;
+  color: var(--blue);
+  font-size: 0.96rem;
   font-weight: 600;
+}
+
+.needle-variant-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 10px 22px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface-subtle);
+}
+
+.needle-variant-tabs button {
+  min-width: 148px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.needle-variant-tabs button:hover,
+.needle-variant-tabs button.active {
+  border-color: var(--blue);
+}
+
+.needle-variant-tabs button.active {
+  background: var(--blue-soft);
+  color: var(--navy);
+}
+
+.needle-variant-tabs button > span {
+  display: block;
+  margin-top: 1px;
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
+.needle-dialog-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--workspace);
 }
 
 .needle-dialog-body {
   display: grid;
-  grid-template-columns: minmax(190px, 0.8fr) minmax(280px, 1.2fr);
-  gap: 24px;
-  padding: 24px 28px 18px;
+  grid-template-columns: minmax(400px, 0.95fr) minmax(440px, 1.05fr);
+  align-items: start;
+  gap: 20px;
+  padding: 20px;
 }
 
-.needle-placeholder {
-  min-height: 310px;
+.needle-gallery {
+  position: sticky;
+  top: 20px;
+  min-width: 0;
+}
+
+.needle-section-heading {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 17px;
-  border: 1px dashed #b9ccd9;
-  background: #f2f7fa;
-  color: #8296a5;
-}
-
-.needle-fields {
-  margin: 0;
-}
-
-.needle-fields div {
-  display: grid;
-  grid-template-columns: 136px minmax(0, 1fr);
-  gap: 12px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.needle-fields dt {
+  gap: 8px;
+  margin-bottom: 9px;
   color: var(--navy);
-  font-size: 0.84rem;
+}
+
+.needle-section-heading h3 {
+  margin: 0;
+  font-size: 0.92rem;
   font-weight: 600;
 }
 
-.needle-fields dd {
-  margin: 0;
+.needle-section-heading span {
+  margin-left: auto;
   color: var(--text-faint);
-  font-size: 0.84rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.needle-gallery figure {
+  margin: 0 0 14px;
+  border: 1px solid var(--rule-strong);
+  background: #fff;
+  box-shadow: 0 4px 14px rgb(8 42 74 / 7%);
+}
+
+.needle-gallery figure > a {
+  position: relative;
+  display: block;
+  padding: 8px;
+  color: inherit;
+}
+
+.needle-gallery img {
+  width: 100%;
+  max-height: 610px;
+  display: block;
+  object-fit: contain;
+  background: #fff;
+}
+
+.needle-gallery figure > a > span {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 9px;
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: var(--radius-sm);
+  background: rgb(8 42 74 / 82%);
+  color: #fff;
+  font-size: 0.76rem;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.needle-gallery figure > a:hover > span,
+.needle-gallery figure > a:focus-visible > span {
+  opacity: 1;
+}
+
+.needle-gallery figcaption {
+  padding: 8px 11px;
+  border-top: 1px solid var(--rule);
+  color: var(--text-muted);
+  font-size: 0.77rem;
+}
+
+.needle-guide-details {
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+
+.needle-core-fields {
+  margin: 0;
+}
+
+.needle-core-fields > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 15px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.needle-core-fields dt {
+  color: var(--navy);
+  font-size: 0.83rem;
+  font-weight: 600;
+}
+
+.needle-core-fields dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.62;
+}
+
+.needle-point-section {
+  padding: 17px 18px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.needle-point-section:last-child {
+  border-bottom: 0;
+}
+
+.needle-point-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 10px;
+  color: var(--navy);
+  font-size: 0.9rem;
+}
+
+.needle-point-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.needle-point-section li,
+.needle-point-section p {
+  color: var(--text-muted);
+  font-size: 0.87rem;
+  line-height: 1.58;
+}
+
+.needle-point-section li + li {
+  margin-top: 7px;
+}
+
+.needle-point-section p {
+  margin: 0;
+}
+
+.needle-point-section.caution {
+  background: var(--warning-soft);
+}
+
+.needle-point-section.caution h3 {
+  color: var(--warning);
 }
 
 .needle-review-note {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
-  margin: 0 28px 18px;
-  padding: 10px 12px;
+  margin: 0 20px 20px;
+  padding: 11px 13px;
   background: var(--blue-soft);
   color: #19597f;
   font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.needle-review-note svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.needle-empty-guide {
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.needle-empty-guide strong {
+  color: var(--navy);
+}
+
+.needle-empty-guide p {
+  max-width: 430px;
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 980px) {
+  .needle-dialog-body {
+    grid-template-columns: 1fr;
+  }
+
+  .needle-gallery {
+    position: static;
+  }
+
+  .needle-gallery img {
+    max-height: none;
+  }
 }
 
 .worksheet-dialog {
@@ -824,6 +1392,10 @@
 }
 
 @media (max-width: 1250px) {
+  .app-brand p {
+    display: none;
+  }
+
   .picker-layout {
     grid-template-columns: minmax(790px, 1fr) 340px;
   }
@@ -835,14 +1407,6 @@
 }
 
 @media (max-width: 1120px) {
-  .app-header > div:first-child {
-    display: block;
-  }
-
-  .app-header p {
-    margin-top: 2px;
-  }
-
   .picker-layout {
     display: block;
   }
@@ -861,6 +1425,10 @@
   .selected-list-wrap {
     max-height: 420px;
   }
+
+  .dermatome-hero {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -873,6 +1441,28 @@
   .app-header p,
   .review-status {
     font-size: 0.83rem;
+  }
+
+  .app-header-main {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .app-brand {
+    display: block;
+  }
+
+  .primary-nav {
+    width: 100%;
+  }
+
+  .primary-nav a {
+    min-height: 42px;
+    flex: 1;
+    justify-content: center;
+    padding: 0 9px;
   }
 
   .review-status {
@@ -964,23 +1554,136 @@
     font-size: 1.05rem;
   }
 
-  .needle-dialog-body {
-    display: block;
-    overflow-y: auto;
+  .dialog-backdrop {
+    padding: 0;
   }
 
-  .needle-placeholder {
-    min-height: 150px;
-    margin-bottom: 14px;
+  .needle-dialog {
+    width: 100vw;
+    max-height: 100dvh;
+    border: 0;
+    border-radius: 0;
   }
 
-  .needle-fields div {
-    grid-template-columns: 1fr;
+  .needle-dialog-header {
+    padding: 15px 16px;
+  }
+
+  .needle-title-line {
+    align-items: flex-start;
+    flex-direction: column;
     gap: 3px;
+  }
+
+  .needle-title-line span {
+    padding-left: 0;
+    border-left: 0;
+    font-size: 0.82rem;
+  }
+
+  .needle-variant-tabs {
+    padding: 9px 12px;
+  }
+
+  .needle-dialog-body {
+    padding: 12px;
+  }
+
+  .needle-core-fields > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 14px;
+  }
+
+  .needle-review-note {
+    margin: 0 12px 12px;
   }
 
   .worksheet-footer {
     flex-wrap: wrap;
+  }
+
+  .dermatome-page {
+    padding: 16px 12px 34px;
+  }
+
+  .dermatome-hero {
+    gap: 24px;
+    padding: 24px 18px;
+  }
+
+  .dermatome-hero h2 {
+    font-size: clamp(1.9rem, 10vw, 2.65rem);
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .section-heading > p {
+    text-align: left;
+  }
+
+  .dermatome-map-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dermatome-image-wrap {
+    height: auto;
+    min-height: 0;
+    padding: 14px;
+  }
+
+  .dermatome-image-wrap img {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+
+  .dermatome-map-card figcaption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .dermatome-map-card figcaption span {
+    text-align: left;
+  }
+
+  .dermatome-table-head {
+    display: none;
+  }
+
+  .dermatome-row {
+    grid-template-columns: 68px minmax(0, 1fr);
+    gap: 2px 0;
+    padding: 12px 0;
+  }
+
+  .dermatome-root,
+  .dermatome-region {
+    grid-column: 1;
+  }
+
+  .dermatome-root {
+    align-self: end;
+  }
+
+  .dermatome-region {
+    align-self: start;
+  }
+
+  .dermatome-landmark {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .dermatome-source-note {
+    padding: 15px;
   }
 }
 

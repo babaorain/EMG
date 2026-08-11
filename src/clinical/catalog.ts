@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import legacyMuscles from './legacy-muscles.json'
 import { buildPathway, type MusclePathway } from '../domain/anatomy'
+import { bookInnervationForCatalogName } from './bookInnervation'
 
 const legacyMuscleSchema = z.object({
   m: z.string().min(1),
@@ -15,20 +16,26 @@ type LegacyMuscle = z.infer<typeof legacyMuscleSchema>
 const parsedLegacyMuscles = z.array(legacyMuscleSchema).parse(legacyMuscles)
 
 /**
- * Cervical paraspinals are absent from the legacy catalog, which only carried
- * L2-L5 and S1. They are added here because the preganglionic screen in
- * brachial plexus injury and the confirmation step in cervical radiculopathy
- * both depend on them. These four entries are additions to the legacy data set,
- * not migrations of it.
+ * These entries are absent from the legacy catalog. Cervical and thoracic
+ * paraspinals complete the chapter 13 needle guide coverage; flexor hallucis
+ * brevis is also included because it has its own insertion figure and technique.
  */
 const addedMuscles: LegacyMuscle[] = [
   { m: 'Paraspinal (C5)', n: 'Post. Rami (Cervical)', r: 'C5', r_list: ['C5'], a: ['C5 PSP'] },
   { m: 'Paraspinal (C6)', n: 'Post. Rami (Cervical)', r: 'C6', r_list: ['C6'], a: ['C6 PSP'] },
   { m: 'Paraspinal (C7)', n: 'Post. Rami (Cervical)', r: 'C7', r_list: ['C7'], a: ['C7 PSP'] },
   { m: 'Paraspinal (C8)', n: 'Post. Rami (Cervical)', r: 'C8', r_list: ['C8'], a: ['C8 PSP'] },
+  {
+    m: 'Paraspinal (Thoracic)',
+    n: 'Post. Rami (Thoracic)',
+    r: 'T1-T12',
+    r_list: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+    a: ['T PSP'],
+  },
+  { m: 'Flexor Hallucis Brevis', n: 'Med. Plantar N.', r: 'S1-S2', r_list: ['S1', 'S2'], a: ['FHB'] },
 ]
 
-export type ReviewStatus = 'legacy-unverified' | 'added-unverified'
+export type ReviewStatus = 'legacy-unverified' | 'added-unverified' | 'book-sourced'
 export type MuscleRegion = 'cranial' | 'upper' | 'lower' | 'paraspinal' | 'other'
 
 export interface MuscleCatalogEntry {
@@ -40,6 +47,7 @@ export interface MuscleCatalogEntry {
   rootLabel: string
   region: MuscleRegion
   reviewStatus: ReviewStatus
+  innervationSource?: string
   pathway: MusclePathway
   /**
    * A normal result here narrows the differential far less than the raw
@@ -65,24 +73,31 @@ function inferRegion(name: string, pathway: MusclePathway): MuscleRegion {
   return 'cranial'
 }
 
-export const CATALOG_VERSION = 'emg-catalog.0.2.0'
+export const CATALOG_VERSION = 'emg-catalog.0.4.0'
 
 function toEntry(
   item: LegacyMuscle,
   index: number,
-  reviewStatus: ReviewStatus,
+  fallbackReviewStatus: Exclude<ReviewStatus, 'book-sourced'>,
+  idPrefix: 'lg' | 'add',
 ): MuscleCatalogEntry {
-  const pathway = buildPathway(item.n, item.r_list)
+  const bookInnervation = bookInnervationForCatalogName(item.m)
+  const nerveLabel = bookInnervation?.nerveLabel ?? item.n
+  const roots = bookInnervation?.roots ?? item.r_list
+  const rootLabel = bookInnervation?.rootLabel ?? item.r
+  const reviewStatus: ReviewStatus = bookInnervation ? 'book-sourced' : fallbackReviewStatus
+  const pathway = buildPathway(nerveLabel, roots)
   const region = inferRegion(item.m, pathway)
   return {
-    id: `${reviewStatus === 'legacy-unverified' ? 'lg' : 'add'}-${String(index + 1).padStart(3, '0')}-${slug(item.m)}`,
+    id: `${idPrefix}-${String(index + 1).padStart(3, '0')}-${slug(item.m)}`,
     name: item.m,
     abbreviations: item.a,
-    nerveLabel: item.n,
-    roots: item.r_list,
-    rootLabel: item.r,
+    nerveLabel,
+    roots,
+    rootLabel,
     region,
     reviewStatus,
+    innervationSource: bookInnervation?.sourceLocator,
     pathway,
     normalIsWeakExclusion: region === 'paraspinal',
     weakExclusionReason:
@@ -93,9 +108,13 @@ function toEntry(
 }
 
 export const muscleCatalog: MuscleCatalogEntry[] = [
-  ...parsedLegacyMuscles.map((item, index) => toEntry(item, index, 'legacy-unverified')),
-  ...addedMuscles.map((item, index) => toEntry(item, index, 'added-unverified')),
+  ...parsedLegacyMuscles.map((item, index) => toEntry(item, index, 'legacy-unverified', 'lg')),
+  ...addedMuscles.map((item, index) => toEntry(item, index, 'added-unverified', 'add')),
 ]
+
+export const bookSourcedMuscleCount = muscleCatalog.filter(
+  (muscle) => muscle.reviewStatus === 'book-sourced',
+).length
 
 export const muscleById = new Map(muscleCatalog.map((muscle) => [muscle.id, muscle]))
 

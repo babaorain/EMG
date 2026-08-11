@@ -58,6 +58,7 @@ const namesByArea: Record<MuscleArea, readonly string[]> = {
     'Paraspinal (C6)',
     'Paraspinal (C7)',
     'Paraspinal (C8)',
+    'Paraspinal (Thoracic)',
   ],
   upper_arm: [
     'Biceps Brachii',
@@ -144,6 +145,7 @@ const namesByArea: Record<MuscleArea, readonly string[]> = {
     'Extensor Digitorum Brevis',
     'Extensor Hallucis Brevis',
     'Abductor Hallucis',
+    'Flexor Hallucis Brevis',
     'Flexor Digitorum Brevis',
     'Abductor Digiti Quinti',
     'Interossei (Foot)',

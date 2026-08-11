@@ -53,6 +53,8 @@ interface NerveDef {
   label: string
   /** Immediate parent trunk in the nerve tree, e.g. PIN -> radial. */
   parent?: string
+  /** Used when a muscle has recognized dual terminal innervation. */
+  parents?: string[]
   origin: NerveOrigin
   region: SiteRegion
   confidence?: SiteConfidence
@@ -60,11 +62,16 @@ interface NerveDef {
 
 const nerveDefs: NerveDef[] = [
   { id: 'facial', label: 'Facial N.', origin: { kind: 'cranial' }, region: 'cranial' },
+  { id: 'facial-frontal', label: 'Frontal branch (Facial N.)', parent: 'facial', origin: { kind: 'cranial' }, region: 'cranial' },
+  { id: 'facial-mandibular', label: 'Mandibular branch (Facial N.)', parent: 'facial', origin: { kind: 'cranial' }, region: 'cranial' },
+  { id: 'facial-temporal', label: 'Temporal branch (Facial N.)', parent: 'facial', origin: { kind: 'cranial' }, region: 'cranial' },
   { id: 'trigeminal', label: 'Trigeminal N.', origin: { kind: 'cranial' }, region: 'cranial' },
+  { id: 'mandibular-v3', label: 'Mandibular N. (V3)', parent: 'trigeminal', origin: { kind: 'cranial' }, region: 'cranial' },
   { id: 'hypoglossal', label: 'Hypoglossal N.', origin: { kind: 'cranial' }, region: 'cranial' },
   { id: 'accessory', label: 'Accessory N.', origin: { kind: 'cranial' }, region: 'cranial' },
 
   { id: 'post-rami-cervical', label: 'Post. Rami (Cervical)', origin: { kind: 'posterior_ramus' }, region: 'axial' },
+  { id: 'post-rami-thoracic', label: 'Post. Rami (Thoracic)', origin: { kind: 'posterior_ramus' }, region: 'axial' },
   { id: 'post-rami-lumbar', label: 'Post. Rami (Lumbar)', origin: { kind: 'posterior_ramus' }, region: 'axial' },
   { id: 'post-rami-sacral', label: 'Post. Rami (Sacral)', origin: { kind: 'posterior_ramus' }, region: 'axial' },
 
@@ -86,6 +93,13 @@ const nerveDefs: NerveDef[] = [
   { id: 'median', label: 'Median N.', origin: { kind: 'cord_by_roots' }, region: 'upper' },
   { id: 'ain', label: 'AIN (Median)', parent: 'median', origin: { kind: 'cord_by_roots' }, region: 'upper' },
   { id: 'ulnar', label: 'Ulnar N.', origin: { kind: 'cord', cords: ['cord-medial'] }, region: 'upper' },
+  {
+    id: 'median-ulnar',
+    label: 'Median / Ulnar N.',
+    parents: ['median', 'ulnar'],
+    origin: { kind: 'cord_by_roots' },
+    region: 'upper',
+  },
 
   { id: 'femoral', label: 'Femoral N.', origin: { kind: 'plexus', plexus: 'plexus-lumbar' }, region: 'lower' },
   { id: 'obturator', label: 'Obturator N.', origin: { kind: 'plexus', plexus: 'plexus-lumbar' }, region: 'lower' },
@@ -110,7 +124,10 @@ const nerveById = new Map(nerveDefs.map((nerve) => [nerve.id, nerve]))
 
 const upperRoots = ['C5', 'C6', 'C7', 'C8', 'T1'] as const
 const lowerRoots = ['L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'S2', 'S3', 'S4'] as const
-const axialRoots = ['C2', 'C3', 'C4'] as const
+const axialRoots = [
+  'C2', 'C3', 'C4',
+  'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12',
+] as const
 
 function rootRegion(root: string): SiteRegion {
   if ((upperRoots as readonly string[]).includes(root)) return 'upper'
@@ -195,13 +212,21 @@ function cordsFromRoots(roots: string[]): CordId[] {
 
 function nerveChain(nerveId: string): string[] {
   const chain: string[] = []
-  let current: string | undefined = nerveId
   const guard = new Set<string>()
-  while (current && !guard.has(current)) {
+
+  const visit = (current: string | undefined) => {
+    if (!current || guard.has(current)) return
     guard.add(current)
     chain.push(current)
-    current = nerveById.get(current)?.parent
+    const nerve = nerveById.get(current)
+    if (nerve?.parents) {
+      for (const parent of nerve.parents) visit(parent)
+    } else {
+      visit(nerve?.parent)
+    }
   }
+
+  visit(nerveId)
   return chain
 }
 
