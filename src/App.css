@@ -78,6 +78,10 @@
   color: #fff;
 }
 
+.nav-compact {
+  display: none;
+}
+
 .review-status {
   display: flex;
   align-items: center;
@@ -85,6 +89,435 @@
   flex-shrink: 0;
   color: var(--text-muted);
   font-size: 0.9rem;
+}
+
+.plexus-page {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 46px) clamp(20px, 3.5vw, 54px) 54px;
+}
+
+.plexus-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(310px, 0.55fr);
+  align-items: end;
+  gap: clamp(24px, 4vw, 60px);
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid #c5d5e0;
+  border-top: 4px solid var(--navy);
+  background:
+    linear-gradient(105deg, rgb(234 244 252 / 94%), rgb(255 255 255 / 92%)),
+    repeating-linear-gradient(90deg, transparent 0 79px, rgb(8 117 209 / 7%) 79px 80px);
+}
+
+.plexus-hero h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(2rem, 3.4vw, 3.15rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.plexus-hero > div > p {
+  max-width: 760px;
+  margin: 14px 0 0;
+  color: #405564;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.plexus-hero aside {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 16px 17px;
+  border-left: 3px solid var(--normal);
+  background: var(--normal-soft);
+  color: #285d3d;
+}
+
+.plexus-hero aside svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.plexus-hero aside strong,
+.plexus-hero aside span {
+  display: block;
+}
+
+.plexus-hero aside strong {
+  margin-bottom: 3px;
+  color: #1f5837;
+}
+
+.plexus-hero aside span {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.plexus-first-pass,
+.plexus-flow-section,
+.plexus-localization-section {
+  margin-top: clamp(34px, 4vw, 54px);
+}
+
+.plexus-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 15px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.plexus-section-heading h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(1.35rem, 2vw, 1.72rem);
+  font-weight: 600;
+}
+
+.plexus-section-heading > p {
+  max-width: 610px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.plexus-first-pass ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--rule-strong);
+  background: #fff;
+}
+
+.plexus-first-pass li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px;
+  border-right: 1px solid var(--rule);
+}
+
+.plexus-first-pass li:last-child {
+  border-right: 0;
+}
+
+.plexus-first-pass li > span {
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.plexus-first-pass strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--navy);
+  font-size: 0.98rem;
+}
+
+.plexus-first-pass p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.plexus-flow-board {
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  background: #fff;
+}
+
+.plexus-flow-head {
+  display: grid;
+  grid-template-columns: 0.65fr 0.9fr 1fr 1fr;
+  gap: 36px;
+  padding: 10px 16px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.plexus-flow-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.65fr) 22px minmax(140px, 0.9fr) repeat(2, minmax(150px, 1fr));
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.plexus-flow-row:last-child {
+  border-bottom: 0;
+}
+
+.plexus-flow-row > svg {
+  align-self: center;
+  color: var(--blue);
+}
+
+.plexus-flow-row > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 10px 13px;
+  border-left: 3px solid var(--blue);
+  background: var(--blue-soft);
+}
+
+.plexus-flow-row > div:first-child {
+  border-left-color: var(--navy);
+  background: #eef3f7;
+}
+
+.plexus-flow-row .flow-branch {
+  border-left-color: var(--normal);
+  background: var(--normal-soft);
+}
+
+.plexus-flow-row .flow-branch.posterior {
+  border-left-color: #6a55a3;
+  background: #f2eff9;
+}
+
+.plexus-flow-row small {
+  display: none;
+}
+
+.plexus-flow-row strong {
+  color: var(--navy);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.plexus-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.plexus-localization-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  background: #fff;
+}
+
+.plexus-localization-card > header {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 16px;
+  border-left: 5px solid var(--blue);
+  background: linear-gradient(90deg, #edf6fc, #fff);
+}
+
+.plexus-localization-section.cord .plexus-localization-card > header {
+  border-left-color: var(--normal);
+  background: linear-gradient(90deg, #edf7f0, #fff);
+}
+
+.plexus-localization-card header span {
+  display: block;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.plexus-localization-card h4 {
+  margin: 2px 0 0;
+  color: var(--navy);
+  font-size: 1.25rem;
+  font-weight: 650;
+}
+
+.plexus-localization-card header > strong {
+  color: var(--navy);
+  font-family: var(--mono);
+  font-size: 1.03rem;
+}
+
+.plexus-composition {
+  min-height: 76px;
+  margin: 0;
+  padding: 13px 16px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.plexus-card-block {
+  padding: 14px 16px;
+}
+
+.plexus-card-block h5 {
+  margin: 0 0 9px;
+  color: var(--navy);
+  font-size: 0.82rem;
+}
+
+.plexus-card-block ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plexus-card-block li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dotted #cad6de;
+}
+
+.plexus-card-block li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.plexus-card-block li strong {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.plexus-card-block li span {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-align: right;
+}
+
+.plexus-evidence-list {
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.plexus-evidence-list > div {
+  padding: 11px 16px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.plexus-evidence-list > div:last-child {
+  border-bottom: 0;
+}
+
+.plexus-evidence-list dt {
+  margin-bottom: 3px;
+  color: var(--blue);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.plexus-localization-section.cord .plexus-evidence-list dt {
+  color: var(--normal);
+}
+
+.plexus-evidence-list dd {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+.plexus-caution {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--warning);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.plexus-caution svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.plexus-caution strong {
+  display: block;
+  color: #754300;
+}
+
+.plexus-caution p {
+  margin: 3px 0 0;
+  color: #72582e;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.plexus-sources {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 54px;
+  align-items: start;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 17px 19px;
+  border: 1px solid var(--rule);
+  background: var(--surface-subtle);
+}
+
+.plexus-sources > svg:first-child {
+  color: var(--navy);
+}
+
+.plexus-sources h3 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 0.94rem;
+}
+
+.plexus-sources ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plexus-sources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.plexus-sources li > span {
+  display: block;
+  margin-top: 1px;
+  color: var(--text-faint);
+  font-size: 0.77rem;
+}
+
+.plexus-source-mark {
+  justify-self: end;
+  color: #acc1cf;
 }
 
 .dermatome-page {
@@ -633,17 +1066,6 @@
   font-weight: 400;
 }
 
-.root-band {
-  margin: 0;
-  padding: 7px 28px;
-  border-bottom: 1px solid #d9e4ec;
-  background: #f6f9fb;
-  color: var(--navy);
-  font-family: var(--mono);
-  font-size: 0.83rem;
-  font-weight: 600;
-}
-
 .muscle-path-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
@@ -700,6 +1122,13 @@
   color: var(--text-faint);
 }
 
+.pathway-stage:first-child .pathway-value {
+  color: var(--navy);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
 .pathway-stage:last-child .pathway-value {
   min-height: 46px;
   padding: 5px 9px 6px 12px;
@@ -716,7 +1145,7 @@
 
 .pathway-line {
   position: absolute;
-  right: 0;
+  right: -5px;
   bottom: 13px;
   left: 4px;
   height: 1px;
@@ -764,10 +1193,34 @@
   padding: 0 10px;
 }
 
+.needle-button.has-guide {
+  border-color: #92bda7;
+  background: var(--normal-soft);
+  color: #176b43;
+  font-weight: 600;
+}
+
+.needle-button.no-guide {
+  border-color: transparent;
+  background: transparent;
+  color: #8a969f;
+}
+
 .needle-button:hover,
 .side-add-button:hover {
   border-color: var(--blue);
   color: var(--blue);
+}
+
+.needle-button.has-guide:hover {
+  border-color: var(--normal);
+  background: #e3f2e8;
+  color: #115a37;
+}
+
+.needle-button.no-guide:hover {
+  border-color: var(--rule-strong);
+  color: #667680;
 }
 
 .no-results {
@@ -1466,6 +1919,18 @@
   .dermatome-hero {
     grid-template-columns: 1fr;
   }
+
+  .plexus-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .plexus-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plexus-composition {
+    min-height: 0;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1509,6 +1974,14 @@
     justify-content: center;
     padding: 0 7px;
     font-size: 0.75rem;
+  }
+
+  .nav-wide {
+    display: none;
+  }
+
+  .nav-compact {
+    display: inline;
   }
 
   .library-toolbar {
@@ -1595,6 +2068,10 @@
     font-size: 0.9rem;
   }
 
+  .pathway-stage:first-child .pathway-value {
+    font-size: 1.08rem;
+  }
+
   .pathway-stage:last-child .pathway-label {
     color: #527084;
     font-size: 0.7rem;
@@ -1629,6 +2106,110 @@
 
   .clinical-area-band h3 {
     font-size: 1.05rem;
+  }
+
+  .plexus-page {
+    padding: 16px 12px 34px;
+  }
+
+  .plexus-hero {
+    gap: 15px;
+    padding: 18px 16px;
+  }
+
+  .plexus-hero h2 {
+    font-size: clamp(1.62rem, 7vw, 1.95rem);
+  }
+
+  .plexus-hero > div > p {
+    margin-top: 10px;
+    font-size: 0.95rem;
+  }
+
+  .plexus-hero aside {
+    padding: 13px 14px;
+  }
+
+  .plexus-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .plexus-section-heading > p {
+    text-align: left;
+  }
+
+  .plexus-first-pass ol {
+    grid-template-columns: 1fr;
+  }
+
+  .plexus-first-pass li {
+    padding: 15px;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .plexus-first-pass li:last-child {
+    border-bottom: 0;
+  }
+
+  .plexus-flow-head {
+    display: none;
+  }
+
+  .plexus-flow-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .plexus-flow-row > svg {
+    display: none;
+  }
+
+  .plexus-flow-row > div {
+    min-height: 58px;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 10px;
+  }
+
+  .plexus-flow-row small {
+    display: block;
+    margin-bottom: 1px;
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-size: 0.63rem;
+    text-transform: uppercase;
+  }
+
+  .plexus-flow-row strong {
+    font-size: 0.92rem;
+  }
+
+  .plexus-card-grid {
+    gap: 12px;
+  }
+
+  .plexus-card-block li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .plexus-card-block li span {
+    text-align: left;
+  }
+
+  .plexus-sources {
+    grid-template-columns: 22px minmax(0, 1fr);
+    padding: 15px;
+  }
+
+  .plexus-source-mark {
+    display: none;
   }
 
   .dialog-backdrop {

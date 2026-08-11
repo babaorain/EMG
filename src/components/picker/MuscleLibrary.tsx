@@ -6,7 +6,8 @@ import {
   muscleAreaDefinitions,
   type MuscleArea,
 } from '../../clinical/clinicalAreas'
-import { pathwayStages, primaryRoot } from '../../domain/muscleSelection'
+import { needleGuidesForMuscle } from '../../clinical/needleGuides'
+import { pathwayStages } from '../../domain/muscleSelection'
 import type { Side } from '../../domain/types'
 
 export type AreaFilter = 'all' | MuscleArea
@@ -67,6 +68,7 @@ function MusclePathRow({
   const stages = pathwayStages(muscle)
   const leftSelected = selectedKeys.has(`L:${muscle.id}`)
   const rightSelected = selectedKeys.has(`R:${muscle.id}`)
+  const hasNeedleGuide = needleGuidesForMuscle(muscle.name).length > 0
 
   return (
     <article className="muscle-path-row">
@@ -85,10 +87,11 @@ function MusclePathRow({
         <AddButton side="L" selected={leftSelected} onClick={() => onAdd(muscle, 'L')} />
         <AddButton side="R" selected={rightSelected} onClick={() => onAdd(muscle, 'R')} />
         <button
-          className="needle-button"
+          className={`needle-button ${hasNeedleGuide ? 'has-guide' : 'no-guide'}`}
           type="button"
           onClick={() => onNeedlePoint(muscle, rightSelected ? 'R' : 'L')}
-          title="查看扎針點"
+          title={hasNeedleGuide ? '查看扎針圖譜' : '尚無扎針圖片'}
+          aria-label={`扎針點，${hasNeedleGuide ? '有圖譜' : '尚無圖片'}`}
         >
           <Crosshair size={17} aria-hidden="true" />
           <span>扎針點</span>
@@ -200,10 +203,6 @@ export function MuscleLibrary(props: MuscleLibraryProps) {
             const area = clinicalAreaForMuscle(muscle)
             const previousMuscle = props.muscles[index - 1]
             const previousArea = previousMuscle ? clinicalAreaForMuscle(previousMuscle) : undefined
-            const root = primaryRoot(muscle)
-            const previousRoot = previousArea === area && previousMuscle
-              ? primaryRoot(previousMuscle)
-              : undefined
             const areaDefinition = muscleAreaById.get(area)
 
             return (
@@ -217,7 +216,6 @@ export function MuscleLibrary(props: MuscleLibraryProps) {
                     <strong>{areaCounts.get(area)} muscles</strong>
                   </div>
                 ) : null}
-                {root !== previousRoot ? <h4 className="root-band">Root {root}</h4> : null}
                 <MusclePathRow
                   muscle={muscle}
                   selectedKeys={props.selectedKeys}
