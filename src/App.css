@@ -207,7 +207,7 @@
 }
 
 .dermatome-image-wrap {
-  --map-padding: clamp(14px, 2vw, 28px);
+  --map-padding: clamp(6px, 1vw, 12px);
   position: relative;
   height: clamp(500px, 49vw, 670px);
   overflow: hidden;
@@ -1185,7 +1185,8 @@
 .needle-gallery figure > a {
   position: relative;
   display: block;
-  padding: 8px;
+  overflow: hidden;
+  padding: 3px;
   color: inherit;
 }
 
@@ -1254,6 +1255,27 @@
   color: var(--text);
   font-size: 0.9rem;
   line-height: 1.62;
+}
+
+.clinical-emphasis {
+  box-decoration-break: clone;
+  padding: 0.06em 0.25em;
+  border-radius: 3px;
+  background: #fff0ce;
+  color: #704600;
+  font-weight: 700;
+  -webkit-box-decoration-break: clone;
+}
+
+.needle-core-fields > .activation-field {
+  border-left: 4px solid var(--blue);
+  background: linear-gradient(90deg, #eaf5fb 0%, #f7fbfd 100%);
+}
+
+.activation-field dd {
+  color: var(--navy);
+  font-size: 1rem;
+  font-weight: 650;
 }
 
 .needle-point-section {
@@ -1550,6 +1572,12 @@
     margin-bottom: 3px;
   }
 
+  .muscle-path-row .pathway-stage:nth-child(5) {
+    grid-row: 4;
+    grid-column: 1 / -1;
+    padding-top: 2px;
+  }
+
   .pathway-stage::after,
   .pathway-line {
     display: none;
@@ -1638,6 +1666,16 @@
     padding: 12px;
   }
 
+  .needle-gallery figure > a {
+    padding: 0;
+  }
+
+  .needle-gallery img {
+    width: 110%;
+    max-width: none;
+    margin-left: -5%;
+  }
+
   .needle-core-fields > div {
     grid-template-columns: 1fr;
     gap: 4px;
@@ -1657,12 +1695,24 @@
   }
 
   .dermatome-hero {
-    gap: 24px;
-    padding: 24px 18px;
+    gap: 16px;
+    padding: 18px 16px;
   }
 
   .dermatome-hero h2 {
-    font-size: clamp(1.9rem, 10vw, 2.65rem);
+    font-size: clamp(1.65rem, 7.4vw, 2.05rem);
+    letter-spacing: -0.025em;
+  }
+
+  .dermatome-hero-copy > p {
+    margin-top: 12px;
+    font-size: 0.97rem;
+    line-height: 1.62;
+  }
+
+  .dermatome-caution {
+    gap: 10px;
+    padding: 14px 15px;
   }
 
   .section-heading {
@@ -1682,7 +1732,7 @@
   .dermatome-image-wrap {
     height: auto;
     min-height: 0;
-    padding: 14px;
+    padding: 2px;
   }
 
   .dermatome-image-wrap img {
