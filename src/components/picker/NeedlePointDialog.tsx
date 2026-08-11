@@ -1,4 +1,4 @@
-import { BookOpenCheck, ExternalLink, ImageIcon, Info, ShieldAlert, X } from 'lucide-react'
+import { ExternalLink, ImageIcon, Info, ShieldAlert, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { MuscleCatalogEntry } from '../../clinical/catalog'
 import { needleGuidesForMuscle } from '../../clinical/needleGuides'
@@ -168,25 +168,16 @@ export function NeedlePointDialog({ muscle, side, onClose }: NeedlePointDialogPr
                   </ul>
                 </div>
 
-                <div className="needle-point-section caution">
-                  <h3><ShieldAlert size={17} aria-hidden="true" /> 橫切面構造與避險</h3>
-                  {activeGuide.anatomyPoints.length ? (
+                {activeGuide.anatomyPoints.length ? (
+                  <div className="needle-point-section caution">
+                    <h3><ShieldAlert size={17} aria-hidden="true" /> 橫切面構造與避險</h3>
                     <ul>
                       {activeGuide.anatomyPoints.map((point) => (
                         <li key={point}><HighlightedClinicalText text={point} /></li>
                       ))}
                     </ul>
-                  ) : <p>本章未另列此肌肉的橫切面避險文字；請依圖示構造判讀。</p>}
-                </div>
-
-                <div className="needle-point-section practice-guardrails">
-                  <h3><BookOpenCheck size={17} aria-hidden="true" /> 檢查前確認</h3>
-                  <ul>
-                    <li>先依個別體型、姿勢、觸診與選擇性動作確認肌肉；固定公分或指幅不能取代三維解剖。</li>
-                    <li>優先選擇表淺、可觸診且能回答臨床問題的肌肉；深層、萎縮或高風險肌應考慮超音波導引。</li>
-                    <li>進針前確認感染、出血與抗凝風險；避免胸膜、大血管、神經幹及無法直接壓迫止血的路徑。</li>
-                  </ul>
-                </div>
+                  </div>
+                ) : null}
               </section>
             </div>
 
@@ -196,7 +187,7 @@ export function NeedlePointDialog({ muscle, side, onClose }: NeedlePointDialogPr
                 {activeGuide.sourceKind === 'textbook' ? (
                   <>
                     <span>
-                      私人臨床參考用。翻譯整理自 Preston &amp; Shapiro, <i>Electromyography and Neuromuscular Disorders</i>, 4th ed. (2020), Chapter 13, Fig. {figureLabel(activeGuide.figures)}；通用安全提醒另依下列指引更新。
+                      私人臨床參考用。翻譯整理自 Preston &amp; Shapiro, <i>Electromyography and Neuromuscular Disorders</i>, 4th ed. (2020), Chapter 13, Fig. {figureLabel(activeGuide.figures)}；肌肉專屬內容另參照下列指引。
                     </span>
                     <ul>
                       {activeGuide.sources.map((source) => (

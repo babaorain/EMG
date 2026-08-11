@@ -1869,15 +1869,6 @@
   line-height: 1.6;
 }
 
-.needle-point-section.practice-guardrails {
-  border-left: 4px solid #397b75;
-  background: #eef7f5;
-}
-
-.needle-point-section.practice-guardrails h3 {
-  color: #175f59;
-}
-
 .needle-review-note svg {
   flex: 0 0 auto;
   margin-top: 1px;
