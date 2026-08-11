@@ -1,5 +1,5 @@
 import { Download, Printer, X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { worksheetColumns, worksheetCsv, worksheetRow } from '../../domain/muscleSelection'
 import type { ResolvedSelectedMuscle } from './SelectedMusclesPanel'
 
@@ -10,6 +10,7 @@ interface WorksheetDialogProps {
 
 export function WorksheetDialog({ rows, onClose }: WorksheetDialogProps) {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const [headerText, setHeaderText] = useState('')
 
   useEffect(() => {
     closeRef.current?.focus()
@@ -50,7 +51,22 @@ export function WorksheetDialog({ rows, onClose }: WorksheetDialogProps) {
           </button>
         </header>
 
+        <div className="worksheet-context-editor">
+          <label htmlFor="worksheet-header-text">列印頁首文字</label>
+          <textarea
+            id="worksheet-header-text"
+            value={headerText}
+            onChange={(event) => setHeaderText(event.target.value)}
+            rows={3}
+            placeholder="可貼入病人資料、檢查日期、臨床問題或其他備註；此內容會印在表格上方。"
+          />
+        </div>
+
         <div className="worksheet-scroll">
+          <div className="worksheet-print-header">
+            <h1>Needle EMG Worksheet</h1>
+            <p>{headerText}</p>
+          </div>
           <table className="worksheet-table">
             <thead>
               <tr>{worksheetColumns.map((column) => <th key={column}>{column}</th>)}</tr>

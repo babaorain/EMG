@@ -32,7 +32,7 @@ describe('clinical muscle areas', () => {
       muscleCatalog.find((muscle) => muscle.name === name)!,
     )
 
-    expect(areaOf('Deltoid (Ant/Mid/Post)')).toBe('shoulder_back')
+    expect(areaOf('Deltoid (Ant/Mid/Post)')).toBe('upper_arm')
     expect(areaOf('Biceps Brachii')).toBe('upper_arm')
     expect(areaOf('Pronator Teres')).toBe('forearm')
     expect(areaOf('First Dorsal Interosseous')).toBe('hand')

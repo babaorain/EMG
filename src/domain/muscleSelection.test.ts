@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { findMuscleByName } from '../clinical/catalog'
 import {
   compareMuscles,
+  matchesRootFilter,
   pathwayStages,
+  THORACIC_PARASPINAL_FILTER,
   worksheetColumns,
   worksheetCsv,
 } from './muscleSelection'
@@ -34,6 +36,17 @@ describe('muscle selection helpers', () => {
     ])
     expect(stages.find((stage) => stage.label === 'Division')?.value).toBe('Posterior division(s)')
     expect(stages.find((stage) => stage.label === 'Cord / plexus')?.value).toBe('Posterior cord')
+  })
+
+  it('uses one thoracic root filter for the thoracic paraspinal only', () => {
+    expect(matchesRootFilter(
+      findMuscleByName('Paraspinal (Thoracic)'),
+      THORACIC_PARASPINAL_FILTER,
+    )).toBe(true)
+    expect(matchesRootFilter(
+      findMuscleByName('Abd. Pollicis Brevis'),
+      THORACIC_PARASPINAL_FILTER,
+    )).toBe(false)
   })
 
   it('exports every requested blank worksheet column in CSV order', () => {

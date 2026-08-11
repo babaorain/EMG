@@ -15,19 +15,25 @@ import {
   clinicalAreaLabel,
   clinicalAreaRank,
 } from './clinical/clinicalAreas'
-import { needleGuidesForMuscle } from './clinical/needleGuides'
+import { hasNeedleGuideImage } from './clinical/needleGuides'
 import { BrachialPlexusPage } from './components/BrachialPlexusPage'
 import { MuscleLibrary, type AreaFilter } from './components/picker/MuscleLibrary'
 import { NeedlePointDialog } from './components/picker/NeedlePointDialog'
 import { SelectedMusclesPanel, type ResolvedSelectedMuscle } from './components/picker/SelectedMusclesPanel'
 import { WorksheetDialog } from './components/picker/WorksheetDialog'
 import { DermatomePage } from './components/DermatomePage'
-import { compareMuscles, rootRank, selectedKey, type SelectedMuscle } from './domain/muscleSelection'
+import {
+  compareMuscles,
+  matchesRootFilter,
+  rootRank,
+  selectedKey,
+  THORACIC_PARASPINAL_FILTER,
+  type SelectedMuscle,
+} from './domain/muscleSelection'
 import type { Side } from './domain/types'
 
 const visibleRoots = [
-  'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'T1',
-  'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12',
+  'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', THORACIC_PARASPINAL_FILTER,
   'L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'S2', 'S3', 'S4',
   'V', 'VII', 'XI', 'XII',
 ]
@@ -59,7 +65,7 @@ function App() {
   const muscles = useMemo(() => {
     return muscleCatalog
       .filter((muscle) => area === 'all' || clinicalAreaForMuscle(muscle) === area)
-      .filter((muscle) => root === 'all' || muscle.roots.includes(root))
+      .filter((muscle) => matchesRootFilter(muscle, root))
       .filter((muscle) => {
         if (!deferredQuery) return true
         return [
@@ -72,7 +78,7 @@ function App() {
       })
       .sort((a, b) => (
         clinicalAreaRank(a) - clinicalAreaRank(b)
-        || Number(needleGuidesForMuscle(b.name).length > 0) - Number(needleGuidesForMuscle(a.name).length > 0)
+        || Number(hasNeedleGuideImage(b.name)) - Number(hasNeedleGuideImage(a.name))
         || compareMuscles(a, b)
       ))
   }, [area, deferredQuery, root])
@@ -143,7 +149,7 @@ function App() {
         <div className="review-status">
           <Info size={17} aria-hidden="true" />
           {activePage === 'muscles'
-            ? `${bookSourcedMuscleCount} 條依原書校正 · 其餘待覆核`
+            ? `${bookSourcedMuscleCount} 條課本圖譜 · ${muscleCatalog.length - bookSourcedMuscleCount} 條文字指引`
             : activePage === 'dermatomes'
               ? 'C2-S4/5 · 28 個標準檢查點'
               : 'C5-T1 · 3 trunks · 3 cords'}

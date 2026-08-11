@@ -52,7 +52,6 @@ const namesByArea: Record<MuscleArea, readonly string[]> = {
     'Subscapularis',
     'Teres Major',
     'Latissimus Dorsi',
-    'Deltoid (Ant/Mid/Post)',
     'Teres Minor',
     'Paraspinal (C5)',
     'Paraspinal (C6)',
@@ -61,6 +60,7 @@ const namesByArea: Record<MuscleArea, readonly string[]> = {
     'Paraspinal (Thoracic)',
   ],
   upper_arm: [
+    'Deltoid (Ant/Mid/Post)',
     'Biceps Brachii',
     'Brachialis',
     'Coracobrachialis',

@@ -13,6 +13,8 @@ export interface PathwayStage {
   value: string
 }
 
+export const THORACIC_PARASPINAL_FILTER = 'T1-T12'
+
 const rootOrder = [
   'C1',
   'C2',
@@ -111,6 +113,12 @@ export function primaryRoot(muscle: MuscleCatalogEntry): string {
 
 export function compareMuscles(a: MuscleCatalogEntry, b: MuscleCatalogEntry): number {
   return rootRank(a) - rootRank(b) || a.name.localeCompare(b.name)
+}
+
+export function matchesRootFilter(muscle: MuscleCatalogEntry, root: string): boolean {
+  if (root === 'all') return true
+  if (root === THORACIC_PARASPINAL_FILTER) return muscle.name === 'Paraspinal (Thoracic)'
+  return muscle.roots.includes(root)
 }
 
 export function selectedKey(muscleId: string, side: Side): string {

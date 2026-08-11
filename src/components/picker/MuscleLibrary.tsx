@@ -6,8 +6,8 @@ import {
   muscleAreaDefinitions,
   type MuscleArea,
 } from '../../clinical/clinicalAreas'
-import { needleGuidesForMuscle } from '../../clinical/needleGuides'
-import { pathwayStages } from '../../domain/muscleSelection'
+import { hasNeedleGuideImage } from '../../clinical/needleGuides'
+import { pathwayStages, THORACIC_PARASPINAL_FILTER } from '../../domain/muscleSelection'
 import type { Side } from '../../domain/types'
 
 export type AreaFilter = 'all' | MuscleArea
@@ -49,7 +49,7 @@ function AddButton({
       aria-pressed={selected}
     >
       {selected ? null : <Plus size={15} aria-hidden="true" />}
-      <span>{side} {selected ? '已加入' : '加入'}</span>
+      <span>{selected ? `✓ ${side}` : side}</span>
     </button>
   )
 }
@@ -68,7 +68,7 @@ function MusclePathRow({
   const stages = pathwayStages(muscle)
   const leftSelected = selectedKeys.has(`L:${muscle.id}`)
   const rightSelected = selectedKeys.has(`R:${muscle.id}`)
-  const hasNeedleGuide = needleGuidesForMuscle(muscle.name).length > 0
+  const hasNeedleImage = hasNeedleGuideImage(muscle.name)
 
   return (
     <article className="muscle-path-row">
@@ -76,9 +76,16 @@ function MusclePathRow({
         {stages.map((stage, index) => (
           <div className="pathway-stage" key={stage.label}>
             <span className="pathway-label">{stage.label}</span>
-            <span className={`pathway-value${stage.value === '—' ? ' unavailable' : ''}`}>
-              {stage.value}
-            </span>
+            {stage.label === 'Muscle' ? (
+              <span className="pathway-value pathway-muscle-value">
+                <span>{stage.value}</span>
+                <strong className="muscle-root-badge">{muscle.rootLabel.replaceAll('-', '–')}</strong>
+              </span>
+            ) : (
+              <span className={`pathway-value${stage.value === '—' ? ' unavailable' : ''}`}>
+                {stage.value}
+              </span>
+            )}
             {index < stages.length - 1 ? <span className="pathway-line" aria-hidden="true" /> : null}
           </div>
         ))}
@@ -87,11 +94,11 @@ function MusclePathRow({
         <AddButton side="L" selected={leftSelected} onClick={() => onAdd(muscle, 'L')} />
         <AddButton side="R" selected={rightSelected} onClick={() => onAdd(muscle, 'R')} />
         <button
-          className={`needle-button ${hasNeedleGuide ? 'has-guide' : 'no-guide'}`}
+          className={`needle-button ${hasNeedleImage ? 'has-guide' : 'no-guide'}`}
           type="button"
           onClick={() => onNeedlePoint(muscle, rightSelected ? 'R' : 'L')}
-          title={hasNeedleGuide ? '查看扎針圖譜' : '尚無扎針圖片'}
-          aria-label={`扎針點，${hasNeedleGuide ? '有圖譜' : '尚無圖片'}`}
+          title={hasNeedleImage ? '查看扎針圖譜' : '無圖片，開啟文字指引'}
+          aria-label={`扎針點，${hasNeedleImage ? '有圖譜' : '無圖片，有文字指引'}`}
         >
           <Crosshair size={17} aria-hidden="true" />
           <span>扎針點</span>
@@ -173,10 +180,10 @@ export function MuscleLibrary(props: MuscleLibraryProps) {
             <button
               key={root}
               type="button"
-              className={props.root === root ? 'active' : ''}
+              className={`${props.root === root ? 'active ' : ''}${root === THORACIC_PARASPINAL_FILTER ? 'thoracic-root-button' : ''}`.trim()}
               onClick={() => props.onRootChange(root)}
             >
-              {root}
+              {root === THORACIC_PARASPINAL_FILTER ? 'T1–T12 PSP' : root}
             </button>
           ))}
         </div>
