@@ -1,8 +1,11 @@
 import '@fontsource/source-sans-3/400.css'
+import '@fontsource/source-sans-3/500.css'
 import '@fontsource/source-sans-3/600.css'
+import '@fontsource/source-sans-3/700.css'
 import '@fontsource/ibm-plex-mono/400.css'
-import { Info } from 'lucide-react'
-import { useDeferredValue, useEffect, useMemo, useState } from 'react'
+import '@fontsource/ibm-plex-mono/500.css'
+import { Activity, Crosshair, GitBranch, Info } from 'lucide-react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import {
   bookSourcedMuscleCount,
@@ -14,14 +17,22 @@ import {
   clinicalAreaForMuscle,
   clinicalAreaLabel,
   clinicalAreaRank,
+  type MuscleArea,
 } from './clinical/clinicalAreas'
-import { hasNeedleGuideImage } from './clinical/needleGuides'
 import { BrachialPlexusPage } from './components/BrachialPlexusPage'
-import { MuscleLibrary, type AreaFilter } from './components/picker/MuscleLibrary'
-import { NeedlePointDialog } from './components/picker/NeedlePointDialog'
-import { SelectedMusclesPanel, type ResolvedSelectedMuscle } from './components/picker/SelectedMusclesPanel'
-import { WorksheetDialog } from './components/picker/WorksheetDialog'
 import { DermatomePage } from './components/DermatomePage'
+import { FilterPanel } from './components/picker/FilterPanel'
+import { FilterSheet } from './components/picker/FilterSheet'
+import { activeFilterCount, type AreaFilter } from './components/picker/filterState'
+import { MuscleLibrary } from './components/picker/MuscleLibrary'
+import { NeedlePointDialog } from './components/picker/NeedlePointDialog'
+import { QueueBar, QueueSheet } from './components/picker/QueueBar'
+import {
+  SelectedMusclesPanel,
+  type ResolvedSelectedMuscle,
+} from './components/picker/SelectedMusclesPanel'
+import { WorksheetDialog } from './components/picker/WorksheetDialog'
+import { COMPACT_QUERY, useMediaQuery } from './hooks/useMediaQuery'
 import {
   compareMuscles,
   matchesRootFilter,
@@ -40,10 +51,42 @@ const visibleRoots = [
 
 type AppPage = 'muscles' | 'dermatomes' | 'brachial-plexus'
 
+const pageTabs = [
+  { id: 'muscles', hash: '#muscles', label: '肌肉／扎針', short: '肌肉', Icon: Crosshair },
+  { id: 'dermatomes', hash: '#dermatomes', label: 'Dermatome 皮節', short: '皮節', Icon: Activity },
+  { id: 'brachial-plexus', hash: '#brachial-plexus', label: 'Brachial plexus', short: 'Plexus', Icon: GitBranch },
+] as const satisfies ReadonlyArray<{ id: AppPage; hash: string; label: string; short: string; Icon: typeof Info }>
+
+const pageCopy: Record<AppPage, { subtitle: string; status: string }> = {
+  muscles: {
+    subtitle: '肌肉選擇、扎針定位與空白 worksheet',
+    status: `${bookSourcedMuscleCount} 條課本圖譜 · ${muscleCatalog.length - bookSourcedMuscleCount} 條文字指引`,
+  },
+  dermatomes: {
+    subtitle: '皮節分布與標準化感覺檢查點',
+    status: 'C2–S4/5 · 28 個標準檢查點',
+  },
+  'brachial-plexus': {
+    subtitle: 'Brachial plexus 的 trunk 與 cord 定位',
+    status: 'C5–T1 · 3 trunks · 3 cords',
+  },
+}
+
 function pageFromHash(): AppPage {
   if (window.location.hash === '#dermatomes') return 'dermatomes'
   if (window.location.hash === '#brachial-plexus') return 'brachial-plexus'
   return 'muscles'
+}
+
+function matchesQuery(muscle: MuscleCatalogEntry, query: string): boolean {
+  if (!query) return true
+  return [
+    muscle.name,
+    muscle.nerveLabel,
+    muscle.rootLabel,
+    clinicalAreaLabel(muscle),
+    ...muscle.abbreviations,
+  ].some((value) => value.toLowerCase().includes(query))
 }
 
 function App() {
@@ -53,8 +96,15 @@ function App() {
   const [area, setArea] = useState<AreaFilter>('all')
   const [root, setRoot] = useState('all')
   const [selected, setSelected] = useState<SelectedMuscle[]>([])
+  const [expandedId, setExpandedId] = useState<string | null>(null)
   const [needleTarget, setNeedleTarget] = useState<{ muscle: MuscleCatalogEntry; side: Side } | null>(null)
   const [worksheetOpen, setWorksheetOpen] = useState(false)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [queueSheetOpen, setQueueSheetOpen] = useState(false)
+
+  const compact = useMediaQuery(COMPACT_QUERY)
+  const topbarRef = useRef<HTMLElement>(null)
+  const [topbarHeight, setTopbarHeight] = useState(60)
 
   useEffect(() => {
     const handleHashChange = () => setActivePage(pageFromHash())
@@ -62,26 +112,58 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
 
+  /**
+   * The top bar wraps to two rows on narrow screens, so the sticky search bar
+   * and the side rails need its measured height to sit right below it.
+   */
+  useEffect(() => {
+    const element = topbarRef.current
+    if (!element) return
+    const sync = () => setTopbarHeight(Math.round(element.getBoundingClientRect().height))
+    sync()
+    const observer = new ResizeObserver(sync)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!compact) {
+      setFilterSheetOpen(false)
+      setQueueSheetOpen(false)
+    }
+  }, [compact])
+
+  const queryMatches = useMemo(
+    () => muscleCatalog.filter((muscle) => matchesQuery(muscle, deferredQuery)),
+    [deferredQuery],
+  )
+
   const muscles = useMemo(() => {
-    return muscleCatalog
+    return queryMatches
       .filter((muscle) => area === 'all' || clinicalAreaForMuscle(muscle) === area)
       .filter((muscle) => matchesRootFilter(muscle, root))
-      .filter((muscle) => {
-        if (!deferredQuery) return true
-        return [
-          muscle.name,
-          muscle.nerveLabel,
-          muscle.rootLabel,
-          clinicalAreaLabel(muscle),
-          ...muscle.abbreviations,
-        ].some((value) => value.toLowerCase().includes(deferredQuery))
-      })
-      .sort((a, b) => (
-        clinicalAreaRank(a) - clinicalAreaRank(b)
-        || Number(hasNeedleGuideImage(b.name)) - Number(hasNeedleGuideImage(a.name))
-        || compareMuscles(a, b)
-      ))
-  }, [area, deferredQuery, root])
+      .sort((a, b) => clinicalAreaRank(a) - clinicalAreaRank(b) || compareMuscles(a, b))
+  }, [area, queryMatches, root])
+
+  /** Counts ignore the filter they describe, so a chip never reads zero for itself. */
+  const areaCounts = useMemo(() => {
+    const counts = new Map<MuscleArea, number>()
+    for (const muscle of queryMatches) {
+      if (!matchesRootFilter(muscle, root)) continue
+      const key = clinicalAreaForMuscle(muscle)
+      counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+    return counts
+  }, [queryMatches, root])
+
+  const rootCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+    const pool = queryMatches.filter((muscle) => area === 'all' || clinicalAreaForMuscle(muscle) === area)
+    for (const candidate of visibleRoots) {
+      counts.set(candidate, pool.filter((muscle) => matchesRootFilter(muscle, candidate)).length)
+    }
+    return counts
+  }, [area, queryMatches])
 
   const resolvedSelected = useMemo<ResolvedSelectedMuscle[]>(() => {
     return selected
@@ -105,78 +187,99 @@ function App() {
       : [...current, { key, muscleId: muscle.id, side }])
   }
 
+  const resetFilters = () => {
+    setArea('all')
+    setRoot('all')
+  }
+
+  const filterProps = {
+    area,
+    onAreaChange: (next: AreaFilter) => setArea(next),
+    root,
+    onRootChange: (next: string) => setRoot(next),
+    roots: visibleRoots,
+    areaCounts,
+    rootCounts,
+    totalCount: queryMatches.filter((muscle) => matchesRootFilter(muscle, root)).length,
+    onReset: resetFilters,
+  }
+
+  const openWorksheet = () => {
+    setQueueSheetOpen(false)
+    setWorksheetOpen(true)
+  }
+
+  const railStyle = {
+    top: topbarHeight + 20,
+    maxHeight: `calc(100vh - ${topbarHeight + 40}px)`,
+  }
+
   return (
-    <div className="app-shell">
-      <header className="app-header">
-        <div className="app-header-main">
-          <div className="app-brand">
-            <h1>EMG 臨床圖譜</h1>
-            <p>
-              {activePage === 'muscles'
-                ? '肌肉選擇、扎針定位與空白 worksheet'
-                : activePage === 'dermatomes'
-                  ? '皮節分布與標準化感覺檢查點'
-                  : 'Brachial plexus 的 trunk 與 cord 定位'}
-            </p>
-          </div>
-          <nav className="primary-nav" aria-label="主要頁面">
-            <a
-              href="#muscles"
-              className={activePage === 'muscles' ? 'active' : ''}
-              aria-current={activePage === 'muscles' ? 'page' : undefined}
-              onClick={() => setActivePage('muscles')}
-            >
-              <span className="nav-wide">肌肉／扎針</span><span className="nav-compact">肌肉</span>
-            </a>
-            <a
-              href="#dermatomes"
-              className={activePage === 'dermatomes' ? 'active' : ''}
-              aria-current={activePage === 'dermatomes' ? 'page' : undefined}
-              onClick={() => setActivePage('dermatomes')}
-            >
-              <span className="nav-wide">Dermatome 皮節</span><span className="nav-compact">皮節</span>
-            </a>
-            <a
-              href="#brachial-plexus"
-              className={activePage === 'brachial-plexus' ? 'active' : ''}
-              aria-current={activePage === 'brachial-plexus' ? 'page' : undefined}
-              onClick={() => setActivePage('brachial-plexus')}
-            >
-              <span className="nav-wide">Brachial plexus</span><span className="nav-compact">Plexus</span>
-            </a>
-          </nav>
+    <div className={`app${activePage === 'muscles' && compact ? ' has-action-bar' : ''}`}>
+      <header className="topbar" ref={topbarRef}>
+        <div className="brand">
+          <span className="brand-mark" aria-hidden="true">EMG</span>
+          <span className="brand-copy">
+            <h1>臨床圖譜</h1>
+            <p>{pageCopy[activePage].subtitle}</p>
+          </span>
         </div>
-        <div className="review-status">
-          <Info size={17} aria-hidden="true" />
-          {activePage === 'muscles'
-            ? `${bookSourcedMuscleCount} 條課本圖譜 · ${muscleCatalog.length - bookSourcedMuscleCount} 條文字指引`
-            : activePage === 'dermatomes'
-              ? 'C2-S4/5 · 28 個標準檢查點'
-              : 'C5-T1 · 3 trunks · 3 cords'}
-        </div>
+
+        <nav className="nav-seg" aria-label="主要頁面">
+          {pageTabs.map((tab) => (
+            <a
+              key={tab.id}
+              href={tab.hash}
+              className={activePage === tab.id ? 'is-active' : ''}
+              aria-current={activePage === tab.id ? 'page' : undefined}
+              onClick={() => setActivePage(tab.id)}
+            >
+              <tab.Icon size={16} aria-hidden="true" />
+              <span className="nav-wide">{tab.label}</span>
+              <span className="nav-compact">{tab.short}</span>
+            </a>
+          ))}
+        </nav>
+
+        <p className="topbar-status">
+          <Info size={15} aria-hidden="true" />
+          {pageCopy[activePage].status}
+        </p>
       </header>
 
       {activePage === 'muscles' ? (
-        <main className="picker-layout">
+        <main className="workspace">
+          {compact ? null : (
+            <aside className="rail rail-filters" aria-label="篩選條件" style={railStyle}>
+              <FilterPanel {...filterProps} />
+            </aside>
+          )}
+
           <MuscleLibrary
             muscles={muscles}
             query={query}
             onQueryChange={setQuery}
-            area={area}
-            onAreaChange={setArea}
-            root={root}
-            onRootChange={setRoot}
-            roots={visibleRoots}
             selectedKeys={selectedKeys}
             onAdd={toggleMuscle}
             onNeedlePoint={(muscle, side) => setNeedleTarget({ muscle, side })}
+            expandedId={expandedId}
+            onToggleExpanded={(id) => setExpandedId((current) => (current === id ? null : id))}
+            compact={compact}
+            activeFilterCount={activeFilterCount(area, root)}
+            onOpenFilters={() => setFilterSheetOpen(true)}
+            onResetFilters={resetFilters}
+            stickyTop={topbarHeight}
           />
-          <SelectedMusclesPanel
-            rows={resolvedSelected}
-            onRemove={(key) => setSelected((current) => current.filter((item) => item.key !== key))}
-            onClear={() => setSelected([])}
-            onOpenWorksheet={() => setWorksheetOpen(true)}
-          />
+
+          {compact ? null : (
+            <SelectedMusclesPanel
+              rows={resolvedSelected}
+              onRemove={(key) => setSelected((current) => current.filter((item) => item.key !== key))}
+              onClear={() => setSelected([])}
+              onOpenWorksheet={openWorksheet}
+              style={railStyle}
+            />
+          )}
         </main>
       ) : activePage === 'dermatomes' ? (
         <DermatomePage />
@@ -184,13 +287,46 @@ function App() {
         <BrachialPlexusPage />
       )}
 
+      {activePage === 'muscles' && compact ? (
+        <QueueBar
+          rows={resolvedSelected}
+          onOpenQueue={() => setQueueSheetOpen(true)}
+          onOpenWorksheet={openWorksheet}
+        />
+      ) : null}
+
+      {filterSheetOpen ? (
+        <FilterSheet
+          {...filterProps}
+          resultCount={muscles.length}
+          onClose={() => setFilterSheetOpen(false)}
+        />
+      ) : null}
+
+      {queueSheetOpen ? (
+        <QueueSheet
+          rows={resolvedSelected}
+          onRemove={(key) => setSelected((current) => current.filter((item) => item.key !== key))}
+          onClear={() => setSelected([])}
+          onOpenQueue={() => setQueueSheetOpen(true)}
+          onOpenWorksheet={openWorksheet}
+          onClose={() => setQueueSheetOpen(false)}
+        />
+      ) : null}
+
       {needleTarget ? (
         <NeedlePointDialog
           muscle={needleTarget.muscle}
           side={needleTarget.side}
+          selectedSides={{
+            L: selectedKeys.has(selectedKey(needleTarget.muscle.id, 'L')),
+            R: selectedKeys.has(selectedKey(needleTarget.muscle.id, 'R')),
+          }}
+          onToggleSide={(side) => toggleMuscle(needleTarget.muscle, side)}
           onClose={() => setNeedleTarget(null)}
         />
       ) : null}
+
       {worksheetOpen ? (
         <WorksheetDialog rows={resolvedSelected} onClose={() => setWorksheetOpen(false)} />
       ) : null}
