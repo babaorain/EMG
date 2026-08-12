@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { plexusFlowRows, plexusLocalizationCards } from './brachialPlexusReference'
+import { plexusFlowRows, plexusPatternRows } from './brachialPlexusReference'
 
 describe('brachial plexus reference', () => {
   it('maps the three root groups through trunks to anterior and posterior cords', () => {
@@ -10,10 +10,16 @@ describe('brachial plexus reference', () => {
     ])
   })
 
-  it('provides complete trunk and cord localization cards', () => {
-    expect(plexusLocalizationCards.filter((card) => card.level === 'trunk')).toHaveLength(3)
-    expect(plexusLocalizationCards.filter((card) => card.level === 'cord')).toHaveLength(3)
-    expect(new Set(plexusLocalizationCards.map((card) => card.id)).size).toBe(6)
-    expect(plexusLocalizationCards.every((card) => card.muscles.length >= 4)).toBe(true)
+  it('matches the three handwritten trunk and cord sampling rows', () => {
+    expect(plexusPatternRows.map((row) => [row.roots, row.trunk.title, row.cord.title])).toEqual([
+      ['C5–C6', 'Upper trunk', 'Lateral cord'],
+      ['C7', 'Middle trunk', 'Posterior cord'],
+      ['C8–T1', 'Lower trunk', 'Medial cord'],
+    ])
+    expect(plexusPatternRows[0]?.trunk.muscles.filter((muscle) => muscle.key).map((muscle) => muscle.name)).toEqual([
+      'Supraspinatus',
+      'Biceps Brachii',
+      'Deltoid',
+    ])
   })
 })

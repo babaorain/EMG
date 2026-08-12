@@ -578,7 +578,7 @@ export const needleGuides: NeedleGuide[] = [
   }),
   defineGuide({
     chineseName: '頸椎脊旁肌', englishName: 'Cervical Paraspinal Muscles (PSPs)',
-    catalogNames: ['Paraspinal (C5)', 'Paraspinal (C6)', 'Paraspinal (C7)', 'Paraspinal (C8)'], figures: [56],
+    catalogNames: ['Paraspinal (Cervical)'], figures: [56],
     innervation: '脊神經後支（dorsal rami）、脊神經與神經根。',
     insertion: '側臥、待測側朝上；在下頸椎距脊椎中線兩指幅處進針，針尖稍向內側。為確認進入深層肌群，可前進至輕觸椎板（lamina）後稍微退出。',
     activation: '請病人伸頸。',

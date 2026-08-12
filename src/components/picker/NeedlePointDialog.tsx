@@ -1,7 +1,7 @@
 import { BookOpen, ExternalLink, ImageIcon, Info, ShieldAlert, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { MuscleCatalogEntry } from '../../clinical/catalog'
-import { needleGuidesForMuscle } from '../../clinical/needleGuides'
+import { needleGuidesForMuscle, type NeedleGuide } from '../../clinical/needleGuides'
 import type { Side } from '../../domain/types'
 import { Overlay } from '../ui/Overlay'
 
@@ -50,6 +50,40 @@ function HighlightedClinicalText({ text }: { text: string }) {
         exactClinicalCuePattern.test(part)
           ? <mark className="clinical-emphasis" key={`${part}-${index}`}>{part}</mark>
           : part
+      ))}
+    </>
+  )
+}
+
+function citationLabel(guide: NeedleGuide): string {
+  if (guide.sourceKind === 'textbook') {
+    return `P&S 4e · Ch.13 · Fig. ${figureLabel(guide.figures)}`
+  }
+  return 'Supplemental · sources below'
+}
+
+function sentenceParts(text: string): string[] {
+  return text.match(/[^。！？]+[。！？]?/g)?.map((part) => part.trim()).filter(Boolean) ?? [text]
+}
+
+function InlineCitation({ guide }: { guide: NeedleGuide }) {
+  return (
+    <cite
+      className="inline-citation"
+      title={guide.sources.map((source) => source.label).join('；')}
+    >
+      {citationLabel(guide)}
+    </cite>
+  )
+}
+
+function CitedClinicalText({ text, guide }: { text: string; guide: NeedleGuide }) {
+  return (
+    <>
+      {sentenceParts(text).map((sentence, index) => (
+        <span className="cited-sentence" key={`${sentence}-${index}`}>
+          <HighlightedClinicalText text={sentence} /> <InlineCitation guide={guide} />
+        </span>
       ))}
     </>
   )
@@ -131,7 +165,7 @@ export function NeedlePointDialog({
                       <img src={image.src} alt={image.alt} loading={index === 0 ? 'eager' : 'lazy'} />
                       <span><ExternalLink size={14} aria-hidden="true" /> 原尺寸</span>
                     </a>
-                    <figcaption>{image.caption}</figcaption>
+                    <figcaption>{image.caption} <InlineCitation guide={activeGuide} /></figcaption>
                   </figure>
                 ))}
               </section>
@@ -147,15 +181,15 @@ export function NeedlePointDialog({
               <dl className="field-list">
                 <div>
                   <dt>神經支配</dt>
-                  <dd>{activeGuide.innervation}</dd>
+                  <dd><CitedClinicalText text={activeGuide.innervation} guide={activeGuide} /></dd>
                 </div>
                 <div>
                   <dt>病人姿勢／扎針方式</dt>
-                  <dd><HighlightedClinicalText text={activeGuide.insertion} /></dd>
+                  <dd><CitedClinicalText text={activeGuide.insertion} guide={activeGuide} /></dd>
                 </div>
                 <div>
                   <dt>肌肉啟動（activation）</dt>
-                  <dd>{activeGuide.activation}</dd>
+                  <dd><CitedClinicalText text={activeGuide.activation} guide={activeGuide} /></dd>
                 </div>
               </dl>
 
@@ -163,7 +197,7 @@ export function NeedlePointDialog({
                 <h3>臨床重點</h3>
                 <ul>
                   {activeGuide.clinicalPoints.map((point) => (
-                    <li key={point}><HighlightedClinicalText text={point} /></li>
+                    <li key={point}><CitedClinicalText text={point} guide={activeGuide} /></li>
                   ))}
                 </ul>
               </div>
@@ -173,7 +207,7 @@ export function NeedlePointDialog({
                   <h3><ShieldAlert size={16} aria-hidden="true" /> 橫切面構造與避險</h3>
                   <ul>
                     {activeGuide.anatomyPoints.map((point) => (
-                      <li key={point}><HighlightedClinicalText text={point} /></li>
+                      <li key={point}><CitedClinicalText text={point} guide={activeGuide} /></li>
                     ))}
                   </ul>
                 </div>

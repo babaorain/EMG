@@ -30,6 +30,7 @@ describe('NeedlePointDialog', () => {
 
     expect(screen.getByText('橫切面構造與避險')).toBeInTheDocument()
     expect(screen.getByText('進針太深可能傷及內側足底神經。')).toBeInTheDocument()
+    expect(screen.getAllByText(/P&S 4e/).length).toBeGreaterThan(4)
     expect(screen.queryByText('檢查前確認')).not.toBeInTheDocument()
   })
 })

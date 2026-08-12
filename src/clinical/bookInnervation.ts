@@ -80,10 +80,12 @@ const groups: BookInnervationGroup[] = [
   { names: ['Gluteus Medius', 'Tensor Fasciae Latae'], nerveLabel: 'Sup. Gluteal N.', roots: ['L4', 'L5', 'S1'] },
   { names: ['Gluteus Major'], nerveLabel: 'Inf. Gluteal N.', roots: ['L5', 'S1', 'S2'] },
 
-  { names: ['Paraspinal (C5)'], nerveLabel: 'Post. Rami (Cervical)', roots: ['C5'] },
-  { names: ['Paraspinal (C6)'], nerveLabel: 'Post. Rami (Cervical)', roots: ['C6'] },
-  { names: ['Paraspinal (C7)'], nerveLabel: 'Post. Rami (Cervical)', roots: ['C7'] },
-  { names: ['Paraspinal (C8)'], nerveLabel: 'Post. Rami (Cervical)', roots: ['C8'] },
+  {
+    names: ['Paraspinal (Cervical)'],
+    nerveLabel: 'Post. Rami (Cervical)',
+    roots: ['C5', 'C6', 'C7', 'C8'],
+    rootLabel: 'C5-C8',
+  },
   {
     names: ['Paraspinal (Thoracic)'],
     nerveLabel: 'Post. Rami (Thoracic)',

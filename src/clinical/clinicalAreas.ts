@@ -53,10 +53,7 @@ const namesByArea: Record<MuscleArea, readonly string[]> = {
     'Teres Major',
     'Latissimus Dorsi',
     'Teres Minor',
-    'Paraspinal (C5)',
-    'Paraspinal (C6)',
-    'Paraspinal (C7)',
-    'Paraspinal (C8)',
+    'Paraspinal (Cervical)',
     'Paraspinal (Thoracic)',
   ],
   upper_arm: [

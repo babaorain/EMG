@@ -30,7 +30,7 @@ describe('chapter 13 needle guides', () => {
   })
 
   it('keeps cervical, thoracic, and lumbosacral paraspinal figures separate', () => {
-    expect(needleGuidesForMuscle('Paraspinal (C5)')[0]?.figures).toEqual([56])
+    expect(needleGuidesForMuscle('Paraspinal (Cervical)')[0]?.figures).toEqual([56])
     expect(needleGuidesForMuscle('Paraspinal (Thoracic)')[0]?.figures).toEqual([57])
     expect(needleGuidesForMuscle('Paraspinal (L5)')[0]?.figures).toEqual([58])
   })

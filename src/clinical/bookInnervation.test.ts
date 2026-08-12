@@ -9,9 +9,9 @@ describe('book-sourced muscle innervation', () => {
       .filter((muscle) => hasTextbookNeedleGuide(muscle.name))
       .map((muscle) => muscle.name)
 
-    expect(bookSourcedMuscleCount).toBe(71)
-    expect(bookInnervationByCatalogName.size).toBe(71)
-    expect(guidedNames).toHaveLength(71)
+    expect(bookSourcedMuscleCount).toBe(68)
+    expect(bookInnervationByCatalogName.size).toBe(68)
+    expect(guidedNames).toHaveLength(68)
     expect(guidedNames.filter((name) => !bookInnervationByCatalogName.has(name))).toEqual([])
   })
 
