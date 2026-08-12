@@ -21,10 +21,13 @@ const parsedLegacyMuscles = z.array(legacyMuscleSchema).parse(legacyMuscles)
  * brevis is also included because it has its own insertion figure and technique.
  */
 const addedMuscles: LegacyMuscle[] = [
-  { m: 'Paraspinal (C5)', n: 'Post. Rami (Cervical)', r: 'C5', r_list: ['C5'], a: ['C5 PSP'] },
-  { m: 'Paraspinal (C6)', n: 'Post. Rami (Cervical)', r: 'C6', r_list: ['C6'], a: ['C6 PSP'] },
-  { m: 'Paraspinal (C7)', n: 'Post. Rami (Cervical)', r: 'C7', r_list: ['C7'], a: ['C7 PSP'] },
-  { m: 'Paraspinal (C8)', n: 'Post. Rami (Cervical)', r: 'C8', r_list: ['C8'], a: ['C8 PSP'] },
+  {
+    m: 'Paraspinal (Cervical)',
+    n: 'Post. Rami (Cervical)',
+    r: 'C5-C8',
+    r_list: ['C5', 'C6', 'C7', 'C8'],
+    a: ['C PSP'],
+  },
   {
     m: 'Paraspinal (Thoracic)',
     n: 'Post. Rami (Thoracic)',

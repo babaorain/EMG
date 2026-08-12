@@ -320,13 +320,13 @@ function suggestionsFor(
       // Additions still surface once the planned candidates run out.
       const byPlan = Number(b.inPlan) - Number(a.inPlan)
       if (byPlan !== 0) return byPlan
-      const byScore = b.score - a.score
-      if (byScore !== 0) return byScore
       // Paraspinals are the canonical root-level test, then other branches that
       // leave the root proximal to the plexus.
       const byRamus =
         Number(b.muscle.pathway.posteriorRamus) - Number(a.muscle.pathway.posteriorRamus)
       if (byRamus !== 0) return byRamus
+      const byScore = b.score - a.score
+      if (byScore !== 0) return byScore
       const byPrePlexus =
         Number(b.muscle.pathway.prePlexus) - Number(a.muscle.pathway.prePlexus)
       if (byPrePlexus !== 0) return byPrePlexus

@@ -51,7 +51,7 @@
   background: linear-gradient(150deg, var(--accent), var(--accent-strong));
   color: var(--text-on-accent);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.02em;
   box-shadow: 0 4px 12px -4px var(--accent-ring);
@@ -62,7 +62,7 @@
 }
 
 .brand-copy h1 {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.2;
@@ -71,7 +71,7 @@
 .brand-copy p {
   overflow: hidden;
   color: var(--text-faint);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.35;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -95,7 +95,7 @@
   padding: 7px 15px;
   border-radius: var(--r-full);
   color: var(--text-soft);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
@@ -127,7 +127,7 @@
   background: var(--surface);
   border: 1px solid var(--line);
   color: var(--text-soft);
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -142,7 +142,7 @@
   align-items: center;
   gap: 5px;
   color: var(--accent);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -167,7 +167,7 @@
   padding: 0 20px;
   background: linear-gradient(180deg, var(--accent), var(--accent-strong));
   color: var(--text-on-accent);
-  font-size: 14.5px;
+  font-size: 15.5px;
   box-shadow: 0 6px 16px -8px var(--accent-ring);
 }
 
@@ -191,7 +191,7 @@
   background: var(--surface);
   border: 1px solid var(--line-strong);
   color: var(--text);
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .secondary-button:hover {
@@ -204,7 +204,7 @@
   min-height: 32px;
   padding: 0 10px;
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
 }
 
 .ghost-button:hover:not(:disabled) {
@@ -241,7 +241,7 @@
   background: var(--accent-tint);
   color: var(--accent-strong);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -257,7 +257,7 @@
   background: var(--accent-tint);
   color: var(--accent-strong);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   text-align: center;
   white-space: nowrap;
@@ -271,7 +271,7 @@
   flex: none;
   border-radius: 7px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -301,13 +301,13 @@
 }
 
 .empty-state strong {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .empty-state p {
   max-width: 34ch;
   color: var(--text-soft);
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .empty-actions {
@@ -371,7 +371,7 @@
 }
 
 .filters-head h2 {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -387,7 +387,7 @@
 .filter-block legend {
   padding: 0 0 8px;
   color: var(--text-faint);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -400,7 +400,7 @@
 
 .filter-group-label {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 600;
 }
 
@@ -426,7 +426,7 @@
   background: var(--surface-muted);
   border: 1px solid transparent;
   color: var(--text-soft);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   transition: background var(--fast) var(--ease), color var(--fast) var(--ease),
     border-color var(--fast) var(--ease);
@@ -461,7 +461,7 @@
 
 .chip-wide em {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-style: normal;
   opacity: 0.75;
 }
@@ -469,7 +469,7 @@
 .chip-root {
   padding: 0 4px;
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 13.5px;
 }
 
 /* 5. Muscle library ------------------------------------------------------ */
@@ -520,7 +520,7 @@
   min-width: 0;
   border: 0;
   background: none;
-  font-size: 15px;
+  font-size: 16px;
   outline: none;
 }
 
@@ -552,7 +552,7 @@
   border: 1px solid var(--line);
   color: var(--text-faint);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .filter-trigger {
@@ -567,7 +567,7 @@
   border: 1px solid var(--line);
   box-shadow: var(--shadow-sm);
   color: var(--text);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
 }
 
@@ -580,21 +580,21 @@
   background: var(--accent);
   color: var(--text-on-accent);
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-style: normal;
 }
 
 .library-count {
   flex: none;
   color: var(--text-faint);
-  font-size: 12.5px;
+  font-size: 13.5px;
   white-space: nowrap;
 }
 
 .library-count strong {
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .muscle-results {
@@ -615,13 +615,13 @@
 
 .area-band-group {
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1em;
 }
 
 .area-band h3 {
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
 }
 
@@ -631,7 +631,7 @@
   background: var(--surface-sunken);
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
 }
 
 .area-band::after {
@@ -686,7 +686,7 @@
 /* names wrap rather than truncate — the muscle name is the row's identity */
 .mrow-id strong {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.3;
@@ -704,7 +704,7 @@
 .mrow-nerve {
   overflow: hidden;
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -716,7 +716,7 @@
   background: var(--surface-sunken);
   color: var(--text-faint);
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
 }
 
 .guide-dot {
@@ -768,7 +768,7 @@
   border: 1px solid var(--line);
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 500;
   transition: background var(--fast) var(--ease), color var(--fast) var(--ease),
     border-color var(--fast) var(--ease);
@@ -786,12 +786,6 @@
   color: var(--right);
 }
 
-.side-button.is-on::before {
-  content: '✓';
-  margin-right: 3px;
-  font-size: 11px;
-}
-
 .side-button.side-L.is-on {
   background: var(--left);
   border-color: var(--left);
@@ -804,6 +798,36 @@
   color: #fff;
 }
 
+.side-button > span {
+  width: 100%;
+  text-align: center;
+}
+
+.cited-sentence {
+  display: inline;
+}
+
+.cited-sentence + .cited-sentence {
+  margin-left: 0.18em;
+}
+
+.inline-citation {
+  display: inline-block;
+  margin-left: 0.22em;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-full);
+  background: var(--surface-sunken);
+  color: var(--text-faint);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.35;
+  vertical-align: 0.08em;
+  white-space: nowrap;
+}
+
 .needle-button {
   display: inline-flex;
   align-items: center;
@@ -814,7 +838,7 @@
   background: var(--surface);
   border: 1px solid var(--line-strong);
   color: var(--text-soft);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
   transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease),
@@ -869,7 +893,7 @@
 .chain-label {
   display: block;
   color: var(--text-faint);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -878,7 +902,7 @@
 .chain-value {
   display: block;
   margin-top: 2px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.35;
 }
@@ -895,7 +919,7 @@
   border-radius: var(--r-full);
   background: var(--surface-sunken);
   color: var(--text-soft);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 600;
 }
 
@@ -906,7 +930,7 @@
 
 .detail-note {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
 }
 
 /* 6. Queue panel & action bar -------------------------------------------- */
@@ -938,7 +962,7 @@
   align-items: center;
   gap: 8px;
   margin-top: 2px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
 }
 
@@ -949,7 +973,7 @@
   padding-bottom: 2px;
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 13.5px;
 }
 
 .queue-summary .side-tag:not(:first-child) {
@@ -988,7 +1012,7 @@
 
 .queue-identity strong {
   display: block;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   line-height: 1.3;
   overflow-wrap: break-word;
@@ -998,7 +1022,7 @@
   display: block;
   overflow: hidden;
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1033,12 +1057,12 @@
 }
 
 .queue-empty strong {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .queue-empty p {
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.5;
 }
 
@@ -1060,7 +1084,7 @@
 
 .queue-foot p {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
   line-height: 1.45;
 }
 
@@ -1097,14 +1121,14 @@
 .action-bar-label {
   display: grid;
   min-width: 0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.2;
 }
 
 .action-bar-label em {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-style: normal;
   font-weight: 500;
 }
@@ -1180,7 +1204,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.25;
 }
@@ -1191,7 +1215,7 @@
   flex-wrap: wrap;
   gap: 6px 10px;
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
 }
 
 .dialog-head-meta > span:not(.side-tag)::before {
@@ -1240,7 +1264,7 @@
   gap: 10px;
   margin-right: auto;
   color: var(--text-soft);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -1299,14 +1323,14 @@
   background: var(--surface-muted);
   border: 1px solid var(--line);
   color: var(--text-soft);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   text-align: left;
 }
 
 .variant-tabs button span {
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -1343,7 +1367,7 @@
 }
 
 .panel-heading h3 {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
 }
 
@@ -1354,7 +1378,7 @@
   background: var(--surface-sunken);
   color: var(--text-soft);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .needle-gallery {
@@ -1392,7 +1416,7 @@
   border-radius: var(--r-full);
   background: rgba(21, 34, 47, 0.78);
   color: #fff;
-  font-size: 11.5px;
+  font-size: 12.5px;
   opacity: 0;
   transition: opacity var(--fast) var(--ease);
 }
@@ -1405,7 +1429,7 @@
 .needle-gallery figcaption {
   padding: 8px 12px 10px;
   color: var(--text-soft);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -1425,12 +1449,12 @@
 }
 
 .no-image-card strong {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .no-image-card p {
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.5;
 }
 
@@ -1453,14 +1477,14 @@
 
 .field-list dt {
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
 }
 
 .field-list dd {
   margin-top: 3px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -1477,7 +1501,7 @@
   gap: 6px;
   margin-bottom: 6px;
   color: var(--accent-strong);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -1489,7 +1513,7 @@
 .note-block li {
   position: relative;
   padding-left: 15px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.6;
 }
 
@@ -1534,7 +1558,7 @@
   background: var(--surface-muted);
   border: 1px solid var(--line);
   color: var(--text-soft);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -1577,7 +1601,7 @@
 
 .worksheet-context-editor label {
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1589,7 +1613,7 @@
   border-radius: var(--r-sm);
   background: var(--surface);
   border: 1px solid var(--line-strong);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
   resize: vertical;
 }
@@ -1615,7 +1639,7 @@
   width: 100%;
   min-width: 940px;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13.5px;
 }
 
 .worksheet-table th,
@@ -1631,7 +1655,7 @@
   top: 0;
   background: var(--accent-tint);
   color: var(--accent-strong);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -1665,7 +1689,7 @@
   display: block;
   margin-bottom: 3px;
   color: var(--accent);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1687,7 +1711,7 @@
 .dermatome-hero h2,
 .plexus-hero h2 {
   margin-bottom: 6px;
-  font-size: 24px;
+  font-size: 25px;
   font-weight: 700;
   line-height: 1.25;
 }
@@ -1696,7 +1720,7 @@
 .plexus-hero > div p {
   max-width: 62ch;
   color: var(--text-soft);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.65;
 }
 
@@ -1728,14 +1752,14 @@
 .plexus-caution strong {
   display: block;
   margin-bottom: 3px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .dermatome-caution span,
 .plexus-hero aside span,
 .plexus-caution p {
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.6;
 }
 
@@ -1761,14 +1785,14 @@
 
 .section-heading h3,
 .plexus-section-heading h3 {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
 }
 
 .section-heading p,
 .plexus-section-heading p {
   color: var(--text-soft);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -1805,12 +1829,12 @@
 }
 
 .dermatome-map-card figcaption strong {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .dermatome-map-card figcaption span {
   color: var(--text-faint);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .dermatome-filter {
@@ -1827,7 +1851,7 @@
   background: var(--surface-muted);
   border: 1px solid var(--line);
   color: var(--text-soft);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   text-align: left;
 }
@@ -1835,7 +1859,7 @@
 .dermatome-filter button small {
   color: var(--text-faint);
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 400;
 }
 
@@ -1872,7 +1896,7 @@
 .dermatome-table-head {
   background: var(--surface-sunken);
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1893,7 +1917,7 @@
   background: var(--surface-sunken);
   color: var(--accent-strong);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   text-align: center;
 }
 
@@ -1904,7 +1928,7 @@
 
 .dermatome-region {
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
 }
 
 .dermatome-landmark {
@@ -1921,13 +1945,13 @@
 
 .dermatome-landmark strong {
   display: block;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .dermatome-landmark small {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
 }
 
 .dermatome-source-note,
@@ -1952,14 +1976,14 @@
 .dermatome-source-note h3,
 .plexus-sources h3 {
   margin-bottom: 4px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .dermatome-source-note p {
   max-width: 92ch;
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.7;
 }
 
@@ -1967,7 +1991,9 @@
 
 .plexus-first-pass,
 .plexus-flow-section,
-.plexus-localization-section {
+.plexus-localization-section,
+.plexus-pattern-section,
+.plexus-ncs-section {
   display: grid;
   gap: 14px;
   padding: 20px;
@@ -1975,6 +2001,171 @@
   background: var(--surface);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-sm);
+}
+
+.plexus-pattern-section,
+.plexus-ncs-section {
+  display: grid;
+  gap: 16px;
+}
+
+.plexus-pattern-matrix {
+  display: grid;
+  gap: 12px;
+}
+
+.plexus-pattern-row {
+  display: grid;
+  grid-template-columns: 94px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.plexus-pattern-root {
+  display: grid;
+  place-content: center;
+  gap: 3px;
+  min-height: 132px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  text-align: center;
+}
+
+.plexus-pattern-root small {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+.plexus-pattern-root strong {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.plexus-pattern-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 0.42fr);
+  gap: 12px 16px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-muted);
+}
+
+.plexus-pattern-card.cord {
+  border-left: 4px solid var(--left);
+}
+
+.plexus-pattern-card > header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+
+.plexus-pattern-card > header span,
+.plexus-pattern-card h5 {
+  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.plexus-pattern-card > header h4 {
+  font-size: 18px;
+}
+
+.plexus-pattern-muscles,
+.plexus-pattern-sensory {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
+.plexus-pattern-muscles ul {
+  display: grid;
+  gap: 5px;
+}
+
+.plexus-pattern-muscles li {
+  display: grid;
+  gap: 1px;
+  padding: 6px 8px;
+  border-left: 3px solid transparent;
+  border-radius: var(--r-xs);
+  background: var(--surface);
+}
+
+.plexus-pattern-muscles li.is-key {
+  border-color: var(--caution);
+  background: var(--caution-tint);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--caution) 28%, transparent);
+}
+
+.plexus-pattern-muscles strong {
+  font-size: 15px;
+}
+
+.plexus-pattern-muscles li.is-key strong {
+  color: var(--caution);
+}
+
+.plexus-pattern-muscles span,
+.plexus-pattern-sensory p {
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.plexus-pattern-sensory > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.plexus-pattern-sensory > div span {
+  padding: 4px 8px;
+  border-radius: var(--r-full);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.plexus-ncs-section ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.plexus-ncs-section li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-muted);
+}
+
+.plexus-ncs-section li > span {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.plexus-ncs-section li p {
+  font-size: 14.5px;
+  line-height: 1.5;
 }
 
 .plexus-first-pass ol {
@@ -1996,7 +2187,7 @@
   flex: none;
   color: var(--accent-tint-strong);
   font-family: var(--font-mono);
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 500;
   line-height: 1;
 }
@@ -2004,12 +2195,12 @@
 .plexus-first-pass strong {
   display: block;
   margin-bottom: 4px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .plexus-first-pass p {
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.6;
 }
 
@@ -2024,7 +2215,7 @@
   gap: 10px;
   padding: 0 14px;
   color: var(--text-faint);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2060,14 +2251,14 @@
 .plexus-flow-row small {
   display: block;
   color: var(--text-faint);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .plexus-flow-row strong {
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .flow-branch {
@@ -2112,14 +2303,14 @@
 
 .plexus-localization-card header span {
   color: var(--text-faint);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .plexus-localization-card header h4 {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
 }
 
@@ -2130,20 +2321,20 @@
   background: var(--accent-tint);
   color: var(--accent-strong);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
 
 .plexus-composition {
   color: var(--text-soft);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.6;
 }
 
 .plexus-card-block h5 {
   margin-bottom: 6px;
   color: var(--text-faint);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2166,13 +2357,13 @@
 }
 
 .plexus-card-block.muscle-set strong {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .plexus-card-block.muscle-set span {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
   text-align: right;
 }
 
@@ -2190,13 +2381,13 @@
 
 .plexus-evidence-list dt {
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 
 .plexus-evidence-list dd {
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.55;
 }
 
@@ -2219,13 +2410,13 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .plexus-sources span {
   color: var(--text-faint);
-  font-size: 11.5px;
+  font-size: 12.5px;
 }
 
 .plexus-source-mark {
@@ -2354,7 +2545,9 @@
   .dermatome-section,
   .plexus-first-pass,
   .plexus-flow-section,
-  .plexus-localization-section {
+  .plexus-localization-section,
+  .plexus-pattern-section,
+  .plexus-ncs-section {
     padding: 16px;
   }
 
@@ -2381,6 +2574,14 @@
   .plexus-flow-row > div:nth-child(3) {
     grid-column: span 1;
   }
+
+  .plexus-pattern-row {
+    grid-template-columns: 82px minmax(0, 1fr);
+  }
+
+  .plexus-pattern-card.cord {
+    grid-column: 2;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2395,7 +2596,7 @@
   }
 
   .topbar-status {
-    font-size: 11.5px;
+    font-size: 12.5px;
   }
 
   /* every overlay is a bottom sheet on phones */
@@ -2442,7 +2643,7 @@
 
   .dialog-head h2,
   .sheet-head h2 {
-    font-size: 17px;
+    font-size: 18px;
   }
 
   .dialog-body,
@@ -2464,7 +2665,7 @@
 
   .dialog-foot-add {
     gap: 8px;
-    font-size: 12.5px;
+    font-size: 13.5px;
   }
 
   .needle-grid,
@@ -2491,7 +2692,7 @@
   }
 
   .dermatome-region {
-    font-size: 11.5px;
+    font-size: 12.5px;
   }
 
   .dermatome-landmark {
@@ -2502,6 +2703,14 @@
   .plexus-evidence-list > div {
     grid-template-columns: minmax(0, 1fr);
     gap: 2px;
+  }
+
+  .plexus-pattern-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plexus-ncs-section ol {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -2522,6 +2731,23 @@
   .plexus-first-pass ol,
   .dermatome-map-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plexus-pattern-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plexus-pattern-root {
+    min-height: 0;
+    place-content: initial;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .plexus-pattern-card.cord {
+    grid-column: auto;
   }
 }
 

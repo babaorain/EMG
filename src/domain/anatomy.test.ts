@@ -34,9 +34,9 @@ describe('brachial plexus pathways', () => {
   })
 
   it('keeps paraspinals clear of every post-root site', () => {
-    const c6 = pathwayOf('Paraspinal (C6)')
-    expect(c6.posteriorRamus).toBe(true)
-    expect(c6.upstreamSiteIds).toEqual(['root-C6'])
+    const cervical = pathwayOf('Paraspinal (Cervical)')
+    expect(cervical.posteriorRamus).toBe(true)
+    expect(cervical.upstreamSiteIds).toEqual(['root-C5', 'root-C6', 'root-C7', 'root-C8'])
   })
 })
 
@@ -67,11 +67,11 @@ describe('catalog integrity', () => {
     expect(unresolved.map((muscle) => `${muscle.name} (${muscle.nerveLabel})`)).toEqual([])
   })
 
-  it('adds cervical paraspinals for C5 through C8', () => {
+  it('uses one C PSP entry spanning C5 through C8', () => {
     const cervical = muscleCatalog.filter(
       (muscle) => muscle.nerveLabel === 'Post. Rami (Cervical)',
     )
-    expect(cervical.map((muscle) => muscle.rootLabel)).toEqual(['C5', 'C6', 'C7', 'C8'])
+    expect(cervical.map((muscle) => muscle.rootLabel)).toEqual(['C5-C8'])
     expect(cervical.every((muscle) => muscle.normalIsWeakExclusion)).toBe(true)
   })
 

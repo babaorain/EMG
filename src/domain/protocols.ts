@@ -37,7 +37,7 @@ export const roleLabels: Record<MuscleRole, string> = {
 }
 
 const paraspinal = (root: string, rationale: string): ProtocolMuscle => ({
-  name: `Paraspinal (${root})`,
+  name: root.startsWith('C') ? 'Paraspinal (Cervical)' : `Paraspinal (${root})`,
   role: 'preganglionic',
   rationale,
 })
@@ -267,10 +267,7 @@ export const protocols: Protocol[] = [
     summary:
       'BPI 的第一個問題是 preganglionic 還是 postganglionic。以下肌肉的神經在 plexus 之前離開 root：異常指向 root 或更近端（含 avulsion），正常則偏向 postganglionic。此判斷影響手術可行性。',
     muscles: [
-      paraspinal('C5', 'Posterior ramus 在 DRG 之前分出'),
-      paraspinal('C6', 'Posterior ramus 在 DRG 之前分出'),
-      paraspinal('C7', 'Posterior ramus 在 DRG 之前分出'),
-      paraspinal('C8', 'Posterior ramus 在 DRG 之前分出'),
+      paraspinal('Cervical', 'C5–C8 posterior rami 在 DRG 之前分出'),
       {
         name: 'Rhomboid Major/Minor',
         role: 'preganglionic',
@@ -311,8 +308,7 @@ export const protocols: Protocol[] = [
         rationale: '正常才支持 upper trunk 而非 C5–C7 root',
       },
       { name: 'Triceps Brachii', role: 'exclude', rationale: '界定下邊界' },
-      paraspinal('C5', '正常才支持 postganglionic'),
-      paraspinal('C6', '正常才支持 postganglionic'),
+      paraspinal('Cervical', '正常才支持 postganglionic；以肢體肌肉判定特定 root'),
     ],
   },
   {
@@ -440,10 +436,7 @@ export const protocols: Protocol[] = [
         role: 'preganglionic',
         rationale: 'Long thoracic N.，判斷 C5–C7 是否 avulsion',
       },
-      paraspinal('C5', '判斷該節段是否 preganglionic'),
-      paraspinal('C6', '判斷該節段是否 preganglionic'),
-      paraspinal('C7', '判斷該節段是否 preganglionic'),
-      paraspinal('C8', '判斷該節段是否 preganglionic'),
+      paraspinal('Cervical', '判斷 C5–C8 是否有 preganglionic involvement'),
     ],
   },
   {
@@ -459,8 +452,7 @@ export const protocols: Protocol[] = [
       { name: 'Extensor Indicis Proprius', role: 'confirm', rationale: 'C7–C8 / PIN' },
       { name: 'Abd. Pollicis Brevis', role: 'confirm', rationale: 'C8–T1 / median' },
       { name: 'First Dorsal Interosseous', role: 'confirm', rationale: 'C8–T1 / ulnar' },
-      paraspinal('C6', '判斷病灶層級'),
-      paraspinal('C7', '判斷病灶層級'),
+      paraspinal('Cervical', '判斷病灶層級；特定 root 仍依肢體肌肉定位'),
     ],
   },
   {

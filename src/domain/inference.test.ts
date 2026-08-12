@@ -54,7 +54,7 @@ describe('C6 radiculopathy pattern', () => {
 
   it('offers a cervical paraspinal to separate root from plexus', () => {
     const names = result.suggestions.map((entry) => entry.muscle.name)
-    expect(names).toContain('Paraspinal (C6)')
+    expect(names).toContain('Paraspinal (Cervical)')
   })
 })
 
@@ -65,11 +65,11 @@ describe('next-needle ranking', () => {
         ['Biceps Brachii', 'abnormal'],
         ['Deltoid (Ant/Mid/Post)', 'abnormal'],
         ['Triceps Brachii', 'normal'],
-        ['Paraspinal (C6)', 'not_tested'],
+        ['Paraspinal (Cervical)', 'not_tested'],
       ]),
       'R',
     )
-    expect(result.suggestions[0].muscle.name).toBe('Paraspinal (C6)')
+    expect(result.suggestions[0].muscle.name).toBe('Paraspinal (Cervical)')
     expect(result.suggestions[0].inPlan).toBe(true)
   })
 
@@ -78,12 +78,12 @@ describe('next-needle ranking', () => {
       observe([
         ['Biceps Brachii', 'abnormal'],
         ['Deltoid (Ant/Mid/Post)', 'abnormal'],
-        ['Paraspinal (C6)', 'normal'],
+        ['Paraspinal (Cervical)', 'normal'],
       ]),
       'R',
     )
     expect(result.suggestions.map((entry) => entry.muscle.name)).not.toContain(
-      'Paraspinal (C6)',
+      'Paraspinal (Cervical)',
     )
   })
 })
@@ -110,13 +110,13 @@ describe('structural weakening of exclusion', () => {
       observe([
         ['Biceps Brachii', 'abnormal'],
         ['Deltoid (Ant/Mid/Post)', 'abnormal'],
-        ['Paraspinal (C6)', 'normal'],
+        ['Paraspinal (Cervical)', 'normal'],
       ]),
       'R',
     )
     const c6 = result.compatible.find((entry) => entry.site.label === 'C6 root')
     expect(c6).toBeDefined()
-    expect(c6?.softenedBy.map((ref) => ref.name)).toEqual(['Paraspinal (C6)'])
+    expect(c6?.softenedBy.map((ref) => ref.name)).toEqual(['Paraspinal (Cervical)'])
   })
 })
 
