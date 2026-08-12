@@ -1,231 +1,235 @@
-import { Crosshair, Plus, Search } from 'lucide-react'
+import { ChevronDown, Crosshair, ListFilter, Search, X } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import type { MuscleCatalogEntry } from '../../clinical/catalog'
 import {
   clinicalAreaForMuscle,
   muscleAreaById,
-  muscleAreaDefinitions,
-  type MuscleArea,
 } from '../../clinical/clinicalAreas'
 import { hasNeedleGuideImage } from '../../clinical/needleGuides'
-import { pathwayStages, THORACIC_PARASPINAL_FILTER } from '../../domain/muscleSelection'
+import { pathwayStages } from '../../domain/muscleSelection'
 import type { Side } from '../../domain/types'
-
-export type AreaFilter = 'all' | MuscleArea
 
 interface MuscleLibraryProps {
   muscles: MuscleCatalogEntry[]
   query: string
   onQueryChange: (query: string) => void
-  area: AreaFilter
-  onAreaChange: (area: AreaFilter) => void
-  root: string
-  onRootChange: (root: string) => void
-  roots: string[]
   selectedKeys: Set<string>
   onAdd: (muscle: MuscleCatalogEntry, side: Side) => void
   onNeedlePoint: (muscle: MuscleCatalogEntry, side: Side) => void
+  expandedId: string | null
+  onToggleExpanded: (id: string) => void
+  /** phone / tablet layout: filters live in a sheet */
+  compact: boolean
+  activeFilterCount: number
+  onOpenFilters: () => void
+  onResetFilters: () => void
+  /** measured top bar height, so the search row sticks directly beneath it */
+  stickyTop: number
 }
 
-const areaGroups = [
-  { id: 'upper', label: '上肢' },
-  { id: 'lower', label: '下肢' },
-  { id: 'other', label: '其他' },
-] as const
-
-function AddButton({
+function SideButton({
   side,
   selected,
+  muscleName,
   onClick,
 }: {
   side: Side
   selected: boolean
+  muscleName: string
   onClick: () => void
 }) {
   return (
     <button
-      className={`side-add-button${selected ? ' selected' : ''}`}
+      className={`side-button side-${side}${selected ? ' is-on' : ''}`}
       type="button"
       onClick={onClick}
       aria-pressed={selected}
+      aria-label={`${selected ? '移除' : '加入'}${side === 'L' ? '左側' : '右側'} ${muscleName}`}
     >
-      {selected ? null : <Plus size={15} aria-hidden="true" />}
-      <span>{selected ? `✓ ${side}` : side}</span>
+      <span aria-hidden="true">{side}</span>
     </button>
   )
 }
 
-function MusclePathRow({
+function MuscleRow({
   muscle,
   selectedKeys,
+  expanded,
+  onToggleExpanded,
   onAdd,
   onNeedlePoint,
 }: {
   muscle: MuscleCatalogEntry
   selectedKeys: Set<string>
+  expanded: boolean
+  onToggleExpanded: () => void
   onAdd: MuscleLibraryProps['onAdd']
   onNeedlePoint: MuscleLibraryProps['onNeedlePoint']
 }) {
-  const stages = pathwayStages(muscle)
   const leftSelected = selectedKeys.has(`L:${muscle.id}`)
   const rightSelected = selectedKeys.has(`R:${muscle.id}`)
-  const hasNeedleImage = hasNeedleGuideImage(muscle.name)
+  const queued = leftSelected || rightSelected
+  const hasImage = hasNeedleGuideImage(muscle.name)
+  const stages = pathwayStages(muscle).filter((stage) => stage.label !== 'Muscle')
+  const detailId = `detail-${muscle.id}`
 
   return (
-    <article className="muscle-path-row">
-      <div className="pathway-track" aria-label={`${muscle.name} 神經路徑`}>
-        {stages.map((stage, index) => (
-          <div className="pathway-stage" key={stage.label}>
-            <span className="pathway-label">{stage.label}</span>
-            {stage.label === 'Muscle' ? (
-              <span className="pathway-value pathway-muscle-value">
-                <span>{stage.value}</span>
-                <strong className="muscle-root-badge">{muscle.rootLabel.replaceAll('-', '–')}</strong>
-              </span>
-            ) : (
-              <span className={`pathway-value${stage.value === '—' ? ' unavailable' : ''}`}>
-                {stage.value}
-              </span>
-            )}
-            {index < stages.length - 1 ? <span className="pathway-line" aria-hidden="true" /> : null}
-          </div>
-        ))}
-      </div>
-      <div className="muscle-row-actions">
-        <AddButton side="L" selected={leftSelected} onClick={() => onAdd(muscle, 'L')} />
-        <AddButton side="R" selected={rightSelected} onClick={() => onAdd(muscle, 'R')} />
+    <article className={`mrow${expanded ? ' is-open' : ''}${queued ? ' is-queued' : ''}`}>
+      <button
+        type="button"
+        className="mrow-summary"
+        aria-expanded={expanded}
+        aria-controls={detailId}
+        onClick={onToggleExpanded}
+      >
+        <span className="root-badge" title={muscle.rootLabel}>{muscle.rootLabel.replaceAll('-', '–')}</span>
+        <span className="mrow-id">
+          <strong>{muscle.name}</strong>
+          <span className="mrow-meta">
+            <span className="mrow-nerve">{muscle.nerveLabel}</span>
+            {muscle.abbreviations[0] ? <span className="mrow-abbr">{muscle.abbreviations[0]}</span> : null}
+          </span>
+        </span>
+        <span className={`guide-dot${hasImage ? ' has-image' : ''}`} aria-hidden="true" />
+        <ChevronDown className="mrow-caret" size={18} aria-hidden="true" />
+      </button>
+
+      <div className="mrow-actions">
+        <div className="side-pair" role="group" aria-label={`${muscle.name} 加入清單`}>
+          <SideButton side="L" selected={leftSelected} muscleName={muscle.name} onClick={() => onAdd(muscle, 'L')} />
+          <SideButton side="R" selected={rightSelected} muscleName={muscle.name} onClick={() => onAdd(muscle, 'R')} />
+        </div>
         <button
-          className={`needle-button ${hasNeedleImage ? 'has-guide' : 'no-guide'}`}
+          className={`needle-button${hasImage ? ' has-guide' : ''}`}
           type="button"
-          onClick={() => onNeedlePoint(muscle, rightSelected ? 'R' : 'L')}
-          title={hasNeedleImage ? '查看扎針圖譜' : '無圖片，開啟文字指引'}
-          aria-label={`扎針點，${hasNeedleImage ? '有圖譜' : '無圖片，有文字指引'}`}
+          onClick={() => onNeedlePoint(muscle, rightSelected && !leftSelected ? 'R' : 'L')}
+          title={hasImage ? '查看扎針圖譜與說明' : '無課本圖片，開啟文字指引'}
+          aria-label={`${muscle.name} 扎針點，${hasImage ? '有課本圖譜' : '無圖片，僅文字指引'}`}
         >
-          <Crosshair size={17} aria-hidden="true" />
+          <Crosshair size={16} aria-hidden="true" />
           <span>扎針點</span>
         </button>
+      </div>
+
+      <div className="mrow-detail" id={detailId} hidden={!expanded}>
+        <ol className="chain">
+          {stages.map((stage) => (
+            <li className={`chain-step${stage.value === '—' ? ' is-empty' : ''}`} key={stage.label}>
+              <span className="chain-label">{stage.label}</span>
+              <strong className="chain-value">{stage.value}</strong>
+            </li>
+          ))}
+        </ol>
+        <div className="detail-foot">
+          <span className={`source-tag${muscle.reviewStatus === 'book-sourced' ? ' is-book' : ''}`}>
+            {muscle.reviewStatus === 'book-sourced' ? '課本校正' : 'Legacy 目錄'}
+          </span>
+          <span className="detail-note">Root {muscle.rootLabel}</span>
+          {muscle.innervationSource ? <span className="detail-note">{muscle.innervationSource}</span> : null}
+          {muscle.abbreviations.length > 1 ? (
+            <span className="detail-note">別名 {muscle.abbreviations.join('、')}</span>
+          ) : null}
+        </div>
       </div>
     </article>
   )
 }
 
 export function MuscleLibrary(props: MuscleLibraryProps) {
-  const areaCounts = new Map<MuscleArea, number>()
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      const typing = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement
+      if (event.key === '/' && !typing) {
+        event.preventDefault()
+        searchRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  const areaCounts = new Map<string, number>()
   for (const muscle of props.muscles) {
     const area = clinicalAreaForMuscle(muscle)
     areaCounts.set(area, (areaCounts.get(area) ?? 0) + 1)
   }
 
   return (
-    <section className="library-pane" aria-labelledby="library-title">
+    <section className="library" aria-labelledby="library-title">
       <h2 id="library-title" className="sr-only">肌肉清單</h2>
-      <div className="library-toolbar">
-        <label className="picker-search">
-          <Search size={20} aria-hidden="true" />
-          <span className="sr-only">搜尋肌肉</span>
+
+      <div className="library-bar" style={{ top: props.stickyTop }}>
+        <div className="searchbar">
+          <Search size={18} aria-hidden="true" />
           <input
+            ref={searchRef}
             type="search"
             value={props.query}
             onChange={(event) => props.onQueryChange(event.target.value)}
             placeholder="搜尋 muscle / nerve / root"
+            aria-label="搜尋肌肉、神經或神經根"
           />
           {props.query ? (
             <button type="button" onClick={() => props.onQueryChange('')} aria-label="清除搜尋">
-              清除
+              <X size={16} aria-hidden="true" />
             </button>
-          ) : null}
-        </label>
-
-        <div className="area-filter" aria-label="依臨床區域篩選">
-          <span className="filter-caption">臨床區域</span>
-          <button
-            type="button"
-            className={`area-all-button${props.area === 'all' ? ' active' : ''}`}
-            onClick={() => props.onAreaChange('all')}
-          >
-            全部
-          </button>
-          <div className="area-filter-groups">
-            {areaGroups.map((group) => (
-              <div className="area-filter-group" key={group.id}>
-                <span>{group.label}</span>
-                <div>
-                  {muscleAreaDefinitions
-                    .filter((definition) => definition.group === group.id)
-                    .map((definition) => (
-                      <button
-                        key={definition.id}
-                        type="button"
-                        className={props.area === definition.id ? 'active' : ''}
-                        onClick={() => props.onAreaChange(definition.id)}
-                      >
-                        {definition.label}
-                      </button>
-                    ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          ) : (
+            <kbd aria-hidden="true">/</kbd>
+          )}
         </div>
 
-        <div className="filter-row root-filter" aria-label="依 Root 篩選">
-          <span className="filter-caption">依 Root</span>
-          <button
-            type="button"
-            className={props.root === 'all' ? 'active' : ''}
-            onClick={() => props.onRootChange('all')}
-          >
-            全部
+        {props.compact ? (
+          <button type="button" className="filter-trigger" onClick={props.onOpenFilters}>
+            <ListFilter size={17} aria-hidden="true" />
+            <span>篩選</span>
+            {props.activeFilterCount > 0 ? <em>{props.activeFilterCount}</em> : null}
           </button>
-          {props.roots.map((root) => (
-            <button
-              key={root}
-              type="button"
-              className={`${props.root === root ? 'active ' : ''}${root === THORACIC_PARASPINAL_FILTER ? 'thoracic-root-button' : ''}`.trim()}
-              onClick={() => props.onRootChange(root)}
-            >
-              {root === THORACIC_PARASPINAL_FILTER ? 'T1–T12 PSP' : root}
-            </button>
-          ))}
-        </div>
+        ) : null}
+
+        <p className="library-count" aria-live="polite">
+          <strong>{props.muscles.length}</strong> 條肌肉
+        </p>
       </div>
 
-      <div className="pathway-column-head" aria-hidden="true">
-        <span>Root</span>
-        <span>Trunk / upstream</span>
-        <span>Division</span>
-        <span>Cord / plexus</span>
-        <span>Downstream nerve</span>
-        <span>Muscle</span>
-        <span>加入／扎針點</span>
-      </div>
-
-      <div className="muscle-results" aria-live="polite">
+      <div className="muscle-results">
         {props.muscles.length === 0 ? (
-          <div className="no-results">
-            <p>找不到符合條件的肌肉</p>
-            <button type="button" onClick={() => props.onQueryChange('')}>清除搜尋</button>
+          <div className="empty-state">
+            <Search size={26} strokeWidth={1.5} aria-hidden="true" />
+            <strong>找不到符合條件的肌肉</strong>
+            <p>試著清除搜尋字串，或重設區域與 root 篩選。</p>
+            <div className="empty-actions">
+              {props.query ? (
+                <button type="button" className="ghost-button" onClick={() => props.onQueryChange('')}>清除搜尋</button>
+              ) : null}
+              {props.activeFilterCount > 0 ? (
+                <button type="button" className="ghost-button" onClick={props.onResetFilters}>重設篩選</button>
+              ) : null}
+            </div>
           </div>
         ) : (
           props.muscles.map((muscle, index) => {
             const area = clinicalAreaForMuscle(muscle)
-            const previousMuscle = props.muscles[index - 1]
-            const previousArea = previousMuscle ? clinicalAreaForMuscle(previousMuscle) : undefined
-            const areaDefinition = muscleAreaById.get(area)
+            const previous = props.muscles[index - 1]
+            const previousArea = previous ? clinicalAreaForMuscle(previous) : undefined
+            const definition = muscleAreaById.get(area)
 
             return (
-              <div className="root-group" key={muscle.id}>
+              <div className="area-block" key={muscle.id}>
                 {area !== previousArea ? (
-                  <div className="clinical-area-band">
-                    <div>
-                      <span>{areaDefinition?.groupLabel}</span>
-                      <h3>{areaDefinition?.label}</h3>
-                    </div>
-                    <strong>{areaCounts.get(area)} muscles</strong>
+                  <div className="area-band">
+                    <span className="area-band-group">{definition?.groupLabel}</span>
+                    <h3>{definition?.label}</h3>
+                    <span className="area-band-count">{areaCounts.get(area)}</span>
                   </div>
                 ) : null}
-                <MusclePathRow
+                <MuscleRow
                   muscle={muscle}
                   selectedKeys={props.selectedKeys}
+                  expanded={props.expandedId === muscle.id}
+                  onToggleExpanded={() => props.onToggleExpanded(muscle.id)}
                   onAdd={props.onAdd}
                   onNeedlePoint={props.onNeedlePoint}
                 />
