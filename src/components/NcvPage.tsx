@@ -5,7 +5,6 @@ import {
   CircleDot,
   Gauge,
   Images,
-  RotateCcw,
   Search,
   SlidersHorizontal,
   X,
@@ -14,21 +13,31 @@ import {
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ncvModalityLabels,
-  ncvModalityOptions,
   ncvRegionLabels,
-  ncvRegionOptions,
   ncvStudies,
-  type NcvModality,
-  type NcvRegion,
   type NcvStudy,
 } from '../clinical/ncvStudies'
+import {
+  ncvCategoryOptions,
+  ncvNavigationGroups,
+  type NcvCategory,
+  type NcvNavigationEntry,
+  type NcvNavigationGroup,
+} from '../clinical/ncvNavigation'
 
-type RegionFilter = 'all' | NcvRegion
-type ModalityFilter = 'all' | NcvModality
+interface NcvStudyIndexEntry extends NcvNavigationEntry {
+  study: NcvStudy
+}
 
-function matchesStudy(study: NcvStudy, query: string): boolean {
+interface NcvStudyIndexGroup extends Omit<NcvNavigationGroup, 'entries'> {
+  entries: NcvStudyIndexEntry[]
+}
+
+function matchesStudy(study: NcvStudy, entry: NcvNavigationEntry, query: string): boolean {
   if (!query) return true
   return [
+    entry.listTitle,
+    entry.listSubtitle,
     study.title,
     study.englishTitle,
     study.nerve,
@@ -41,26 +50,26 @@ function matchesStudy(study: NcvStudy, query: string): boolean {
 function StudyIndexGroup({
   title,
   description,
-  studies,
+  entries,
   selectedId,
   onSelect,
 }: {
   title: string
   description: string
-  studies: NcvStudy[]
+  entries: NcvStudyIndexEntry[]
   selectedId: string
   onSelect: (id: string) => void
 }) {
-  if (!studies.length) return null
+  if (!entries.length) return null
 
   return (
     <section className="ncv-index-group">
       <header>
-        <div><h3>{title}</h3><span>{studies.length}</span></div>
+        <div><h3>{title}</h3><span>{entries.length}</span></div>
         <p>{description}</p>
       </header>
       <div className="ncv-index-list">
-        {studies.map((study) => (
+        {entries.map(({ study, listTitle, listSubtitle }) => (
           <button
             type="button"
             key={study.id}
@@ -68,11 +77,8 @@ function StudyIndexGroup({
             aria-pressed={selectedId === study.id}
             onClick={() => onSelect(study.id)}
           >
-            <span className="ncv-index-title">{study.englishTitle}</span>
-            <span className="ncv-index-subtitle" lang="zh-Hant">{study.title}</span>
-            <span className="ncv-index-meta">
-              {ncvRegionLabels[study.region]} · {ncvModalityLabels[study.modality]}
-            </span>
+            <span className="ncv-index-title">{listTitle}</span>
+            <span className="ncv-index-subtitle" lang="zh-Hant">{listSubtitle}</span>
             <ChevronRight size={16} aria-hidden="true" />
           </button>
         ))}
@@ -129,36 +135,37 @@ function NcvStudyDetail({ study }: { study: NcvStudy }) {
         </ol>
       </section>
 
-      <section className="ncv-image-section" aria-labelledby={`ncv-${study.id}-images`}>
-        <div className="ncv-block-heading">
-          <div><Images size={18} aria-hidden="true" /><h3 id={`ncv-${study.id}-images`}>課本圖版</h3></div>
-          <span>{study.images.length} 張</span>
+      <section className="ncv-evidence-section" aria-label="課本圖版、成人參考值與注意事項">
+        <div className="ncv-image-column">
+          <div className="ncv-block-heading">
+            <div><Images size={18} aria-hidden="true" /><h3 id={`ncv-${study.id}-images`}>課本圖版</h3></div>
+            <span>{study.images.length} 張</span>
+          </div>
+          <div className={`ncv-image-grid count-${Math.min(study.images.length, 4)}`} aria-labelledby={`ncv-${study.id}-images`}>
+            {study.images.map((entry, index) => (
+              <figure key={entry.src}>
+                <div><img src={entry.src} alt={entry.alt} loading={index === 0 ? 'eager' : 'lazy'} /></div>
+                <figcaption><span>{String(index + 1).padStart(2, '0')}</span><p>{entry.caption}</p></figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
-        <div className={`ncv-image-grid count-${Math.min(study.images.length, 4)}`}>
-          {study.images.map((entry, index) => (
-            <figure key={entry.src}>
-              <div><img src={entry.src} alt={entry.alt} loading={index === 0 ? 'eager' : 'lazy'} /></div>
-              <figcaption><span>{String(index + 1).padStart(2, '0')}</span><p>{entry.caption}</p></figcaption>
-            </figure>
-          ))}
+        <div className="ncv-reference-column">
+          <section className="ncv-normal-values" aria-labelledby={`ncv-${study.id}-normal`}>
+            <div className="ncv-block-heading">
+              <div><Gauge size={18} aria-hidden="true" /><h3 id={`ncv-${study.id}-normal`}>課本成人參考值</h3></div>
+            </div>
+            <ul>{study.normalValues.map((value) => <li key={value}>{value}</li>)}</ul>
+          </section>
+
+          <section className="ncv-pitfalls" aria-labelledby={`ncv-${study.id}-pitfalls`}>
+            <div className="ncv-block-heading">
+              <div><AlertTriangle size={18} aria-hidden="true" /><h3 id={`ncv-${study.id}-pitfalls`}>注意事項</h3></div>
+            </div>
+            <ul>{study.notes.map((note) => <li key={note}>{note}</li>)}</ul>
+          </section>
         </div>
       </section>
-
-      <div className="ncv-interpretation-grid">
-        <section className="ncv-normal-values" aria-labelledby={`ncv-${study.id}-normal`}>
-          <div className="ncv-block-heading">
-            <div><Gauge size={18} aria-hidden="true" /><h3 id={`ncv-${study.id}-normal`}>課本成人參考值</h3></div>
-          </div>
-          <ul>{study.normalValues.map((value) => <li key={value}>{value}</li>)}</ul>
-        </section>
-
-        <section className="ncv-pitfalls" aria-labelledby={`ncv-${study.id}-pitfalls`}>
-          <div className="ncv-block-heading">
-            <div><AlertTriangle size={18} aria-hidden="true" /><h3 id={`ncv-${study.id}-pitfalls`}>注意事項</h3></div>
-          </div>
-          <ul>{study.notes.map((note) => <li key={note}>{note}</li>)}</ul>
-        </section>
-      </div>
 
       <footer className="ncv-source-locator">
         <BookOpenText size={17} aria-hidden="true" />
@@ -168,79 +175,47 @@ function NcvStudyDetail({ study }: { study: NcvStudy }) {
   )
 }
 
-function NcvFilterBar({
-  region,
-  modality,
-  onRegionChange,
-  onModalityChange,
-  onReset,
+function NcvCategoryBar({
+  category,
+  onChange,
 }: {
-  region: RegionFilter
-  modality: ModalityFilter
-  onRegionChange: (value: RegionFilter) => void
-  onModalityChange: (value: ModalityFilter) => void
-  onReset: () => void
+  category: NcvCategory
+  onChange: (value: NcvCategory) => void
 }) {
-  const hasFilters = region !== 'all' || modality !== 'all'
-
   return (
-    <div className="ncv-filter-bar" aria-label="NCV 篩選條件">
+    <div className="ncv-filter-bar" aria-label="NCV 檢查區域">
       <SlidersHorizontal size={17} aria-hidden="true" />
-      <div className="ncv-filter-scroll">
-        <div className="ncv-filter-group" role="group" aria-label="檢查類型">
-          <span className="ncv-filter-label">類型</span>
-          {ncvModalityOptions.map((option) => (
-            <button
-              type="button"
-              key={option.value}
-              className={`chip${modality === option.value ? ' is-active' : ''}`}
-              aria-pressed={modality === option.value}
-              onClick={() => onModalityChange(option.value)}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-
-        <span className="ncv-filter-divider" aria-hidden="true" />
-
-        <div className="ncv-filter-group" role="group" aria-label="檢查區域">
-          <span className="ncv-filter-label">區域</span>
-          {ncvRegionOptions.map((option) => (
-            <button
-              type="button"
-              key={option.value}
-              className={`chip${region === option.value ? ' is-active' : ''}`}
-              aria-pressed={region === option.value}
-              onClick={() => onRegionChange(option.value)}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
+      <div className="ncv-category-options" role="group" aria-label="檢查區域">
+        {ncvCategoryOptions.map((option) => (
+          <button
+            type="button"
+            key={option.value}
+            className={`chip${category === option.value ? ' is-active' : ''}`}
+            aria-pressed={category === option.value}
+            onClick={() => onChange(option.value)}
+          >
+            {option.label}
+          </button>
+        ))}
       </div>
-      <button type="button" className="ghost-button ncv-filter-reset" onClick={onReset} disabled={!hasFilters} aria-label="重設篩選">
-        <RotateCcw size={15} aria-hidden="true" />
-      </button>
     </div>
   )
 }
 
 function NcvStudyIndex({
-  commonStudies,
-  supplementalStudies,
+  groups,
   selectedId,
   onSelect,
 }: {
-  commonStudies: NcvStudy[]
-  supplementalStudies: NcvStudy[]
+  groups: NcvStudyIndexGroup[]
   selectedId: string
   onSelect: (id: string) => void
 }) {
   return (
     <div className="ncv-index">
-      <StudyIndexGroup title="常用上／下肢" description="例行檢查與常見比較研究優先" studies={commonStudies} selectedId={selectedId} onSelect={onSelect} />
-      <StudyIndexGroup title="特殊與延伸" description="近端、顱神經、呼吸與少用技術" studies={supplementalStudies} selectedId={selectedId} onSelect={onSelect} />
+      {groups.map((group) => (
+        <StudyIndexGroup key={group.id} {...group} selectedId={selectedId} onSelect={onSelect} />
+      ))}
     </div>
   )
 }
@@ -249,19 +224,22 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query.trim().toLowerCase())
   const searchRef = useRef<HTMLInputElement>(null)
-  const [region, setRegion] = useState<RegionFilter>('all')
-  const [modality, setModality] = useState<ModalityFilter>('all')
+  const [category, setCategory] = useState<NcvCategory>('upper')
   const [selectedId, setSelectedId] = useState(ncvStudies[0]?.id ?? '')
 
-  const filteredStudies = useMemo(() => ncvStudies.filter((study) => (
-    (region === 'all' || study.region === region)
-    && (modality === 'all' || study.modality === modality)
-    && matchesStudy(study, deferredQuery)
-  )), [deferredQuery, modality, region])
-
-  const commonStudies = filteredStudies.filter((study) => study.priority === 'common')
-  const supplementalStudies = filteredStudies.filter((study) => study.priority === 'supplemental')
-  const selectedStudy = filteredStudies.find((study) => study.id === selectedId) ?? filteredStudies[0]
+  const studyById = useMemo(() => new Map(ncvStudies.map((study) => [study.id, study])), [])
+  const categoryGroups = ncvNavigationGroups[category]
+  const groups = useMemo<NcvStudyIndexGroup[]>(() => categoryGroups.map((group) => ({
+    ...group,
+    entries: group.entries.flatMap((entry) => {
+      const study = studyById.get(entry.studyId)
+      return study && matchesStudy(study, entry, deferredQuery) ? [{ ...entry, study }] : []
+    }),
+  })).filter((group) => group.entries.length > 0), [categoryGroups, deferredQuery, studyById])
+  const filteredEntries = groups.flatMap((group) => group.entries)
+  const selectedEntry = filteredEntries.find((entry) => entry.study.id === selectedId) ?? filteredEntries[0]
+  const selectedStudy = selectedEntry?.study
+  const categoryTotal = categoryGroups.reduce((total, group) => total + group.entries.length, 0)
 
   useEffect(() => {
     if (selectedStudy && selectedStudy.id !== selectedId) setSelectedId(selectedStudy.id)
@@ -280,14 +258,8 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  const resetFilters = () => {
-    setRegion('all')
-    setModality('all')
-  }
-
   const clearAll = () => {
     setQuery('')
-    resetFilters()
   }
 
   const railStyle = {
@@ -304,11 +276,11 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
               <header className="queue-head">
                 <div>
                   <span className="eyebrow">Study index</span>
-                  <h2 id="ncv-index-title">檢查項目 <span className="count-badge">{filteredStudies.length}</span></h2>
+                  <h2 id="ncv-index-title">檢查項目 <span className="count-badge">{filteredEntries.length}</span></h2>
                 </div>
               </header>
               <div className="queue-body">
-                <NcvStudyIndex commonStudies={commonStudies} supplementalStudies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
+                <NcvStudyIndex groups={groups} selectedId={selectedStudy.id} onSelect={setSelectedId} />
               </div>
             </section>
           ) : null}
@@ -329,22 +301,16 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
               </button>
             ) : <kbd aria-hidden="true">/</kbd>}
           </label>
-          <p className="library-count" aria-live="polite"><strong>{filteredStudies.length}</strong> 項檢查</p>
+          <p className="library-count" aria-live="polite"><strong>{filteredEntries.length}</strong> / {categoryTotal} 項</p>
         </div>
 
-        <NcvFilterBar
-          region={region}
-          modality={modality}
-          onRegionChange={setRegion}
-          onModalityChange={setModality}
-          onReset={resetFilters}
-        />
+        <NcvCategoryBar category={category} onChange={setCategory} />
 
         {selectedStudy ? (
           <>
             {compact ? (
               <nav className="ncv-mobile-index" aria-label="NCV 檢查清單">
-                <NcvStudyIndex commonStudies={commonStudies} supplementalStudies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
+                <NcvStudyIndex groups={groups} selectedId={selectedStudy.id} onSelect={setSelectedId} />
               </nav>
             ) : null}
             <NcvStudyDetail study={selectedStudy} />
@@ -353,8 +319,8 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
           <div className="ncv-empty">
             <Search size={24} aria-hidden="true" />
             <h3>沒有符合條件的檢查</h3>
-            <p>清除搜尋字詞，或切回「全部區域／全部類型」。</p>
-            <button type="button" onClick={clearAll}>清除篩選</button>
+            <p>清除搜尋字詞，或切換至其他檢查區域。</p>
+            <button type="button" onClick={clearAll}>清除搜尋</button>
           </div>
         )}
 
