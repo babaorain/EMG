@@ -22,7 +22,6 @@ import {
   type NcvRegion,
   type NcvStudy,
 } from '../clinical/ncvStudies'
-import { Overlay } from './ui/Overlay'
 
 type RegionFilter = 'all' | NcvRegion
 type ModalityFilter = 'all' | NcvModality
@@ -169,19 +168,15 @@ function NcvStudyDetail({ study }: { study: NcvStudy }) {
   )
 }
 
-function NcvFilterPanel({
+function NcvFilterBar({
   region,
   modality,
-  regionCounts,
-  modalityCounts,
   onRegionChange,
   onModalityChange,
   onReset,
 }: {
   region: RegionFilter
   modality: ModalityFilter
-  regionCounts: Map<RegionFilter, number>
-  modalityCounts: Map<ModalityFilter, number>
   onRegionChange: (value: RegionFilter) => void
   onModalityChange: (value: ModalityFilter) => void
   onReset: () => void
@@ -189,50 +184,44 @@ function NcvFilterPanel({
   const hasFilters = region !== 'all' || modality !== 'all'
 
   return (
-    <div className="filters ncv-filters">
-      <div className="filters-head">
-        <h2>篩選條件</h2>
-        <button type="button" className="ghost-button" onClick={onReset} disabled={!hasFilters}>
-          <RotateCcw size={14} aria-hidden="true" />
-          重設
-        </button>
-      </div>
-
-      <fieldset className="filter-block">
-        <legend>檢查類型</legend>
-        <div className="chip-stack">
+    <div className="ncv-filter-bar" aria-label="NCV 篩選條件">
+      <SlidersHorizontal size={17} aria-hidden="true" />
+      <div className="ncv-filter-scroll">
+        <div className="ncv-filter-group" role="group" aria-label="檢查類型">
+          <span className="ncv-filter-label">類型</span>
           {ncvModalityOptions.map((option) => (
             <button
               type="button"
               key={option.value}
-              className={`chip chip-wide${modality === option.value ? ' is-active' : ''}`}
+              className={`chip${modality === option.value ? ' is-active' : ''}`}
               aria-pressed={modality === option.value}
               onClick={() => onModalityChange(option.value)}
             >
-              <span>{option.label}</span>
-              <em>{modalityCounts.get(option.value) ?? 0}</em>
+              {option.label}
             </button>
           ))}
         </div>
-      </fieldset>
 
-      <fieldset className="filter-block">
-        <legend>檢查區域</legend>
-        <div className="chip-stack">
+        <span className="ncv-filter-divider" aria-hidden="true" />
+
+        <div className="ncv-filter-group" role="group" aria-label="檢查區域">
+          <span className="ncv-filter-label">區域</span>
           {ncvRegionOptions.map((option) => (
             <button
               type="button"
               key={option.value}
-              className={`chip chip-wide${region === option.value ? ' is-active' : ''}`}
+              className={`chip${region === option.value ? ' is-active' : ''}`}
               aria-pressed={region === option.value}
               onClick={() => onRegionChange(option.value)}
             >
-              <span>{option.label}</span>
-              <em>{regionCounts.get(option.value) ?? 0}</em>
+              {option.label}
             </button>
           ))}
         </div>
-      </fieldset>
+      </div>
+      <button type="button" className="ghost-button ncv-filter-reset" onClick={onReset} disabled={!hasFilters} aria-label="重設篩選">
+        <RotateCcw size={15} aria-hidden="true" />
+      </button>
     </div>
   )
 }
@@ -263,7 +252,6 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
   const [region, setRegion] = useState<RegionFilter>('all')
   const [modality, setModality] = useState<ModalityFilter>('all')
   const [selectedId, setSelectedId] = useState(ncvStudies[0]?.id ?? '')
-  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
 
   const filteredStudies = useMemo(() => ncvStudies.filter((study) => (
     (region === 'all' || study.region === region)
@@ -274,29 +262,6 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
   const commonStudies = filteredStudies.filter((study) => study.priority === 'common')
   const supplementalStudies = filteredStudies.filter((study) => study.priority === 'supplemental')
   const selectedStudy = filteredStudies.find((study) => study.id === selectedId) ?? filteredStudies[0]
-  const activeFilterCount = Number(region !== 'all') + Number(modality !== 'all')
-
-  const regionCounts = useMemo(() => new Map<RegionFilter, number>(
-    ncvRegionOptions.map((option) => [
-      option.value,
-      ncvStudies.filter((study) => (
-        matchesStudy(study, deferredQuery)
-        && (modality === 'all' || study.modality === modality)
-        && (option.value === 'all' || study.region === option.value)
-      )).length,
-    ]),
-  ), [deferredQuery, modality])
-
-  const modalityCounts = useMemo(() => new Map<ModalityFilter, number>(
-    ncvModalityOptions.map((option) => [
-      option.value,
-      ncvStudies.filter((study) => (
-        matchesStudy(study, deferredQuery)
-        && (region === 'all' || study.region === region)
-        && (option.value === 'all' || study.modality === option.value)
-      )).length,
-    ]),
-  ), [deferredQuery, region])
 
   useEffect(() => {
     if (selectedStudy && selectedStudy.id !== selectedId) setSelectedId(selectedStudy.id)
@@ -325,18 +290,6 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
     resetFilters()
   }
 
-  const filterPanel = (
-    <NcvFilterPanel
-      region={region}
-      modality={modality}
-      regionCounts={regionCounts}
-      modalityCounts={modalityCounts}
-      onRegionChange={setRegion}
-      onModalityChange={setModality}
-      onReset={resetFilters}
-    />
-  )
-
   const railStyle = {
     top: stickyTop + 20,
     maxHeight: `calc(100vh - ${stickyTop + 40}px)`,
@@ -345,8 +298,7 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
   return (
     <main className="workspace ncv-workspace">
       {compact ? null : (
-        <aside className="rail ncv-left-rail" aria-label="NCV 篩選條件與檢查項目" style={railStyle}>
-          {filterPanel}
+        <aside className="rail ncv-left-rail" aria-label="NCV 檢查項目" style={railStyle}>
           {selectedStudy ? (
             <section className="queue-panel ncv-study-panel" aria-labelledby="ncv-index-title">
               <header className="queue-head">
@@ -377,15 +329,16 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
               </button>
             ) : <kbd aria-hidden="true">/</kbd>}
           </label>
-          {compact ? (
-            <button type="button" className="filter-trigger" aria-label="篩選 NCV 檢查" onClick={() => setFilterSheetOpen(true)}>
-              <SlidersHorizontal size={17} aria-hidden="true" />
-              <span>篩選</span>
-              {activeFilterCount > 0 ? <em>{activeFilterCount}</em> : null}
-            </button>
-          ) : null}
           <p className="library-count" aria-live="polite"><strong>{filteredStudies.length}</strong> 項檢查</p>
         </div>
+
+        <NcvFilterBar
+          region={region}
+          modality={modality}
+          onRegionChange={setRegion}
+          onModalityChange={setModality}
+          onReset={resetFilters}
+        />
 
         {selectedStudy ? (
           <>
@@ -415,23 +368,6 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
         </section>
       </section>
 
-      {filterSheetOpen ? (
-        <Overlay labelledBy="ncv-filter-sheet-title" panelClass="sheet filter-sheet" onClose={() => setFilterSheetOpen(false)}>
-          <header className="sheet-head">
-            <div>
-              <span className="eyebrow">Filters</span>
-              <h2 id="ncv-filter-sheet-title">篩選 NCV 檢查</h2>
-            </div>
-            <button type="button" className="icon-button" onClick={() => setFilterSheetOpen(false)} aria-label="關閉">
-              <X size={20} aria-hidden="true" />
-            </button>
-          </header>
-          <div className="sheet-body">{filterPanel}</div>
-          <footer className="sheet-foot">
-            <button type="button" className="primary-button" onClick={() => setFilterSheetOpen(false)}>顯示 {filteredStudies.length} 項檢查</button>
-          </footer>
-        </Overlay>
-      ) : null}
     </main>
   )
 }
