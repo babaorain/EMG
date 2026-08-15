@@ -199,24 +199,6 @@ function NcvFilterPanel({
       </div>
 
       <fieldset className="filter-block">
-        <legend>檢查區域</legend>
-        <div className="chip-stack">
-          {ncvRegionOptions.map((option) => (
-            <button
-              type="button"
-              key={option.value}
-              className={`chip chip-wide${region === option.value ? ' is-active' : ''}`}
-              aria-pressed={region === option.value}
-              onClick={() => onRegionChange(option.value)}
-            >
-              <span>{option.label}</span>
-              <em>{regionCounts.get(option.value) ?? 0}</em>
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset className="filter-block">
         <legend>檢查類型</legend>
         <div className="chip-stack">
           {ncvModalityOptions.map((option) => (
@@ -229,6 +211,24 @@ function NcvFilterPanel({
             >
               <span>{option.label}</span>
               <em>{modalityCounts.get(option.value) ?? 0}</em>
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className="filter-block">
+        <legend>檢查區域</legend>
+        <div className="chip-stack">
+          {ncvRegionOptions.map((option) => (
+            <button
+              type="button"
+              key={option.value}
+              className={`chip chip-wide${region === option.value ? ' is-active' : ''}`}
+              aria-pressed={region === option.value}
+              onClick={() => onRegionChange(option.value)}
+            >
+              <span>{option.label}</span>
+              <em>{regionCounts.get(option.value) ?? 0}</em>
             </button>
           ))}
         </div>
@@ -345,8 +345,21 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
   return (
     <main className="workspace ncv-workspace">
       {compact ? null : (
-        <aside className="rail rail-filters" aria-label="NCV 篩選條件" style={railStyle}>
+        <aside className="rail ncv-left-rail" aria-label="NCV 篩選條件與檢查項目" style={railStyle}>
           {filterPanel}
+          {selectedStudy ? (
+            <section className="queue-panel ncv-study-panel" aria-labelledby="ncv-index-title">
+              <header className="queue-head">
+                <div>
+                  <span className="eyebrow">Study index</span>
+                  <h2 id="ncv-index-title">檢查項目 <span className="count-badge">{filteredStudies.length}</span></h2>
+                </div>
+              </header>
+              <div className="queue-body">
+                <NcvStudyIndex commonStudies={commonStudies} supplementalStudies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
+              </div>
+            </section>
+          ) : null}
         </aside>
       )}
 
@@ -373,14 +386,6 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
           ) : null}
           <p className="library-count" aria-live="polite"><strong>{filteredStudies.length}</strong> 項檢查</p>
         </div>
-
-        <section className="ncv-safety-note" aria-label="正常值判讀限制">
-          <AlertTriangle size={21} aria-hidden="true" />
-          <div>
-            <strong>相同技術條件才可套用正常值</strong>
-            <p>先確認皮膚溫度、距離、電極位置與 supramaximal stimulation；個案判讀仍以所屬實驗室驗證過的 reference values 為準。</p>
-          </div>
-        </section>
 
         {selectedStudy ? (
           <>
@@ -409,20 +414,6 @@ export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: n
           </div>
         </section>
       </section>
-
-      {compact || !selectedStudy ? null : (
-        <aside className="queue-panel rail ncv-study-panel" aria-labelledby="ncv-index-title" style={railStyle}>
-          <header className="queue-head">
-            <div>
-              <span className="eyebrow">Study index</span>
-              <h2 id="ncv-index-title">檢查項目 <span className="count-badge">{filteredStudies.length}</span></h2>
-            </div>
-          </header>
-          <div className="queue-body">
-            <NcvStudyIndex commonStudies={commonStudies} supplementalStudies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
-          </div>
-        </aside>
-      )}
 
       {filterSheetOpen ? (
         <Overlay labelledBy="ncv-filter-sheet-title" panelClass="sheet filter-sheet" onClose={() => setFilterSheetOpen(false)}>

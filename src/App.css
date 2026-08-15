@@ -3599,7 +3599,7 @@
 /* NCV uses the same three-column workbench skeleton as the muscle page. */
 
 .ncv-workspace {
-  grid-template-columns: 250px minmax(0, 1fr) 328px;
+  grid-template-columns: 328px minmax(0, 1fr);
 }
 
 .ncv-library {
@@ -3616,17 +3616,22 @@
   padding-top: 2px;
 }
 
-.ncv-safety-note {
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs);
+.ncv-left-rail {
+  display: grid;
+  align-content: start;
+  gap: 12px;
 }
 
 .ncv-study-panel {
+  position: static;
   gap: 14px;
 }
 
-.ncv-study-panel .queue-body {
+.ncv-left-rail .queue-body {
+  overflow: visible;
   margin-top: -2px;
+  margin-right: 0;
+  padding-right: 0;
 }
 
 .ncv-index {
@@ -3723,7 +3728,7 @@
 
 @media (max-width: 1420px) {
   .ncv-workspace {
-    grid-template-columns: 228px minmax(0, 1fr) 304px;
+    grid-template-columns: 304px minmax(0, 1fr);
   }
 }
 
@@ -3802,10 +3807,6 @@
 
   .ncv-mobile-index .ncv-index-list button {
     flex-basis: 218px;
-  }
-
-  .ncv-safety-note {
-    padding: 12px 14px;
   }
 
   .ncv-detail {
