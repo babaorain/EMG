@@ -13,10 +13,11 @@
 - 點擊肌肉的「扎針點」可查看第 13 章整理的 61 組繁中說明與 63 組圖版；同一肌肉可切換分部或瀏覽多張圖片。
 - 71 條具有第 13 章個別描述的網站肌肉，已依原書校正神經根與終末神經，並以第 32 章表 32.3／32.4 交叉核對。
 - `#dermatomes` 為可獨立開啟的 Dermatome 頁面，包含書中頸胸與腰薦皮節圖，以及 ISNCSCI C2–S4/5 共 28 個標準化感覺檢查點。
+- `#ncv` 為神經傳導技術頁面，收錄 34 項常用與特殊檢查、58 張課本圖版，以及 G1／G2／ground、刺激位置、距離、姿勢、成人參考值與技術陷阱。
 
 ## 臨床資料狀態
 
-目前 71 條有扎針章節對應的肌肉，其 root 與 terminal nerve 來自 Preston & Shapiro 第四版第 13 章，並以第 32 章表格交叉核對；其餘 34 條仍沿用 legacy catalog。trunk、division、cord／plexus 與 nerve chain 由 anatomy graph 推導。這些資料均屬來源校正或教育用途，尚未標記為正式臨床覆核內容。皮節圖顯示典型分布，標準檢查點依 ISNCSCI 2019；相鄰皮節廣泛重疊，不應單獨用來證實或排除病灶。
+目前 71 條有扎針章節對應的肌肉，其 root 與 terminal nerve 來自 Preston & Shapiro 第四版第 13 章，並以第 32 章表格交叉核對；其餘 34 條仍沿用 legacy catalog。trunk、division、cord／plexus 與 nerve chain 由 anatomy graph 推導。NCV 技術與數值以同書第 4、10、11 章為主，必須在相同溫度、距離、電極與刺激條件下使用，正式判讀仍以所屬實驗室驗證過的 reference values 為準。這些資料均屬來源校正或教育用途，尚未標記為正式臨床覆核內容。皮節圖顯示典型分布，標準檢查點依 ISNCSCI 2019；相鄰皮節廣泛重疊，不應單獨用來證實或排除病灶。
 
 ## 本機執行
 

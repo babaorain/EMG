@@ -4,7 +4,7 @@ import '@fontsource/source-sans-3/600.css'
 import '@fontsource/source-sans-3/700.css'
 import '@fontsource/ibm-plex-mono/400.css'
 import '@fontsource/ibm-plex-mono/500.css'
-import { Activity, Crosshair, GitBranch, Info } from 'lucide-react'
+import { Activity, Cable, Crosshair, GitBranch, Info } from 'lucide-react'
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import {
@@ -21,6 +21,7 @@ import {
 } from './clinical/clinicalAreas'
 import { BrachialPlexusPage } from './components/BrachialPlexusPage'
 import { DermatomePage } from './components/DermatomePage'
+import { NcvPage } from './components/NcvPage'
 import { FilterPanel } from './components/picker/FilterPanel'
 import { FilterSheet } from './components/picker/FilterSheet'
 import { activeFilterCount, type AreaFilter } from './components/picker/filterState'
@@ -49,10 +50,11 @@ const visibleRoots = [
   'V', 'VII', 'XI', 'XII',
 ]
 
-type AppPage = 'muscles' | 'dermatomes' | 'brachial-plexus'
+type AppPage = 'muscles' | 'ncv' | 'dermatomes' | 'brachial-plexus'
 
 const pageTabs = [
   { id: 'muscles', hash: '#muscles', label: '肌肉／扎針', short: '肌肉', Icon: Crosshair },
+  { id: 'ncv', hash: '#ncv', label: 'NCV 傳導技術', short: 'NCV', Icon: Cable },
   { id: 'dermatomes', hash: '#dermatomes', label: 'Dermatome 皮節', short: '皮節', Icon: Activity },
   { id: 'brachial-plexus', hash: '#brachial-plexus', label: 'Brachial plexus', short: 'Plexus', Icon: GitBranch },
 ] as const satisfies ReadonlyArray<{ id: AppPage; hash: string; label: string; short: string; Icon: typeof Info }>
@@ -61,6 +63,10 @@ const pageCopy: Record<AppPage, { subtitle: string; status: string }> = {
   muscles: {
     subtitle: '肌肉選擇、扎針定位與空白 worksheet',
     status: `${bookSourcedMuscleCount} 條課本圖譜 · ${muscleCatalog.length - bookSourcedMuscleCount} 條文字指引`,
+  },
+  ncv: {
+    subtitle: '貼片、刺激位置、距離與技術陷阱',
+    status: '34 項檢查 · 58 張課本圖版',
   },
   dermatomes: {
     subtitle: '皮節分布與標準化感覺檢查點',
@@ -73,6 +79,7 @@ const pageCopy: Record<AppPage, { subtitle: string; status: string }> = {
 }
 
 function pageFromHash(): AppPage {
+  if (window.location.hash === '#ncv') return 'ncv'
   if (window.location.hash === '#dermatomes') return 'dermatomes'
   if (window.location.hash === '#brachial-plexus') return 'brachial-plexus'
   return 'muscles'
@@ -283,8 +290,10 @@ function App() {
         </main>
       ) : activePage === 'dermatomes' ? (
         <DermatomePage />
-      ) : (
+      ) : activePage === 'brachial-plexus' ? (
         <BrachialPlexusPage />
+      ) : (
+        <NcvPage />
       )}
 
       {activePage === 'muscles' && compact ? (

@@ -64,8 +64,10 @@ No global MUAP amplitude or duration cutoff may be applied to every muscle. Quan
    - Current use: private, Chinese-language needle insertion guide covering innervation, positioning, activation, clinical points, cross-sectional anatomy, and nearby structures.
    - Current use: root and terminal nerve values for the 71 catalog muscles that map to the chapter 13 descriptions; tables 32.3 and 32.4 are used as a cross-check for major upper- and lower-extremity muscles.
    - Current use: private dermatome distribution maps from chapter 32, figures 32.1 and 32.2.
+   - Current use: private NCV technique atlas from chapters 4, 10, and 11, covering 34 motor, sensory, mixed, comparison, late-response, and reflex entries. The 58 extracted figure panels map to figures 4.5, 10.1–10.21, and 11.1–11.12.
+   - Current use: the textbook's adult reference tables are displayed as educational reference values alongside their standard distance and technique conditions.
    - Local source: user-provided PDF. Figure crops remain private assets and are not intended for public distribution.
-   - Limitation: translated educational content has not been promoted to `clinically-reviewed` status and does not drive automated diagnosis.
+   - Limitation: translated educational content has not been promoted to `clinically-reviewed` status and does not drive automated diagnosis. NCV limits require controlled temperature and matching technique; age, height, limb length, side-to-side comparison, and laboratory-specific reference data may supersede the displayed textbook value.
 
 ## Deferred claims
 
