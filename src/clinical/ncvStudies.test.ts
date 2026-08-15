@@ -12,6 +12,8 @@ describe('NCV technique reference', () => {
 
   it('keeps every study clinically actionable and linked to a textbook image', () => {
     for (const study of ncvStudies) {
+      expect(study.englishTitle).not.toBe('')
+      expect(study.title).not.toBe('')
       expect(study.recording.target).not.toBe('')
       expect(study.recording.g1).not.toBe('')
       expect(study.recording.g2).not.toBe('')

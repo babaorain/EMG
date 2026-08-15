@@ -293,7 +293,7 @@ function App() {
       ) : activePage === 'brachial-plexus' ? (
         <BrachialPlexusPage />
       ) : (
-        <NcvPage />
+        <NcvPage compact={compact} stickyTop={topbarHeight} />
       )}
 
       {activePage === 'muscles' && compact ? (

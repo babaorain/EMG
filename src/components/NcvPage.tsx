@@ -5,11 +5,13 @@ import {
   CircleDot,
   Gauge,
   Images,
+  RotateCcw,
   Search,
   SlidersHorizontal,
+  X,
   Zap,
 } from 'lucide-react'
-import { useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ncvModalityLabels,
   ncvModalityOptions,
@@ -20,6 +22,7 @@ import {
   type NcvRegion,
   type NcvStudy,
 } from '../clinical/ncvStudies'
+import { Overlay } from './ui/Overlay'
 
 type RegionFilter = 'all' | NcvRegion
 type ModalityFilter = 'all' | NcvModality
@@ -66,7 +69,8 @@ function StudyIndexGroup({
             aria-pressed={selectedId === study.id}
             onClick={() => onSelect(study.id)}
           >
-            <span className="ncv-index-title">{study.title}</span>
+            <span className="ncv-index-title">{study.englishTitle}</span>
+            <span className="ncv-index-subtitle" lang="zh-Hant">{study.title}</span>
             <span className="ncv-index-meta">
               {ncvRegionLabels[study.region]} · {ncvModalityLabels[study.modality]}
             </span>
@@ -88,8 +92,8 @@ function NcvStudyDetail({ study }: { study: NcvStudy }) {
             <span>{ncvModalityLabels[study.modality]}</span>
             <span>{study.priority === 'common' ? '常用檢查' : '特殊／延伸'}</span>
           </div>
-          <h2 id={`ncv-${study.id}-title`}>{study.title}</h2>
-          <p>{study.englishTitle}</p>
+          <h2 id={`ncv-${study.id}-title`}>{study.englishTitle}</h2>
+          <p className="ncv-detail-subtitle" lang="zh-Hant">{study.title}</p>
         </div>
         <div className="ncv-nerve-label"><Zap size={17} aria-hidden="true" /><span>{study.nerve}</span></div>
       </header>
@@ -165,12 +169,101 @@ function NcvStudyDetail({ study }: { study: NcvStudy }) {
   )
 }
 
-export function NcvPage() {
+function NcvFilterPanel({
+  region,
+  modality,
+  regionCounts,
+  modalityCounts,
+  onRegionChange,
+  onModalityChange,
+  onReset,
+}: {
+  region: RegionFilter
+  modality: ModalityFilter
+  regionCounts: Map<RegionFilter, number>
+  modalityCounts: Map<ModalityFilter, number>
+  onRegionChange: (value: RegionFilter) => void
+  onModalityChange: (value: ModalityFilter) => void
+  onReset: () => void
+}) {
+  const hasFilters = region !== 'all' || modality !== 'all'
+
+  return (
+    <div className="filters ncv-filters">
+      <div className="filters-head">
+        <h2>篩選條件</h2>
+        <button type="button" className="ghost-button" onClick={onReset} disabled={!hasFilters}>
+          <RotateCcw size={14} aria-hidden="true" />
+          重設
+        </button>
+      </div>
+
+      <fieldset className="filter-block">
+        <legend>檢查區域</legend>
+        <div className="chip-stack">
+          {ncvRegionOptions.map((option) => (
+            <button
+              type="button"
+              key={option.value}
+              className={`chip chip-wide${region === option.value ? ' is-active' : ''}`}
+              aria-pressed={region === option.value}
+              onClick={() => onRegionChange(option.value)}
+            >
+              <span>{option.label}</span>
+              <em>{regionCounts.get(option.value) ?? 0}</em>
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className="filter-block">
+        <legend>檢查類型</legend>
+        <div className="chip-stack">
+          {ncvModalityOptions.map((option) => (
+            <button
+              type="button"
+              key={option.value}
+              className={`chip chip-wide${modality === option.value ? ' is-active' : ''}`}
+              aria-pressed={modality === option.value}
+              onClick={() => onModalityChange(option.value)}
+            >
+              <span>{option.label}</span>
+              <em>{modalityCounts.get(option.value) ?? 0}</em>
+            </button>
+          ))}
+        </div>
+      </fieldset>
+    </div>
+  )
+}
+
+function NcvStudyIndex({
+  commonStudies,
+  supplementalStudies,
+  selectedId,
+  onSelect,
+}: {
+  commonStudies: NcvStudy[]
+  supplementalStudies: NcvStudy[]
+  selectedId: string
+  onSelect: (id: string) => void
+}) {
+  return (
+    <div className="ncv-index">
+      <StudyIndexGroup title="常用上／下肢" description="例行檢查與常見比較研究優先" studies={commonStudies} selectedId={selectedId} onSelect={onSelect} />
+      <StudyIndexGroup title="特殊與延伸" description="近端、顱神經、呼吸與少用技術" studies={supplementalStudies} selectedId={selectedId} onSelect={onSelect} />
+    </div>
+  )
+}
+
+export function NcvPage({ compact, stickyTop }: { compact: boolean; stickyTop: number }) {
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query.trim().toLowerCase())
+  const searchRef = useRef<HTMLInputElement>(null)
   const [region, setRegion] = useState<RegionFilter>('all')
   const [modality, setModality] = useState<ModalityFilter>('all')
   const [selectedId, setSelectedId] = useState(ncvStudies[0]?.id ?? '')
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
 
   const filteredStudies = useMemo(() => ncvStudies.filter((study) => (
     (region === 'all' || study.region === region)
@@ -181,85 +274,173 @@ export function NcvPage() {
   const commonStudies = filteredStudies.filter((study) => study.priority === 'common')
   const supplementalStudies = filteredStudies.filter((study) => study.priority === 'supplemental')
   const selectedStudy = filteredStudies.find((study) => study.id === selectedId) ?? filteredStudies[0]
+  const activeFilterCount = Number(region !== 'all') + Number(modality !== 'all')
+
+  const regionCounts = useMemo(() => new Map<RegionFilter, number>(
+    ncvRegionOptions.map((option) => [
+      option.value,
+      ncvStudies.filter((study) => (
+        matchesStudy(study, deferredQuery)
+        && (modality === 'all' || study.modality === modality)
+        && (option.value === 'all' || study.region === option.value)
+      )).length,
+    ]),
+  ), [deferredQuery, modality])
+
+  const modalityCounts = useMemo(() => new Map<ModalityFilter, number>(
+    ncvModalityOptions.map((option) => [
+      option.value,
+      ncvStudies.filter((study) => (
+        matchesStudy(study, deferredQuery)
+        && (region === 'all' || study.region === region)
+        && (option.value === 'all' || study.modality === option.value)
+      )).length,
+    ]),
+  ), [deferredQuery, region])
 
   useEffect(() => {
     if (selectedStudy && selectedStudy.id !== selectedId) setSelectedId(selectedStudy.id)
   }, [selectedId, selectedStudy])
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      const typing = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement
+      if (event.key === '/' && !typing) {
+        event.preventDefault()
+        searchRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  const resetFilters = () => {
+    setRegion('all')
+    setModality('all')
+  }
+
+  const clearAll = () => {
+    setQuery('')
+    resetFilters()
+  }
+
+  const filterPanel = (
+    <NcvFilterPanel
+      region={region}
+      modality={modality}
+      regionCounts={regionCounts}
+      modalityCounts={modalityCounts}
+      onRegionChange={setRegion}
+      onModalityChange={setModality}
+      onReset={resetFilters}
+    />
+  )
+
+  const railStyle = {
+    top: stickyTop + 20,
+    maxHeight: `calc(100vh - ${stickyTop + 40}px)`,
+  }
+
   return (
-    <main className="ncv-page">
-      <section className="ncv-hero" aria-labelledby="ncv-title">
-        <div>
-          <span className="section-kicker">Nerve conduction atlas</span>
-          <h2 id="ncv-title">NCV 貼片與刺激位置</h2>
-          <p>以 Preston 與 Shapiro 第 4 版為主軸，先列常用上、下肢檢查，再收錄顱神經、呼吸與較少用技術。</p>
-        </div>
-        <dl>
-          <div><dt>檢查項目</dt><dd>{ncvStudies.length}</dd></div>
-          <div><dt>課本圖版</dt><dd>58</dd></div>
-          <div><dt>主要章節</dt><dd>Ch. 4 · 10 · 11</dd></div>
-        </dl>
-      </section>
+    <main className="workspace ncv-workspace">
+      {compact ? null : (
+        <aside className="rail rail-filters" aria-label="NCV 篩選條件" style={railStyle}>
+          {filterPanel}
+        </aside>
+      )}
 
-      <section className="ncv-safety-note" aria-label="正常值判讀限制">
-        <AlertTriangle size={21} aria-hidden="true" />
-        <div>
-          <strong>正常值只能在相同技術條件下使用</strong>
-          <p>先確認皮膚溫度、距離、電極位置與 supramaximal stimulation；年齡、身高、肢長及實驗室常模都會改變界值。個案判讀以所屬實驗室驗證過的 reference values 為準。</p>
-        </div>
-      </section>
+      <section className="library ncv-library" aria-labelledby="ncv-library-title">
+        <h2 id="ncv-library-title" className="sr-only">Nerve Conduction Studies 神經傳導檢查</h2>
 
-      <section className="ncv-browser" aria-labelledby="ncv-browser-title">
-        <header className="ncv-browser-head">
-          <div><span className="section-kicker">Technique browser</span><h2 id="ncv-browser-title">選擇檢查</h2></div>
-          <span>{filteredStudies.length} / {ncvStudies.length}</span>
-        </header>
-
-        <div className="ncv-toolbar">
-          <label className="ncv-search">
+        <div className="library-bar" style={{ top: stickyTop }}>
+          <label className="searchbar">
             <Search size={18} aria-hidden="true" />
             <span className="sr-only">搜尋 NCV 檢查</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜尋神經、肌肉或檢查名稱…" />
+            <input ref={searchRef} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜尋 study / nerve / muscle" />
+            {query ? (
+              <button type="button" onClick={() => setQuery('')} aria-label="清除搜尋">
+                <X size={16} aria-hidden="true" />
+              </button>
+            ) : <kbd aria-hidden="true">/</kbd>}
           </label>
-          <div className="ncv-filter-set" aria-label="區域篩選">
-            <SlidersHorizontal size={16} aria-hidden="true" />
-            {ncvRegionOptions.map((option) => (
-              <button type="button" key={option.value} className={region === option.value ? 'is-active' : ''} onClick={() => setRegion(option.value)}>{option.label}</button>
-            ))}
-          </div>
-          <div className="ncv-filter-set modality" aria-label="檢查類型篩選">
-            {ncvModalityOptions.map((option) => (
-              <button type="button" key={option.value} className={modality === option.value ? 'is-active' : ''} onClick={() => setModality(option.value)}>{option.label}</button>
-            ))}
-          </div>
+          {compact ? (
+            <button type="button" className="filter-trigger" aria-label="篩選 NCV 檢查" onClick={() => setFilterSheetOpen(true)}>
+              <SlidersHorizontal size={17} aria-hidden="true" />
+              <span>篩選</span>
+              {activeFilterCount > 0 ? <em>{activeFilterCount}</em> : null}
+            </button>
+          ) : null}
+          <p className="library-count" aria-live="polite"><strong>{filteredStudies.length}</strong> 項檢查</p>
         </div>
 
-        {selectedStudy ? (
-          <div className="ncv-browser-layout">
-            <aside className="ncv-index" aria-label="NCV 檢查清單">
-              <StudyIndexGroup title="常用上／下肢" description="例行檢查與常見比較研究優先" studies={commonStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
-              <StudyIndexGroup title="特殊與延伸" description="近端、顱神經、呼吸與少用技術" studies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
-            </aside>
-            <NcvStudyDetail study={selectedStudy} />
+        <section className="ncv-safety-note" aria-label="正常值判讀限制">
+          <AlertTriangle size={21} aria-hidden="true" />
+          <div>
+            <strong>相同技術條件才可套用正常值</strong>
+            <p>先確認皮膚溫度、距離、電極位置與 supramaximal stimulation；個案判讀仍以所屬實驗室驗證過的 reference values 為準。</p>
           </div>
+        </section>
+
+        {selectedStudy ? (
+          <>
+            {compact ? (
+              <nav className="ncv-mobile-index" aria-label="NCV 檢查清單">
+                <NcvStudyIndex commonStudies={commonStudies} supplementalStudies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
+              </nav>
+            ) : null}
+            <NcvStudyDetail study={selectedStudy} />
+          </>
         ) : (
           <div className="ncv-empty">
             <Search size={24} aria-hidden="true" />
             <h3>沒有符合條件的檢查</h3>
             <p>清除搜尋字詞，或切回「全部區域／全部類型」。</p>
-            <button type="button" onClick={() => { setQuery(''); setRegion('all'); setModality('all') }}>清除篩選</button>
+            <button type="button" onClick={clearAll}>清除篩選</button>
           </div>
         )}
+
+        <section className="ncv-sources" aria-labelledby="ncv-sources-title">
+          <BookOpenText size={21} aria-hidden="true" />
+          <div>
+            <h3 id="ncv-sources-title">資料來源與使用範圍</h3>
+            <p>技術步驟、圖版與本頁所列數值以 <cite>Electromyography and Neuromuscular Disorders</cite>, 4th ed. (2020) 第 4、10、11 章為主。AANEM 的 reference values 資源僅用於提醒實驗室應建立與驗證自己的常模。</p>
+            <a href="https://www.aanem.org/certification-accreditation/edx-laboratory-accreditation/my-accreditation-dashboard/application-resources" target="_blank" rel="noreferrer">AANEM Laboratory Accreditation resources</a>
+          </div>
+        </section>
       </section>
 
-      <section className="ncv-sources" aria-labelledby="ncv-sources-title">
-        <BookOpenText size={21} aria-hidden="true" />
-        <div>
-          <h2 id="ncv-sources-title">資料來源與使用範圍</h2>
-          <p>技術步驟、圖版與本頁所列數值以 <cite>Electromyography and Neuromuscular Disorders</cite>, 4th ed. (2020) 第 4、10、11 章為主。AANEM 的 reference values 資源僅用於提醒實驗室應建立與驗證自己的常模。</p>
-          <a href="https://www.aanem.org/certification-accreditation/edx-laboratory-accreditation/my-accreditation-dashboard/application-resources" target="_blank" rel="noreferrer">AANEM Laboratory Accreditation resources</a>
-        </div>
-      </section>
+      {compact || !selectedStudy ? null : (
+        <aside className="queue-panel rail ncv-study-panel" aria-labelledby="ncv-index-title" style={railStyle}>
+          <header className="queue-head">
+            <div>
+              <span className="eyebrow">Study index</span>
+              <h2 id="ncv-index-title">檢查項目 <span className="count-badge">{filteredStudies.length}</span></h2>
+            </div>
+          </header>
+          <div className="queue-body">
+            <NcvStudyIndex commonStudies={commonStudies} supplementalStudies={supplementalStudies} selectedId={selectedStudy.id} onSelect={setSelectedId} />
+          </div>
+        </aside>
+      )}
+
+      {filterSheetOpen ? (
+        <Overlay labelledBy="ncv-filter-sheet-title" panelClass="sheet filter-sheet" onClose={() => setFilterSheetOpen(false)}>
+          <header className="sheet-head">
+            <div>
+              <span className="eyebrow">Filters</span>
+              <h2 id="ncv-filter-sheet-title">篩選 NCV 檢查</h2>
+            </div>
+            <button type="button" className="icon-button" onClick={() => setFilterSheetOpen(false)} aria-label="關閉">
+              <X size={20} aria-hidden="true" />
+            </button>
+          </header>
+          <div className="sheet-body">{filterPanel}</div>
+          <footer className="sheet-foot">
+            <button type="button" className="primary-button" onClick={() => setFilterSheetOpen(false)}>顯示 {filteredStudies.length} 項檢查</button>
+          </footer>
+        </Overlay>
+      ) : null}
     </main>
   )
 }
