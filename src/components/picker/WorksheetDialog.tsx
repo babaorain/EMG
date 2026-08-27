@@ -57,6 +57,9 @@ export function WorksheetDialog({ rows, onClose }: WorksheetDialogProps) {
           rows={2}
           placeholder="可貼入病人資料、檢查日期、臨床問題或其他備註；此內容會印在表格上方。"
         />
+        <p className="worksheet-privacy-note">
+          此欄只保存在目前頁面的記憶體，不會上傳；重新整理或關閉頁面即清除。仍請依院內政策避免貼入不必要的可識別個資。
+        </p>
       </div>
 
       <div className="worksheet-scroll">

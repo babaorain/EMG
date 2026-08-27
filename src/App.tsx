@@ -1,11 +1,5 @@
-import '@fontsource/source-sans-3/400.css'
-import '@fontsource/source-sans-3/500.css'
-import '@fontsource/source-sans-3/600.css'
-import '@fontsource/source-sans-3/700.css'
-import '@fontsource/ibm-plex-mono/400.css'
-import '@fontsource/ibm-plex-mono/500.css'
 import { Activity, Cable, Crosshair, GitBranch, Info } from 'lucide-react'
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import {
   bookSourcedMuscleCount,
@@ -19,20 +13,16 @@ import {
   clinicalAreaRank,
   type MuscleArea,
 } from './clinical/clinicalAreas'
-import { BrachialPlexusPage } from './components/BrachialPlexusPage'
-import { DermatomePage } from './components/DermatomePage'
-import { NcvPage } from './components/NcvPage'
+import { hasNeedleGuideImage } from './clinical/needleGuideAvailability'
 import { FilterPanel } from './components/picker/FilterPanel'
 import { FilterSheet } from './components/picker/FilterSheet'
 import { activeFilterCount, type AreaFilter } from './components/picker/filterState'
 import { MuscleLibrary } from './components/picker/MuscleLibrary'
-import { NeedlePointDialog } from './components/picker/NeedlePointDialog'
 import { QueueBar, QueueSheet } from './components/picker/QueueBar'
 import {
   SelectedMusclesPanel,
   type ResolvedSelectedMuscle,
 } from './components/picker/SelectedMusclesPanel'
-import { WorksheetDialog } from './components/picker/WorksheetDialog'
 import { COMPACT_QUERY, useMediaQuery } from './hooks/useMediaQuery'
 import {
   compareMuscles,
@@ -43,6 +33,22 @@ import {
   type SelectedMuscle,
 } from './domain/muscleSelection'
 import type { Side } from './domain/types'
+
+const BrachialPlexusPage = lazy(() => import('./components/BrachialPlexusPage').then((module) => ({
+  default: module.BrachialPlexusPage,
+})))
+const DermatomePage = lazy(() => import('./components/DermatomePage').then((module) => ({
+  default: module.DermatomePage,
+})))
+const NcvPage = lazy(() => import('./components/NcvPage').then((module) => ({
+  default: module.NcvPage,
+})))
+const NeedlePointDialog = lazy(() => import('./components/picker/NeedlePointDialog').then((module) => ({
+  default: module.NeedlePointDialog,
+})))
+const WorksheetDialog = lazy(() => import('./components/picker/WorksheetDialog').then((module) => ({
+  default: module.WorksheetDialog,
+})))
 
 const visibleRoots = [
   'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', THORACIC_PARASPINAL_FILTER,
@@ -83,6 +89,15 @@ function pageFromHash(): AppPage {
   if (window.location.hash === '#dermatomes') return 'dermatomes'
   if (window.location.hash === '#brachial-plexus') return 'brachial-plexus'
   return 'muscles'
+}
+
+function LoadingNotice({ children }: { children: string }) {
+  return (
+    <div className="loading-notice" role="status">
+      <Activity size={17} aria-hidden="true" />
+      <span>{children}</span>
+    </div>
+  )
 }
 
 function matchesQuery(muscle: MuscleCatalogEntry, query: string): boolean {
@@ -149,7 +164,11 @@ function App() {
     return queryMatches
       .filter((muscle) => area === 'all' || clinicalAreaForMuscle(muscle) === area)
       .filter((muscle) => matchesRootFilter(muscle, root))
-      .sort((a, b) => clinicalAreaRank(a) - clinicalAreaRank(b) || compareMuscles(a, b))
+      .sort((a, b) => (
+        clinicalAreaRank(a) - clinicalAreaRank(b)
+        || Number(hasNeedleGuideImage(b.name)) - Number(hasNeedleGuideImage(a.name))
+        || compareMuscles(a, b)
+      ))
   }, [area, queryMatches, root])
 
   /** Counts ignore the filter they describe, so a chip never reads zero for itself. */
@@ -288,12 +307,16 @@ function App() {
             />
           )}
         </main>
-      ) : activePage === 'dermatomes' ? (
-        <DermatomePage />
-      ) : activePage === 'brachial-plexus' ? (
-        <BrachialPlexusPage />
       ) : (
-        <NcvPage compact={compact} stickyTop={topbarHeight} />
+        <Suspense fallback={<LoadingNotice>載入臨床參考頁…</LoadingNotice>}>
+          {activePage === 'dermatomes' ? (
+            <DermatomePage />
+          ) : activePage === 'brachial-plexus' ? (
+            <BrachialPlexusPage />
+          ) : (
+            <NcvPage compact={compact} stickyTop={topbarHeight} />
+          )}
+        </Suspense>
       )}
 
       {activePage === 'muscles' && compact ? (
@@ -324,20 +347,24 @@ function App() {
       ) : null}
 
       {needleTarget ? (
-        <NeedlePointDialog
-          muscle={needleTarget.muscle}
-          side={needleTarget.side}
-          selectedSides={{
-            L: selectedKeys.has(selectedKey(needleTarget.muscle.id, 'L')),
-            R: selectedKeys.has(selectedKey(needleTarget.muscle.id, 'R')),
-          }}
-          onToggleSide={(side) => toggleMuscle(needleTarget.muscle, side)}
-          onClose={() => setNeedleTarget(null)}
-        />
+        <Suspense fallback={<LoadingNotice>載入扎針資料…</LoadingNotice>}>
+          <NeedlePointDialog
+            muscle={needleTarget.muscle}
+            side={needleTarget.side}
+            selectedSides={{
+              L: selectedKeys.has(selectedKey(needleTarget.muscle.id, 'L')),
+              R: selectedKeys.has(selectedKey(needleTarget.muscle.id, 'R')),
+            }}
+            onToggleSide={(side) => toggleMuscle(needleTarget.muscle, side)}
+            onClose={() => setNeedleTarget(null)}
+          />
+        </Suspense>
       ) : null}
 
       {worksheetOpen ? (
-        <WorksheetDialog rows={resolvedSelected} onClose={() => setWorksheetOpen(false)} />
+        <Suspense fallback={<LoadingNotice>載入 worksheet…</LoadingNotice>}>
+          <WorksheetDialog rows={resolvedSelected} onClose={() => setWorksheetOpen(false)} />
+        </Suspense>
       ) : null}
     </div>
   )

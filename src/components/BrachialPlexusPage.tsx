@@ -29,7 +29,7 @@ function PatternCard({ block, kind }: { block: PlexusPatternBlock; kind: 'trunk'
         <h5>Sensory NCS</h5>
         {block.sensory.length ? (
           <div>{block.sensory.map((item) => <span key={item}>{item}</span>)}</div>
-        ) : <p>依症狀分布與對側比較</p>}
+        ) : <p>{block.sensoryNote ?? '依症狀分布與對側比較'}</p>}
       </div>
     </article>
   )
@@ -42,7 +42,7 @@ export function BrachialPlexusPage() {
         <div>
           <span className="section-kicker">Electrodiagnostic reference</span>
           <h2 id="plexus-title">Brachial plexus 定位</h2>
-          <p>先確認 preganglionic 或 postganglionic，再依手寫臨床卡的跨 terminal nerve 組合定位。</p>
+          <p>先形成 preganglionic／postganglionic 的證據權重，再用手寫臨床卡的跨 terminal nerve 組合定位。</p>
         </div>
         <aside>
           <ScanSearch size={22} aria-hidden="true" />
@@ -62,8 +62,8 @@ export function BrachialPlexusPage() {
           <p>先決定病灶是否位於 DRG distal，再進入 trunk／cord 圖表。</p>
         </div>
         <ol>
-          <li><span>01</span><div><strong>SNAP 是否異常？</strong><p>有感覺症狀且 SNAP 低或消失，支持 postganglionic lesion；root lesion 常保留 SNAP。</p></div></li>
-          <li><span>02</span><div><strong>C PSP 是否異常？</strong><p>Denervation 支持 root involvement；純 brachial plexopathy 通常相對保留。</p></div></li>
+          <li><span>01</span><div><strong>SNAP 是否異常？</strong><p>有感覺症狀且 SNAP 低或消失，支持 postganglionic lesion；保留 SNAP 只增加 root lesion 的可能性，不能單獨證實。</p></div></li>
+          <li><span>02</span><div><strong>C PSP 是否異常？</strong><p>Denervation 支持 root involvement；但 root 與 plexus 可共存，年齡、時序及既往後方手術也會影響 PSP。</p></div></li>
           <li><span>03</span><div><strong>是否跨至少兩條 terminal nerves？</strong><p>用共同 root／trunk／cord 解釋異常肌肉，同時尋找應保留的比較肌。</p></div></li>
         </ol>
       </section>
@@ -90,7 +90,7 @@ export function BrachialPlexusPage() {
       <section className="plexus-pattern-section" aria-labelledby="plexus-pattern-title">
         <div className="plexus-section-heading">
           <div><span className="section-kicker">Bedside sampling card</span><h3 id="plexus-pattern-title">手寫 BPI 定位組合</h3></div>
-          <p>框線肌肉是手寫卡特別標示的核心取樣；其餘肌肉用於跨神經與 cord 對照。</p>
+          <p>框線肌肉是手寫卡特別標示的核心取樣；這是 local bedside card 的忠實轉錄，不是 externally validated 固定 protocol。</p>
         </div>
         <div className="plexus-pattern-matrix">
           {plexusPatternRows.map((row) => (
@@ -106,9 +106,9 @@ export function BrachialPlexusPage() {
       <section className="plexus-ncs-section" aria-labelledby="plexus-ncs-title">
         <div className="plexus-section-heading">
           <div><span className="section-kicker">NCS checklist</span><h3 id="plexus-ncs-title">手寫卡上方檢查清單</h3></div>
-          <p>作為 bilateral comparison 與 axonal loss 量化的靜態提醒。</p>
+          <p>保留手寫卡項目，並補上 recording site、適用情境與技術限制。</p>
         </div>
-        <ol>{plexusNcsChecklist.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol>
+        <ol>{plexusNcsChecklist.map((item, index) => <li key={item.text}><span>{String(index + 1).padStart(2, '0')}</span><div><p>{item.text}</p><small>{item.evidence}</small></div></li>)}</ol>
       </section>
 
       <section className="plexus-caution" aria-label="判讀限制">
@@ -118,7 +118,17 @@ export function BrachialPlexusPage() {
 
       <section className="plexus-sources" aria-labelledby="plexus-sources-title">
         <BookOpenText size={21} aria-hidden="true" />
-        <div><h3 id="plexus-sources-title">核對來源</h3><ul>{plexusSources.map((source) => <li key={source.href}><a href={source.href} target="_blank" rel="noreferrer">{source.label}<ExternalLink size={14} aria-hidden="true" /></a><span>{source.note}</span></li>)}</ul></div>
+        <div>
+          <h3 id="plexus-sources-title">核對來源</h3>
+          <ul>{plexusSources.map((source) => (
+            <li key={source.label}>
+              {'href' in source ? <a href={source.href} target="_blank" rel="noreferrer">{source.label}<ExternalLink size={14} aria-hidden="true" /></a> : <strong>{source.label}</strong>}
+              <span>{source.citation}</span>
+              <small>{source.locator}</small>
+              <span>{source.note}</span>
+            </li>
+          ))}</ul>
+        </div>
         <GitBranch className="plexus-source-mark" size={42} strokeWidth={1.2} aria-hidden="true" />
       </section>
     </main>
