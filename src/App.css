@@ -726,9 +726,14 @@
   background: var(--line-strong);
 }
 
-.guide-dot.has-image {
+.guide-dot.is-book {
   background: var(--ok);
   box-shadow: 0 0 0 3px var(--ok-tint);
+}
+
+.guide-dot.is-web {
+  background: var(--external);
+  box-shadow: 0 0 0 3px var(--external-tint);
 }
 
 .mrow-caret {
@@ -862,14 +867,25 @@
   color: var(--text);
 }
 
-.needle-button.has-guide {
+.needle-button.has-book-guide {
   background: var(--ok-tint);
   border-color: color-mix(in srgb, var(--ok) 30%, var(--line));
   color: var(--ok);
 }
 
-.needle-button.has-guide:hover {
+.needle-button.has-book-guide:hover {
   background: color-mix(in srgb, var(--ok-tint) 76%, var(--ok));
+}
+
+.needle-button.has-web-guide {
+  background: var(--external-tint);
+  border-color: var(--external-line);
+  color: var(--external-strong);
+}
+
+.needle-button.has-web-guide:hover {
+  background: color-mix(in srgb, var(--external-tint) 80%, var(--external));
+  border-color: color-mix(in srgb, var(--external) 38%, var(--line));
 }
 
 /* expanded detail */
@@ -1384,8 +1400,8 @@
   align-items: start;
 }
 
-.needle-grid.text-only {
-  grid-template-columns: minmax(0, 230px) minmax(0, 1fr);
+.needle-grid.external-guide {
+  grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
 }
 
 .panel-heading {
@@ -1491,9 +1507,80 @@
   line-height: 1.5;
 }
 
+.external-guide-panel {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.external-guide-panel .panel-heading {
+  margin-bottom: 0;
+}
+
+.external-guide-panel .panel-heading svg {
+  color: var(--external);
+}
+
+.external-guide-intro {
+  padding: 12px 13px;
+  border: 1px solid var(--external-line);
+  border-radius: var(--r-sm);
+  background: var(--external-tint);
+  color: var(--external-strong);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.external-guide-list {
+  display: grid;
+  gap: 10px;
+}
+
+.external-guide-panel .evidence-resource {
+  background: var(--surface);
+  border-color: var(--external-line);
+}
+
+.external-guide-panel .evidence-resource.is-safety {
+  background: var(--caution-tint);
+  border-color: color-mix(in srgb, var(--caution) 24%, transparent);
+}
+
+.external-guide-panel .evidence-resource > a {
+  color: var(--external-strong);
+}
+
 .needle-details {
   display: grid;
   gap: 12px;
+}
+
+.external-source-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px 13px;
+  border: 1px solid var(--external-line);
+  border-radius: var(--r-sm);
+  background: var(--external-tint);
+  color: var(--external-strong);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.external-source-banner > svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.external-source-banner span {
+  display: grid;
+  gap: 2px;
+}
+
+.external-source-banner strong {
+  font-size: 14.5px;
 }
 
 .field-list {
@@ -3614,7 +3701,7 @@
   }
 
   .needle-grid,
-  .needle-grid.text-only {
+  .needle-grid.external-guide {
     grid-template-columns: minmax(0, 1fr);
   }
 

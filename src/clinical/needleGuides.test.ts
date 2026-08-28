@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { muscleCatalog } from './catalog'
-import { hasNeedleGuideImage, needleGuideImageCatalogNames } from './needleGuideAvailability'
+import {
+  hasExternalNeedleGuide,
+  hasNeedleGuideImage,
+  needleGuideAvailabilityForMuscle,
+  needleGuideImageCatalogNames,
+  needleGuideWebCatalogNames,
+} from './needleGuideAvailability'
 import { needleGuides, needleGuidesForMuscle } from './needleGuides'
 
 describe('chapter 13 needle guides', () => {
@@ -36,11 +42,14 @@ describe('chapter 13 needle guides', () => {
     expect(needleGuidesForMuscle('Paraspinal (L5)')[0]?.figures).toEqual([58])
   })
 
-  it('provides text-only guidance without marking it as an available image', () => {
+  it('distinguishes web-reference guidance from textbook images', () => {
     const guide = needleGuidesForMuscle('Popliteus')[0]
     expect(guide?.sourceKind).toBe('supplemental')
     expect(guide?.images).toEqual([])
     expect(hasNeedleGuideImage('Popliteus')).toBe(false)
+    expect(hasExternalNeedleGuide('Popliteus')).toBe(true)
+    expect(needleGuideAvailabilityForMuscle('Popliteus')).toBe('web-reference')
+    expect(needleGuideAvailabilityForMuscle('Tibialis Anterior')).toBe('textbook-image')
   })
 
   it('keeps the first-load image manifest synchronized with guide data', () => {
@@ -50,5 +59,15 @@ describe('chapter 13 needle guides', () => {
         .flatMap((guide) => guide.catalogNames),
     )].sort()
     expect([...needleGuideImageCatalogNames].sort()).toEqual(actual)
+  })
+
+  it('keeps all 34 web-reference indicators synchronized with supplemental guides', () => {
+    const actual = [...new Set(
+      needleGuides
+        .filter((guide) => guide.sourceKind === 'supplemental')
+        .flatMap((guide) => guide.catalogNames),
+    )].sort()
+    expect(needleGuideWebCatalogNames).toHaveLength(34)
+    expect([...needleGuideWebCatalogNames].sort()).toEqual(actual)
   })
 })
