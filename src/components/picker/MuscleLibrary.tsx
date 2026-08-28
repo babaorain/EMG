@@ -5,7 +5,7 @@ import {
   clinicalAreaForMuscle,
   muscleAreaById,
 } from '../../clinical/clinicalAreas'
-import { hasNeedleGuideImage } from '../../clinical/needleGuideAvailability'
+import { needleGuideAvailabilityForMuscle } from '../../clinical/needleGuideAvailability'
 import { pathwayStages } from '../../domain/muscleSelection'
 import type { Side } from '../../domain/types'
 
@@ -69,7 +69,27 @@ function MuscleRow({
   const leftSelected = selectedKeys.has(`L:${muscle.id}`)
   const rightSelected = selectedKeys.has(`R:${muscle.id}`)
   const queued = leftSelected || rightSelected
-  const hasImage = hasNeedleGuideImage(muscle.name)
+  const guideAvailability = needleGuideAvailabilityForMuscle(muscle.name)
+  const guideClass = guideAvailability === 'textbook-image'
+    ? 'is-book'
+    : guideAvailability === 'web-reference'
+      ? 'is-web'
+      : ''
+  const guideButtonClass = guideAvailability === 'textbook-image'
+    ? 'has-book-guide'
+    : guideAvailability === 'web-reference'
+      ? 'has-web-guide'
+      : ''
+  const guideTitle = guideAvailability === 'textbook-image'
+    ? '查看課本圖版與扎針說明'
+    : guideAvailability === 'web-reference'
+      ? '查看網路來源文字圖譜與外部資料'
+      : '尚無專屬扎針圖譜'
+  const guideAria = guideAvailability === 'textbook-image'
+    ? '有課本圖版'
+    : guideAvailability === 'web-reference'
+      ? '有網路來源文字圖譜'
+      : '尚無專屬圖譜'
   const stages = pathwayStages(muscle).filter((stage) => stage.label !== 'Muscle')
   const detailId = `detail-${muscle.id}`
 
@@ -90,7 +110,7 @@ function MuscleRow({
             {muscle.abbreviations[0] ? <span className="mrow-abbr">{muscle.abbreviations[0]}</span> : null}
           </span>
         </span>
-        <span className={`guide-dot${hasImage ? ' has-image' : ''}`} aria-hidden="true" />
+        <span className={`guide-dot${guideClass ? ` ${guideClass}` : ''}`} aria-hidden="true" />
         <ChevronDown className="mrow-caret" size={18} aria-hidden="true" />
       </button>
 
@@ -100,11 +120,11 @@ function MuscleRow({
           <SideButton side="R" selected={rightSelected} muscleName={muscle.name} onClick={() => onAdd(muscle, 'R')} />
         </div>
         <button
-          className={`needle-button${hasImage ? ' has-guide' : ''}`}
+          className={`needle-button${guideButtonClass ? ` ${guideButtonClass}` : ''}`}
           type="button"
           onClick={() => onNeedlePoint(muscle, rightSelected && !leftSelected ? 'R' : 'L')}
-          title={hasImage ? '查看扎針圖譜與說明' : '無課本圖片，開啟文字指引'}
-          aria-label={`${muscle.name} 扎針點，${hasImage ? '有課本圖譜' : '無圖片，僅文字指引'}`}
+          title={guideTitle}
+          aria-label={`${muscle.name} 扎針點，${guideAria}`}
         >
           <Crosshair size={16} aria-hidden="true" />
           <span>扎針點</span>

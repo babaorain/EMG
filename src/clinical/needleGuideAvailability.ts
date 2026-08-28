@@ -74,8 +74,70 @@ const imageGuideCatalogNames = new Set([
   'Triceps Brachii',
 ])
 
+/**
+ * Catalog muscles backed by the separately loaded, source-mapped web guide
+ * bundle. Keep this lightweight list here so the library can communicate the
+ * guide type without pulling clinical prose into the first-load chunk.
+ */
+const webGuideCatalogNames = new Set([
+  'Orbicularis Oris',
+  'Nasalis',
+  'Temporalis',
+  'Levator Scapulae',
+  'Subclavius',
+  'Pectoralis Minor',
+  'Subscapularis',
+  'Teres Major',
+  'Brachialis',
+  'Coracobrachialis',
+  'Extensor Carpi Rad. Brevis',
+  'Supinator',
+  'Abd. Pollicis Longus',
+  'Ext. Pollicis Longus',
+  'Ext. Pollicis Brevis',
+  'Palmaris Longus',
+  'Lumbricals (1,2)',
+  'Palmar Interossei',
+  'Adductor Pollicis',
+  'Sartorius',
+  'Pectineus',
+  'Obturator Externus',
+  'Gluteus Minimus',
+  'Piriformis',
+  'Obturator Int / Gemelli',
+  'Quadratus Femoris',
+  'Extensor Hallucis Brevis',
+  'Peroneus Brevis',
+  'Popliteus',
+  'Flexor Hallucis Longus',
+  'Flexor Digitorum Brevis',
+  'Interossei (Foot)',
+  'Ext. Anal Sphincter',
+  'Bulbocavernosus',
+])
+
+export type NeedleGuideAvailability = 'textbook-image' | 'web-reference' | 'none'
+
 export function hasNeedleGuideImage(muscleName: string): boolean {
   return imageGuideCatalogNames.has(muscleName)
 }
 
+export function hasExternalNeedleGuide(muscleName: string): boolean {
+  return webGuideCatalogNames.has(muscleName)
+}
+
+export function needleGuideAvailabilityForMuscle(muscleName: string): NeedleGuideAvailability {
+  if (hasNeedleGuideImage(muscleName)) return 'textbook-image'
+  if (hasExternalNeedleGuide(muscleName)) return 'web-reference'
+  return 'none'
+}
+
+export function needleGuideAvailabilityRank(muscleName: string): number {
+  const availability = needleGuideAvailabilityForMuscle(muscleName)
+  if (availability === 'textbook-image') return 0
+  if (availability === 'web-reference') return 1
+  return 2
+}
+
 export const needleGuideImageCatalogNames = [...imageGuideCatalogNames]
+export const needleGuideWebCatalogNames = [...webGuideCatalogNames]

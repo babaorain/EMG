@@ -39,6 +39,10 @@
   /* Status */
   --ok: #2f7d55;
   --ok-tint: #e8f5ee;
+  --external: #6b4fa3;
+  --external-strong: #543a87;
+  --external-tint: #f1edfa;
+  --external-line: #d9cff0;
   --caution: #9a5b00;
   --caution-tint: #fdf3e3;
   --danger: #b23a26;

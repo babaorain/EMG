@@ -1,4 +1,4 @@
-import { BookOpen, ExternalLink, ImageIcon, Info, ShieldAlert, X } from 'lucide-react'
+import { BookOpen, ExternalLink, Globe2, ImageIcon, Info, ShieldAlert, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { MuscleCatalogEntry } from '../../clinical/catalog'
 import {
@@ -129,6 +129,26 @@ function ResourceCard({ resource }: { resource: NeedleGuideResource }) {
   )
 }
 
+function ExternalGuidePanel({ guide }: { guide: NeedleGuide }) {
+  return (
+    <section className="external-guide-panel" aria-label={`${guide.chineseName}網路圖譜與來源`}>
+      <div className="panel-heading">
+        <Globe2 size={16} aria-hidden="true" />
+        <h3>網路圖譜與來源</h3>
+        <span>{guide.evidence.resources.length} 項</span>
+      </div>
+      <p className="external-guide-intro">
+        這條肌肉沒有 P&amp;S 原書圖版。以下卡片直接連到原始網站、論文或教學資源；外部圖片與影片未複製到本站。
+      </p>
+      <div className="external-guide-list">
+        {guide.evidence.resources.map((resource) => (
+          <ResourceCard key={`${resource.title}-${resource.citation.locator}`} resource={resource} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
 function guideReferences(guide: NeedleGuide): NeedleCitationRef[] {
   const references = [
     ...citationsForGuidePart(guide.evidence, 'innervation'),
@@ -156,6 +176,7 @@ export function NeedlePointDialog({
   const [activeGuideIndex, setActiveGuideIndex] = useState(0)
   const activeGuide = guides[activeGuideIndex] ?? guides[0]
   const hasImages = Boolean(activeGuide?.images.length)
+  const isSupplemental = activeGuide?.sourceKind === 'supplemental'
 
   useEffect(() => {
     setActiveGuideIndex(0)
@@ -170,8 +191,10 @@ export function NeedlePointDialog({
       <header className="dialog-head">
         <div className="dialog-head-copy">
           <span className="eyebrow">
-            <BookOpen size={13} aria-hidden="true" />
-            扎針定位
+            {isSupplemental
+              ? <Globe2 size={13} aria-hidden="true" />
+              : <BookOpen size={13} aria-hidden="true" />}
+            {isSupplemental ? '網路資料 · 扎針定位' : '課本圖譜 · 扎針定位'}
           </span>
           <h2 id="needle-dialog-title">{activeGuide?.chineseName ?? muscle.name}</h2>
           <p className="dialog-head-meta">
@@ -206,7 +229,7 @@ export function NeedlePointDialog({
 
       {activeGuide ? (
         <div className="dialog-body">
-          <div className={`needle-grid${hasImages ? '' : ' text-only'}`}>
+          <div className={`needle-grid${hasImages ? '' : ' external-guide'}`}>
             {hasImages ? (
               <section className="needle-gallery" aria-label={`${activeGuide.chineseName}圖片`}>
                 <div className="panel-heading">
@@ -224,6 +247,8 @@ export function NeedlePointDialog({
                   </figure>
                 ))}
               </section>
+            ) : activeGuide.evidence.resources.length ? (
+              <ExternalGuidePanel guide={activeGuide} />
             ) : (
               <aside className="no-image-card" aria-label="無圖片文字指引">
                 <ImageIcon size={28} strokeWidth={1.4} aria-hidden="true" />
@@ -233,6 +258,15 @@ export function NeedlePointDialog({
             )}
 
             <section className="needle-details" aria-label={`${activeGuide.chineseName}扎針說明`}>
+              {isSupplemental ? (
+                <div className="external-source-banner">
+                  <Globe2 size={18} aria-hidden="true" />
+                  <span>
+                    <strong>網路來源文字圖譜</strong>
+                    每一句後方標籤皆可開啟原始出處與精確定位；內容仍待 EMG 醫師臨床複核。
+                  </span>
+                </div>
+              ) : null}
               <dl className="field-list">
                 <div>
                   <dt>神經支配</dt>
@@ -270,7 +304,7 @@ export function NeedlePointDialog({
             </section>
           </div>
 
-          {activeGuide.evidence.resources.length ? (
+          {activeGuide.sourceKind === 'textbook' && activeGuide.evidence.resources.length ? (
             <section className="evidence-resources" aria-labelledby="external-evidence-title">
               <div className="panel-heading">
                 <ExternalLink size={16} aria-hidden="true" />

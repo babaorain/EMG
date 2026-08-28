@@ -51,6 +51,7 @@ describe('needle guide evidence registry', () => {
   it('keeps external media link-only and marks clinical review as pending', () => {
     for (const evidence of Object.values(supplementalGuideEvidence)) {
       expect(evidence.clinicalReviewStatus).toBe('pending-emg-physician')
+      expect(evidence.resources.length).toBeGreaterThan(0)
       for (const resource of evidence.resources) expect(resource.rights).toBe('link-only')
     }
   })

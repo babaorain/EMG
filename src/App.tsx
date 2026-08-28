@@ -13,7 +13,10 @@ import {
   clinicalAreaRank,
   type MuscleArea,
 } from './clinical/clinicalAreas'
-import { hasNeedleGuideImage } from './clinical/needleGuideAvailability'
+import {
+  needleGuideAvailabilityRank,
+  needleGuideWebCatalogNames,
+} from './clinical/needleGuideAvailability'
 import { FilterPanel } from './components/picker/FilterPanel'
 import { FilterSheet } from './components/picker/FilterSheet'
 import { activeFilterCount, type AreaFilter } from './components/picker/filterState'
@@ -68,7 +71,7 @@ const pageTabs = [
 const pageCopy: Record<AppPage, { subtitle: string; status: string }> = {
   muscles: {
     subtitle: '肌肉選擇、扎針定位與空白 worksheet',
-    status: `${bookSourcedMuscleCount} 條課本圖譜 · ${muscleCatalog.length - bookSourcedMuscleCount} 條文字指引`,
+    status: `${bookSourcedMuscleCount} 條課本圖譜 · ${needleGuideWebCatalogNames.length} 條網路文字圖譜`,
   },
   ncv: {
     subtitle: '貼片、刺激位置、距離與技術陷阱',
@@ -166,7 +169,7 @@ function App() {
       .filter((muscle) => matchesRootFilter(muscle, root))
       .sort((a, b) => (
         clinicalAreaRank(a) - clinicalAreaRank(b)
-        || Number(hasNeedleGuideImage(b.name)) - Number(hasNeedleGuideImage(a.name))
+        || needleGuideAvailabilityRank(a.name) - needleGuideAvailabilityRank(b.name)
         || compareMuscles(a, b)
       ))
   }, [area, queryMatches, root])

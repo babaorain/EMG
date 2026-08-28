@@ -17,6 +17,7 @@ describe('NeedlePointDialog', () => {
 
     expect(screen.queryByText('檢查前確認')).not.toBeInTheDocument()
     expect(screen.queryByText('橫切面構造與避險')).not.toBeInTheDocument()
+    expect(screen.queryByText('網路來源文字圖譜')).not.toBeInTheDocument()
   })
 
   it('keeps muscle-specific anatomy and safety notes', () => {
@@ -48,5 +49,9 @@ describe('NeedlePointDialog', () => {
     expect(screen.getByText('臨床內容：待 EMG 醫師複核')).toBeInTheDocument()
     expect(screen.queryByText(/臨床複核：/)).not.toBeInTheDocument()
     expect(screen.getByText(/本工具目前不提供常規 blind diagnostic needle route/)).toBeInTheDocument()
+    expect(screen.getByText('網路圖譜與來源')).toBeInTheDocument()
+    expect(screen.getByText('網路來源文字圖譜')).toBeInTheDocument()
+    expect(screen.getByText('Popliteus：低效益、高鄰近風險')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /EMG Atlas.*Popliteus/i })).toHaveAttribute('target', '_blank')
   })
 })
