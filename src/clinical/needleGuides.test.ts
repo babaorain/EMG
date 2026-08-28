@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { muscleCatalog } from './catalog'
-import { hasNeedleGuideImage, needleGuides, needleGuidesForMuscle } from './needleGuides'
+import { hasNeedleGuideImage, needleGuideImageCatalogNames } from './needleGuideAvailability'
+import { needleGuides, needleGuidesForMuscle } from './needleGuides'
 
 describe('chapter 13 needle guides', () => {
   it('covers every figure from 13.1 through 13.63 exactly once', () => {
@@ -40,5 +41,14 @@ describe('chapter 13 needle guides', () => {
     expect(guide?.sourceKind).toBe('supplemental')
     expect(guide?.images).toEqual([])
     expect(hasNeedleGuideImage('Popliteus')).toBe(false)
+  })
+
+  it('keeps the first-load image manifest synchronized with guide data', () => {
+    const actual = [...new Set(
+      needleGuides
+        .filter((guide) => guide.images.length > 0)
+        .flatMap((guide) => guide.catalogNames),
+    )].sort()
+    expect([...needleGuideImageCatalogNames].sort()).toEqual(actual)
   })
 })

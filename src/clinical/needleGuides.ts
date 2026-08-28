@@ -1,14 +1,14 @@
 import { supplementalNeedleGuideInputs } from './supplementalNeedleGuides'
+import {
+  supplementalGuideEvidence,
+  textbookGuideEvidence,
+  type NeedleGuideEvidence,
+} from './needleGuideEvidence'
 
 export interface NeedleGuideImage {
   src: string
   alt: string
   caption: string
-}
-
-export interface NeedleGuideSource {
-  label: string
-  url: string
 }
 
 export interface NeedleGuide {
@@ -24,25 +24,10 @@ export interface NeedleGuide {
   clinicalPoints: string[]
   anatomyPoints: string[]
   sourceKind: 'textbook' | 'supplemental'
-  sources: NeedleGuideSource[]
+  evidence: NeedleGuideEvidence
 }
 
-interface GuideInput extends Omit<NeedleGuide, 'id' | 'images' | 'sourceKind' | 'sources'> {}
-
-export const needleGuideEvidenceSources: NeedleGuideSource[] = [
-  {
-    label: 'Nayak et al. — A systematic approach to needle EMG examination',
-    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6921208/',
-  },
-  {
-    label: 'AANEM — Risks in Electrodiagnostic Medicine',
-    url: 'https://www.aanem.org/docs/default-source/documents/aanem/practice/risksinedx.pdf?sfvrsn=a112b935_0',
-  },
-  {
-    label: 'AAPM&R KnowledgeNow — Electrodiagnosis of Radiculopathies',
-    url: 'https://now.aapmr.org/electrodiagnosis-of-radiculopathies-cervical-thoracic-and-lumbar/',
-  },
-]
+interface GuideInput extends Omit<NeedleGuide, 'id' | 'images' | 'sourceKind' | 'evidence'> {}
 
 function imageSources(figures: number[]): Array<{ figure: number; src: string; panel?: string }> {
   return figures.flatMap((figure) => {
@@ -64,7 +49,7 @@ function defineGuide(input: GuideInput): NeedleGuide {
     ...input,
     id: `chapter-13-figure-${input.figures.join('-')}`,
     sourceKind: 'textbook',
-    sources: needleGuideEvidenceSources,
+    evidence: textbookGuideEvidence(input.figures, input.catalogNames),
     images: imageSources(input.figures).map(({ figure, src, panel }) => ({
       src,
       alt: `${input.chineseName}（${input.englishName}）扎針位置與橫切面`,
@@ -79,7 +64,7 @@ export const needleGuides: NeedleGuide[] = [
     figures: [],
     images: [],
     sourceKind: 'supplemental',
-    sources: needleGuideEvidenceSources,
+    evidence: supplementalGuideEvidence[guide.id],
   })),
   defineGuide({
     chineseName: '拇短展肌', englishName: 'Abductor Pollicis Brevis (APB)',
@@ -187,7 +172,7 @@ export const needleGuides: NeedleGuide[] = [
     insertion: '屈肘、手朝頭部且手背朝下；於鷹嘴遠端三至四指幅處進針。',
     activation: '請病人在遠端指間關節屈曲第 4 或第 5 指。',
     clinicalPoints: ['第 4、5 指的淺層肌束由尺神經支配。', '第 2、3 指的深層肌束由正中神經／前骨間神經支配。', '尺神經肌束較容易取樣，可逐指屈曲辨識個別肌束。', '肘部尺神經病變時常受影響。'],
-    anatomyPoints: ['尺神經可能在針尖可及範圍；應讓針稍朝身體內側。'],
+    anatomyPoints: ['尺神經可能在針尖可及範圍；進針前先依側別確認 ulnar／radial 方位，避免以「朝身體內側」這類會隨擺位改變的描述操作。'],
   }),
   defineGuide({
     chineseName: '尺側屈腕肌', englishName: 'Flexor Carpi Ulnaris (FCU)',
@@ -280,7 +265,7 @@ export const needleGuides: NeedleGuide[] = [
     anatomyPoints: ['針位太外側會進入三角肌。', '太外側且太深可能接近喙肱肌、臂神經叢與上肢主要血管。'],
   }),
   defineGuide({
-    chineseName: '三角肌中束', englishName: 'Deltoid - Medial Head',
+    chineseName: '三角肌中束', englishName: 'Deltoid - Middle Head',
     catalogNames: ['Deltoid (Ant/Mid/Post)'], figures: [23],
     innervation: '腋神經（axillary nerve）、後索、上幹，C5-C6。',
     insertion: '由肩部外側中央進針。',
@@ -330,7 +315,7 @@ export const needleGuides: NeedleGuide[] = [
     innervation: '肩胛上神經、上幹，C5-C6。',
     insertion: '側臥、待測肩朝上且手肘貼身；在肩胛棘中點下方一至兩指幅處進針。',
     activation: '請病人外旋肩關節。',
-    clinicalPoints: ['肩胛上神經病變、上幹神經叢病變及 C5、C6 神經根病變時常異常。', '肩胛骨的棘下窩就在深層；位置正確時沒有氣胸風險。'],
+    clinicalPoints: ['肩胛上神經病變、上幹神經叢病變及 C5、C6 神經根病變時常異常。', '肩胛骨棘下窩可作為 bony backstop；若偏離 scapular fossa 或進針方向錯誤，仍不能視為零氣胸風險。'],
     anatomyPoints: ['肌肉大部分表淺；靠近肩胛棘處若太淺可能進入三角肌後束。可先進針至肩胛骨，再稍微退出以確認位於肌肉內。'],
   }),
   defineGuide({

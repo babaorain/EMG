@@ -5,7 +5,7 @@ import {
   clinicalAreaForMuscle,
   muscleAreaById,
 } from '../../clinical/clinicalAreas'
-import { hasNeedleGuideImage } from '../../clinical/needleGuides'
+import { hasNeedleGuideImage } from '../../clinical/needleGuideAvailability'
 import { pathwayStages } from '../../domain/muscleSelection'
 import type { Side } from '../../domain/types'
 

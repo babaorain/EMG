@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { plexusFlowRows, plexusPatternRows } from './brachialPlexusReference'
+import { plexusFlowRows, plexusNcsChecklist, plexusPatternRows, plexusSources } from './brachialPlexusReference'
 
 describe('brachial plexus reference', () => {
   it('maps the three root groups through trunks to anterior and posterior cords', () => {
@@ -21,5 +21,23 @@ describe('brachial plexus reference', () => {
       'Biceps Brachii',
       'Deltoid',
     ])
+  })
+
+  it('names sensory recording sites precisely and does not imply C7 has no usable SNAP', () => {
+    expect(plexusPatternRows[0]?.trunk.sensory).toEqual(['LABC', 'Median–D1', 'Superficial radial'])
+    expect(plexusPatternRows[1]?.trunk.sensory).toEqual([])
+    expect(plexusPatternRows[1]?.trunk.sensoryNote).toMatch(/不代表 C7 沒有可用 sensory response/)
+    expect(plexusPatternRows[2]?.trunk.sensory).toEqual(['MABC', 'Ulnar–D5'])
+  })
+
+  it('keeps local checklist claims visibly qualified and externally sourced claims traceable', () => {
+    expect(plexusNcsChecklist[0]?.evidence).toMatch(/local technique/)
+    expect(plexusNcsChecklist.at(-1)?.evidence).toMatch(/不是 axonal-loss 百分比的直接量測/)
+    expect(plexusSources[0]).not.toHaveProperty('href')
+    for (const source of plexusSources) {
+      expect(source.citation).not.toBe('')
+      expect(source.locator).not.toBe('')
+      if ('href' in source) expect(source.href).toMatch(/^https:\/\//)
+    }
   })
 })

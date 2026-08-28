@@ -33,4 +33,20 @@ describe('NeedlePointDialog', () => {
     expect(screen.getAllByText(/P&S 4e/).length).toBeGreaterThan(4)
     expect(screen.queryByText('檢查前確認')).not.toBeInTheDocument()
   })
+
+  it('labels source checking separately from pending physician review', () => {
+    render(
+      <NeedlePointDialog
+        muscle={findMuscleByName('Popliteus')}
+        side="L"
+        onClose={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByText('證據有限／不提供一般盲刺路徑')).toBeInTheDocument()
+    expect(screen.getByText(/來源查核：2026-08-28/)).toBeInTheDocument()
+    expect(screen.getByText('臨床內容：待 EMG 醫師複核')).toBeInTheDocument()
+    expect(screen.queryByText(/臨床複核：/)).not.toBeInTheDocument()
+    expect(screen.getByText(/本工具目前不提供常規 blind diagnostic needle route/)).toBeInTheDocument()
+  })
 })

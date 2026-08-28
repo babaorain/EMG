@@ -1,19 +1,18 @@
-import { z } from 'zod'
 import legacyMuscles from './legacy-muscles.json'
 import { buildPathway, type MusclePathway } from '../domain/anatomy'
 import { bookInnervationForCatalogName } from './bookInnervation'
 
-const legacyMuscleSchema = z.object({
-  m: z.string().min(1),
-  n: z.string().min(1),
-  r: z.string().min(1),
-  r_list: z.array(z.string().min(1)).min(1),
-  a: z.array(z.string()),
-})
+interface LegacyMuscle {
+  m: string
+  n: string
+  r: string
+  r_list: string[]
+  a: string[]
+}
 
-type LegacyMuscle = z.infer<typeof legacyMuscleSchema>
-
-const parsedLegacyMuscles = z.array(legacyMuscleSchema).parse(legacyMuscles)
+// Runtime validation belongs in the data-quality test so the browser does not
+// ship the full schema library for a static, version-controlled JSON file.
+const parsedLegacyMuscles: LegacyMuscle[] = legacyMuscles
 
 /**
  * These entries are absent from the legacy catalog. Cervical and thoracic
