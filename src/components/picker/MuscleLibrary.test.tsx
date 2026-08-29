@@ -29,7 +29,7 @@ describe('MuscleLibrary guide indicators', () => {
     )
 
     expect(screen.getByRole('button', { name: /Flexor Hallucis Brevis 扎針點，有課本圖版/ })).toHaveClass('has-book-guide')
-    expect(screen.getByRole('button', { name: /Popliteus 扎針點，有網路來源文字圖譜/ })).toHaveClass('has-web-guide')
+    expect(screen.getByRole('button', { name: /Popliteus 扎針點，有補充圖譜/ })).toHaveClass('has-web-guide')
     expect(container.querySelectorAll('.guide-dot.is-book')).toHaveLength(1)
     expect(container.querySelectorAll('.guide-dot.is-web')).toHaveLength(1)
   })

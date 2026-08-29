@@ -35,7 +35,7 @@ describe('NeedlePointDialog', () => {
     expect(screen.queryByText('檢查前確認')).not.toBeInTheDocument()
   })
 
-  it('labels source checking separately from pending physician review', () => {
+  it('shows reusable external media in place and removes repetitive reminder fields', () => {
     render(
       <NeedlePointDialog
         muscle={findMuscleByName('Popliteus')}
@@ -44,14 +44,16 @@ describe('NeedlePointDialog', () => {
       />,
     )
 
-    expect(screen.getByText('證據有限／不提供一般盲刺路徑')).toBeInTheDocument()
-    expect(screen.getByText(/來源查核：2026-08-28/)).toBeInTheDocument()
-    expect(screen.getByText('臨床內容：待 EMG 醫師複核')).toBeInTheDocument()
-    expect(screen.queryByText(/臨床複核：/)).not.toBeInTheDocument()
+    expect(screen.getByText('解剖與定位圖')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Popliteus 解剖位置' })).toHaveAttribute('loading', 'eager')
+    expect(screen.getByRole('link', { name: /Henry Vandyke Carter／Wikimedia Commons/ })).toHaveAttribute('target', '_blank')
+    expect(screen.getByRole('link', { name: 'Public Domain' })).toHaveAttribute('href', 'https://creativecommons.org/publicdomain/mark/1.0/')
+    expect(screen.getByText('來源')).toBeInTheDocument()
     expect(screen.getByText(/本工具目前不提供常規 blind diagnostic needle route/)).toBeInTheDocument()
-    expect(screen.getByText('網路圖譜與來源')).toBeInTheDocument()
-    expect(screen.getByText('網路來源文字圖譜')).toBeInTheDocument()
-    expect(screen.getByText('Popliteus：低效益、高鄰近風險')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /EMG Atlas.*Popliteus/i })).toHaveAttribute('target', '_blank')
+    expect(screen.queryByText(/外部連結/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/圖片／影片未在本站重製/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/臨床內容：待 EMG 醫師複核/)).not.toBeInTheDocument()
+    expect(screen.queryByText('完整來源與複核狀態')).not.toBeInTheDocument()
+    expect(screen.queryByText('網路來源文字圖譜')).not.toBeInTheDocument()
   })
 })

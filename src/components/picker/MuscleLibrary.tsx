@@ -83,12 +83,12 @@ function MuscleRow({
   const guideTitle = guideAvailability === 'textbook-image'
     ? '查看課本圖版與扎針說明'
     : guideAvailability === 'web-reference'
-      ? '查看網路來源文字圖譜與外部資料'
+      ? '查看補充圖譜與扎針說明'
       : '尚無專屬扎針圖譜'
   const guideAria = guideAvailability === 'textbook-image'
     ? '有課本圖版'
     : guideAvailability === 'web-reference'
-      ? '有網路來源文字圖譜'
+      ? '有補充圖譜'
       : '尚無專屬圖譜'
   const stages = pathwayStages(muscle).filter((stage) => stage.label !== 'Muscle')
   const detailId = `detail-${muscle.id}`
