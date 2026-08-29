@@ -104,7 +104,7 @@ function CitedClinicalText({ text, references }: { text: string; references: Nee
 }
 
 const resourceKindLabel: Record<NeedleResourceKind, string> = {
-  localization: '外部定位',
+  localization: '定位',
   technique: '操作技巧',
   ultrasound: 'Ultrasound',
   safety: '安全／限制',
@@ -124,30 +124,15 @@ function ResourceCard({ resource }: { resource: NeedleGuideResource }) {
         <ExternalLink size={14} aria-hidden="true" />
         <span>{source.shortLabel} · {resource.citation.locator}</span>
       </a>
-      <small>{citationRelationLabel[resource.citation.relation ?? 'direct-technique']} · 外部連結 · 圖片／影片未在本站重製</small>
     </article>
   )
 }
 
-function ExternalGuidePanel({ guide }: { guide: NeedleGuide }) {
-  return (
-    <section className="external-guide-panel" aria-label={`${guide.chineseName}網路圖譜與來源`}>
-      <div className="panel-heading">
-        <Globe2 size={16} aria-hidden="true" />
-        <h3>網路圖譜與來源</h3>
-        <span>{guide.evidence.resources.length} 項</span>
-      </div>
-      <p className="external-guide-intro">
-        這條肌肉沒有 P&amp;S 原書圖版。以下卡片直接連到原始網站、論文或教學資源；外部圖片與影片未複製到本站。
-      </p>
-      <div className="external-guide-list">
-        {guide.evidence.resources.map((resource) => (
-          <ResourceCard key={`${resource.title}-${resource.citation.locator}`} resource={resource} />
-        ))}
-      </div>
-    </section>
-  )
-}
+const mediaKindLabel = {
+  anatomy: '解剖圖',
+  'surface-landmark': '表面定位',
+  ultrasound: 'US 定位',
+} as const
 
 function guideReferences(guide: NeedleGuide): NeedleCitationRef[] {
   const references = [
@@ -194,7 +179,7 @@ export function NeedlePointDialog({
             {isSupplemental
               ? <Globe2 size={13} aria-hidden="true" />
               : <BookOpen size={13} aria-hidden="true" />}
-            {isSupplemental ? '網路資料 · 扎針定位' : '課本圖譜 · 扎針定位'}
+            {isSupplemental ? '補充圖譜 · 扎針定位' : '課本圖譜 · 扎針定位'}
           </span>
           <h2 id="needle-dialog-title">{activeGuide?.chineseName ?? muscle.name}</h2>
           <p className="dialog-head-meta">
@@ -229,44 +214,51 @@ export function NeedlePointDialog({
 
       {activeGuide ? (
         <div className="dialog-body">
-          <div className={`needle-grid${hasImages ? '' : ' external-guide'}`}>
+          <div className="needle-grid">
             {hasImages ? (
               <section className="needle-gallery" aria-label={`${activeGuide.chineseName}圖片`}>
                 <div className="panel-heading">
                   <ImageIcon size={16} aria-hidden="true" />
-                  <h3>扎針位置與橫切面</h3>
+                  <h3>{isSupplemental ? '解剖與定位圖' : '扎針位置與橫切面'}</h3>
                   <span>{activeGuide.images.length} 張</span>
                 </div>
                 {activeGuide.images.map((image, index) => (
-                  <figure key={image.src}>
+                  <figure className={image.kind ? `is-${image.kind}` : undefined} key={image.src}>
                     <a href={image.src} target="_blank" rel="noreferrer" title="開啟原尺寸圖片">
-                      <img src={image.src} alt={image.alt} loading={index === 0 ? 'eager' : 'lazy'} />
-                      <span><ExternalLink size={14} aria-hidden="true" /> 原尺寸</span>
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                      <span><ExternalLink size={14} aria-hidden="true" /> 放大</span>
                     </a>
-                    <figcaption>{image.caption} <InlineCitation references={activeGuide.evidence.defaultCitations} /></figcaption>
+                    <figcaption>
+                      <span className="needle-image-caption">
+                        {image.kind ? <b className={`media-kind is-${image.kind}`}>{mediaKindLabel[image.kind]}</b> : null}
+                        <span>{image.caption}</span>
+                        {!isSupplemental ? <InlineCitation references={activeGuide.evidence.defaultCitations} /> : null}
+                      </span>
+                      {image.credit ? (
+                        <small className="needle-image-credit">
+                          圖片：<a href={image.credit.url} target="_blank" rel="noreferrer">{image.credit.label}</a>
+                          <span aria-hidden="true"> · </span>
+                          <a href={image.credit.licenseUrl} target="_blank" rel="noreferrer">{image.credit.license}</a>
+                        </small>
+                      ) : null}
+                    </figcaption>
                   </figure>
                 ))}
               </section>
-            ) : activeGuide.evidence.resources.length ? (
-              <ExternalGuidePanel guide={activeGuide} />
             ) : (
               <aside className="no-image-card" aria-label="無圖片文字指引">
                 <ImageIcon size={28} strokeWidth={1.4} aria-hidden="true" />
-                <strong>沒有原書圖版</strong>
-                <p>{activeGuide.evidence.resources.length ? `已連結 ${activeGuide.evidence.resources.length} 個外部定位／技巧來源。` : '目前只提供可查核的文字來源。'}</p>
+                <strong>目前沒有圖片</strong>
+                <p>定位與臨床重點仍可在右側查閱。</p>
               </aside>
             )}
 
             <section className="needle-details" aria-label={`${activeGuide.chineseName}扎針說明`}>
-              {isSupplemental ? (
-                <div className="external-source-banner">
-                  <Globe2 size={18} aria-hidden="true" />
-                  <span>
-                    <strong>網路來源文字圖譜</strong>
-                    每一句後方標籤皆可開啟原始出處與精確定位；內容仍待 EMG 醫師臨床複核。
-                  </span>
-                </div>
-              ) : null}
               <dl className="field-list">
                 <div>
                   <dt>神經支配</dt>
@@ -308,7 +300,7 @@ export function NeedlePointDialog({
             <section className="evidence-resources" aria-labelledby="external-evidence-title">
               <div className="panel-heading">
                 <ExternalLink size={16} aria-hidden="true" />
-                <h3 id="external-evidence-title">外部定位、技巧與限制</h3>
+                <h3 id="external-evidence-title">補充技巧與限制</h3>
                 <span>{activeGuide.evidence.resources.length} 項</span>
               </div>
               <div className="evidence-resource-grid">
@@ -322,22 +314,10 @@ export function NeedlePointDialog({
           <details className="source-note">
             <summary>
               <Info size={16} aria-hidden="true" />
-              <span>完整來源與複核狀態</span>
+              <span>來源</span>
               <small>{guideReferences(activeGuide).length} 筆精確定位</small>
             </summary>
             <div className="source-note-content">
-              {activeGuide.sourceKind === 'textbook' ? (
-                <span>
-                  原書欄位與條列連回 P&amp;S 4e 的精確圖號；外部補充只在有肌肉專屬資料時加入。新增的外部圖像只提供連結；本頁既有 P&amp;S 原書圖版的公開網路重製權須由部署者另行確認。
-                </span>
-              ) : (
-                <span>本頁沒有 Preston &amp; Shapiro 第 13 章圖版。欄位與條列連至精確 locator；Anatomy only／Safety only 不等同已驗證的 diagnostic needle route。</span>
-              )}
-              <p className={`evidence-status is-${activeGuide.evidence.evidenceStatus}`}>
-                {activeGuide.evidence.evidenceStatus === 'book-mapped' ? '原書圖版已對應' : activeGuide.evidence.evidenceStatus === 'source-mapped' ? '外部肌肉專屬來源已連結' : '證據有限／不提供一般盲刺路徑'}
-                <span>來源查核：{activeGuide.evidence.sourceCheckedOn}</span>
-                <span>臨床內容：待 EMG 醫師複核</span>
-              </p>
               <ol className="source-list">
                 {guideReferences(activeGuide).map((reference) => {
                   const source = evidenceSource(reference.sourceId)
@@ -345,7 +325,7 @@ export function NeedlePointDialog({
                     <li key={`${reference.sourceId}-${reference.locator}`}>
                       <a href={reference.href ?? source.url} target="_blank" rel="noreferrer">{source.citation}</a>
                       <span>{reference.locator}</span>
-                      <small>{citationRelationLabel[reference.relation ?? 'direct-technique']} · {source.note}</small>
+                      <small>{citationRelationLabel[reference.relation ?? 'direct-technique']}</small>
                     </li>
                   )
                 })}

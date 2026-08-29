@@ -1,5 +1,9 @@
 import { supplementalNeedleGuideInputs } from './supplementalNeedleGuides'
 import {
+  supplementalNeedleMediaByGuideId,
+  type SupplementalNeedleMediaKind,
+} from './supplementalNeedleMedia'
+import {
   supplementalGuideEvidence,
   textbookGuideEvidence,
   type NeedleGuideEvidence,
@@ -9,6 +13,13 @@ export interface NeedleGuideImage {
   src: string
   alt: string
   caption: string
+  kind?: SupplementalNeedleMediaKind
+  credit?: {
+    label: string
+    url: string
+    license: string
+    licenseUrl: string
+  }
 }
 
 export interface NeedleGuide {
@@ -62,7 +73,7 @@ export const needleGuides: NeedleGuide[] = [
   ...supplementalNeedleGuideInputs.map((guide): NeedleGuide => ({
     ...guide,
     figures: [],
-    images: [],
+    images: supplementalNeedleMediaByGuideId[guide.id] ?? [],
     sourceKind: 'supplemental',
     evidence: supplementalGuideEvidence[guide.id],
   })),

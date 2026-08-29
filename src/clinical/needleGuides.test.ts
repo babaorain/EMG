@@ -8,6 +8,7 @@ import {
   needleGuideWebCatalogNames,
 } from './needleGuideAvailability'
 import { needleGuides, needleGuidesForMuscle } from './needleGuides'
+import { supplementalNeedleMediaByGuideId } from './supplementalNeedleMedia'
 
 describe('chapter 13 needle guides', () => {
   it('covers every figure from 13.1 through 13.63 exactly once', () => {
@@ -45,7 +46,8 @@ describe('chapter 13 needle guides', () => {
   it('distinguishes web-reference guidance from textbook images', () => {
     const guide = needleGuidesForMuscle('Popliteus')[0]
     expect(guide?.sourceKind).toBe('supplemental')
-    expect(guide?.images).toEqual([])
+    expect(guide?.images.length).toBeGreaterThan(0)
+    expect(guide?.images[0]?.credit).toBeDefined()
     expect(hasNeedleGuideImage('Popliteus')).toBe(false)
     expect(hasExternalNeedleGuide('Popliteus')).toBe(true)
     expect(needleGuideAvailabilityForMuscle('Popliteus')).toBe('web-reference')
@@ -55,7 +57,7 @@ describe('chapter 13 needle guides', () => {
   it('keeps the first-load image manifest synchronized with guide data', () => {
     const actual = [...new Set(
       needleGuides
-        .filter((guide) => guide.images.length > 0)
+        .filter((guide) => guide.sourceKind === 'textbook' && guide.images.length > 0)
         .flatMap((guide) => guide.catalogNames),
     )].sort()
     expect([...needleGuideImageCatalogNames].sort()).toEqual(actual)
@@ -69,5 +71,22 @@ describe('chapter 13 needle guides', () => {
     )].sort()
     expect(needleGuideWebCatalogNames).toHaveLength(34)
     expect([...needleGuideWebCatalogNames].sort()).toEqual(actual)
+  })
+
+  it('embeds attributable media for all 34 supplemental guides', () => {
+    const supplementalGuides = needleGuides.filter((guide) => guide.sourceKind === 'supplemental')
+    expect(Object.keys(supplementalNeedleMediaByGuideId).sort()).toEqual(
+      supplementalGuides.map((guide) => guide.id).sort(),
+    )
+    supplementalGuides.forEach((guide) => {
+      expect(guide.images.length, guide.id).toBeGreaterThan(0)
+      guide.images.forEach((image) => {
+        expect(image.src, guide.id).toMatch(/^https:\/\//)
+        expect(image.kind, guide.id).toMatch(/^(anatomy|surface-landmark|ultrasound)$/)
+        expect(image.credit?.url, guide.id).toMatch(/^https:\/\//)
+        expect(image.credit?.license, guide.id).toBeTruthy()
+        expect(image.credit?.licenseUrl, guide.id).toMatch(/^https:\/\//)
+      })
+    })
   })
 })

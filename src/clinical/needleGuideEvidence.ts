@@ -323,7 +323,7 @@ const pectoralisMinorAtlas = atlas(
 
 export const supplementalGuideEvidence: Record<string, NeedleGuideEvidence> = {
   'supplement-orbicularis-oris': verified([siu], [
-    resource('localization', 'SIU 公開定位教材', '含定位文字與肌肉圖示；以大學官方 PDF 外部連結提供。', siu),
+    resource('localization', 'SIU 公開定位教材', '含定位文字與肌肉圖示；由 Southern Illinois University School of Medicine 發布。', siu),
     resource('technique', 'Facial nEMG clinical practice guideline', '說明 facial nerve diseases 的 nEMG indication、standardized examination 與 interpretation。', cite('facial-edx-guideline-2020', 'Needle electromyography; Table 2, Step 3')),
   ], {
     clinicalPointCitations: [
